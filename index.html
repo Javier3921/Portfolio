@@ -489,7 +489,7 @@
      nuevos de GitHub) se agregan por JS al final de .project-track. */
   .projects{ background:var(--bg-secondary); }
   .project-carousel{ display:flex; align-items:center; gap:.9rem; }
-  .carousel-viewport{ overflow:hidden; flex:1; border-radius:var(--radius); cursor:grab; touch-action:pan-y; }
+  .carousel-viewport{ overflow:hidden; flex:1; border-radius:var(--radius); cursor:grab; touch-action:pan-y; user-select:none; -webkit-user-select:none; }
   .carousel-viewport.dragging{ cursor:grabbing; }
   .project-track{ display:flex; transition:transform .45s cubic-bezier(.65,0,.35,1); }
   .project-track.no-transition{ transition:none; }
@@ -517,7 +517,7 @@
     height:170px; background:var(--accent-grad); display:flex; align-items:center; justify-content:center;
     font-size:2.8rem; color:var(--on-accent); position:relative; overflow:hidden;
   }
-  .project-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .project-thumb img{ width:100%; height:100%; object-fit:cover; -webkit-user-drag:none; user-drag:none; }
   .project-body{ padding:1.5rem; display:flex; flex-direction:column; gap:.8rem; flex:1; }
   .project-body h3{ font-size:1.1rem; }
   .project-body p{ font-size:.9rem; color:var(--text-secondary); line-height:1.65; flex:1; }
@@ -2185,7 +2185,7 @@
       const desc = repo.description ? repo.description : 'Repositorio público en GitHub.';
       card.innerHTML = `
         <div class="project-thumb project-thumb-auto">
-          <img src="https://opengraph.githubassets.com/1/${GH_USER}/${repo.name}" alt="${repo.name}" loading="lazy">
+          <img src="https://opengraph.githubassets.com/1/${GH_USER}/${repo.name}" alt="${repo.name}" loading="lazy" draggable="false">
         </div>
         <div class="project-body">
           <h3>${prettifyName(repo.name)}</h3>
@@ -2301,6 +2301,8 @@
     }
 
     viewport.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return; // solo clic izquierdo
+      e.preventDefault(); // evita que el navegador seleccione texto o arrastre un link/imagen nativo
       viewport.setPointerCapture(e.pointerId);
       onDragStart(e.clientX);
     });
