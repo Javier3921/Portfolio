@@ -1,0 +1,2818 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Aplica el tema guardado ANTES de pintar la página, para evitar el
+  // parpadeo (oscuro por defecto -> claro) en la primera carga.
+  (function(){
+    var t = localStorage.getItem('theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<title>Javier Fiestas | Data Analytics & Automatización</title>
+<meta name="description" content="Perfil profesional de Javier Fiestas Calixto, Bachiller en Ingeniería de Sistemas. Data Analytics, Business Intelligence, automatización de procesos e IA generativa aplicada.">
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.5.0/css/flag-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+
+<style>
+  :root{
+    /* Editorial Blanco/Negro (inspirado en alison.mobuus.com.mx) */
+    --bg-primary:#ffffff;
+    --bg-secondary:#fafafa;
+    --bg-card:#ffffff;
+    --bg-elevated:#f1f1f3;
+    --text-primary:#111113;
+    --text-secondary:#52525b;
+    --text-muted:#8f8f98;
+    --accent:#111113;
+    --accent-2:#6b6b74;
+    --accent-rgb: 17,17,19;
+    --accent-grad: var(--accent);
+    --on-accent:#ffffff;
+    --border:#e4e4e8;
+    --shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 16px 38px rgba(0, 0, 0, 0.14);
+    --radius: 18px;
+    --nav-h: 72px;
+    --font-serif:'Playfair Display', Georgia, serif;
+    --font-sans:'Plus Jakarta Sans', 'Inter', sans-serif;
+    --font-hand:'Caveat', cursive;
+    /* Escala de verdes real de GitHub para el calendario de contribuciones */
+    --gh-l0:#ebedf0; --gh-l1:#9be9a8; --gh-l2:#40c463; --gh-l3:#30a14e; --gh-l4:#216e39;
+  }
+
+  :root[data-theme="dark"]{
+    /* Editorial Blanco/Negro invertido */
+    --bg-primary:#0a0a0b;
+    --bg-secondary:#141416;
+    --bg-card:#141416;
+    --bg-elevated:#1c1c1f;
+    --text-primary:#f5f5f6;
+    --text-secondary:#a1a1aa;
+    --text-muted:#6f6f78;
+    --accent:#f5f5f6;
+    --accent-2:#9a9aa2;
+    --accent-rgb: 245,245,246;
+    --accent-grad: var(--accent);
+    --on-accent:#111113;
+    --border:#2a2a2e;
+    --shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 18px 40px rgba(0, 0, 0, 0.55);
+    --gh-l0:#161b22; --gh-l1:#0e4429; --gh-l2:#006d32; --gh-l3:#26a641; --gh-l4:#39d353;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; scroll-padding-top: var(--nav-h); }
+
+  body{
+    font-family:var(--font-sans);
+    background:var(--bg-primary);
+    color:var(--text-primary);
+    transition: background .35s ease, color .35s ease;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,h4{ font-family:var(--font-serif); }
+
+  a{ text-decoration:none; color:inherit; }
+  ul{ list-style:none; }
+  img{ max-width:100%; display:block; }
+  section{ padding: 120px 8vw 80px; position:relative; }
+  .container{ max-width:1200px; margin:0 auto; }
+
+  ::selection{ background:var(--accent); color:var(--on-accent); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg-primary); }
+  ::-webkit-scrollbar-thumb{ background:var(--accent); border-radius:10px; }
+
+  /* Progress bar */
+  #progressBar{
+    position:fixed; top:0; left:0; height:3px; width:0%;
+    background:var(--accent-grad); z-index:2000; transition:width .1s ease-out;
+  }
+
+  /* NAVBAR */
+  .navbar{
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    height:var(--nav-h);
+    display:flex; align-items:center;
+    background: color-mix(in srgb, var(--bg-secondary) 94%, transparent);
+    border-bottom:1px solid transparent;
+    transition: border-color .3s ease, background .3s ease;
+  }
+  .navbar.scrolled{ border-bottom:1px solid var(--border); box-shadow:var(--shadow); }
+
+  .nav-container{
+    width:100%; max-width:1300px; margin:0 auto; padding:0 6vw;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+
+  .logo{
+    font-family:var(--font-serif); font-weight:800; font-size:1.4rem;
+    color:var(--text-primary); letter-spacing:.5px;
+  }
+  .logo span{ color:var(--accent); }
+
+  .nav-links{ display:flex; gap:1.7rem; }
+  .nav-links a{
+    font-size:.88rem; font-weight:500; color:var(--text-secondary);
+    position:relative; padding:6px 0; transition: color .25s ease;
+    white-space:nowrap;
+  }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; height:2px; width:0;
+    background:var(--accent-grad); transition:width .25s ease;
+  }
+  .nav-links a:hover, .nav-links a.active{ color:var(--text-primary); }
+  .nav-links a:hover::after, .nav-links a.active::after{ width:100%; }
+
+  .nav-actions{ display:flex; align-items:center; gap:.8rem; }
+
+  /* Selector de idioma */
+  .lang-switch{ position:relative; }
+  .lang-toggle{
+    width:auto; padding:0 .65rem; height:42px; border-radius:999px;
+    border:1px solid var(--border); background:var(--bg-card); color:var(--text-primary);
+    cursor:pointer; display:flex; align-items:center; gap:.45rem; font-size:.85rem;
+    transition: all .25s ease;
+  }
+  .lang-toggle:hover{ transform:translateY(-2px); box-shadow:var(--shadow); border-color:var(--accent); }
+  .lang-toggle .fi{ font-size:1.15rem; border-radius:3px; }
+  .lang-toggle i{ font-size:.6rem; color:var(--text-muted); transition:transform .2s ease; }
+  .lang-switch.open .lang-toggle i{ transform:rotate(180deg); }
+  .lang-menu{
+    position:absolute; top:calc(100% + 10px); right:0; min-width:175px;
+    background:var(--bg-card); border:1px solid var(--border); border-radius:14px;
+    box-shadow:var(--shadow-lg); padding:.4rem; display:flex; flex-direction:column; gap:.15rem;
+    opacity:0; visibility:hidden; transform:translateY(-6px); transition: all .2s ease; z-index:1200;
+  }
+  .lang-switch.open .lang-menu{ opacity:1; visibility:visible; transform:translateY(0); }
+  .lang-option{
+    display:flex; align-items:center; gap:.6rem; padding:.55rem .7rem; border-radius:9px;
+    background:none; border:none; color:var(--text-secondary); font:inherit; font-size:.85rem;
+    font-weight:600; cursor:pointer; text-align:left; width:100%;
+  }
+  .lang-option:hover{ background:var(--bg-elevated); color:var(--text-primary); }
+  .lang-option.active{ color:var(--accent); background:var(--bg-elevated); }
+  .lang-option .fi{ font-size:1.15rem; border-radius:3px; }
+
+  .theme-toggle, .menu-toggle{
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid var(--border); background:var(--bg-card);
+    color:var(--text-primary); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; transition: all .25s ease;
+  }
+  .theme-toggle:hover, .menu-toggle:hover{ transform:translateY(-2px); box-shadow:var(--shadow); border-color:var(--accent); }
+  .theme-toggle .fa-moon{ display:none; }
+  :root[data-theme="dark"] .theme-toggle .fa-sun{ display:none; }
+  :root[data-theme="dark"] .theme-toggle .fa-moon{ display:inline-block; }
+
+  .menu-toggle{ display:none; }
+
+  /* HERO */
+  .hero{
+    min-height:100vh; display:flex; align-items:center;
+    padding-top: calc(var(--nav-h) + 40px);
+    position:relative; overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute; inset:0; z-index:-1; overflow:hidden;
+  }
+  .hero-bg{
+    background:
+      radial-gradient(620px 520px at 88% -8%, color-mix(in srgb, var(--bg-elevated) 65%, transparent), transparent 70%),
+      radial-gradient(560px 480px at -8% 108%, color-mix(in srgb, var(--bg-elevated) 55%, transparent), transparent 70%);
+  }
+
+  .hero-content{
+    display:grid; grid-template-columns: 1.15fr .85fr; gap:4rem;
+    align-items:center; max-width:1200px; margin:0 auto; width:100%;
+  }
+
+  .hero h1{
+    font-size:clamp(2.2rem, 4.5vw, 3.4rem); font-weight:800; line-height:1.15;
+    margin-bottom:.9rem;
+  }
+  .hero h1 .highlight{
+    background:var(--accent-grad); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-role{
+    font-size:1.25rem; font-weight:600; color:var(--text-secondary); margin-bottom:1.3rem;
+    min-height:1.8rem;
+  }
+  .hero-role .cursor{ animation:blink 1s step-start infinite; color:var(--accent); }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero p.bio{ color:var(--text-secondary); max-width:540px; margin-bottom:2rem; line-height:1.75; }
+
+  .hero-buttons{ display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .btn{
+    padding:.85rem 1.6rem; border-radius:12px; font-weight:600; font-size:.92rem;
+    display:inline-flex; align-items:center; gap:.55rem; cursor:pointer; border:none;
+    transition: all .28s ease;
+  }
+  .btn-primary{ background:var(--accent-grad); color:var(--on-accent); box-shadow:var(--shadow); }
+  .btn-primary:hover{ transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .btn-outline{ background:transparent; border:1px solid var(--border); color:var(--text-primary); }
+  .btn-outline:hover{ border-color:var(--accent); color:var(--accent); transform:translateY(-3px); }
+
+  .social-row{ display:flex; gap:.9rem; }
+  .social-icon{
+    width:44px; height:44px; border-radius:50%; border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-size:1.05rem;
+    color:var(--text-secondary); background:var(--bg-card); transition: all .28s ease;
+  }
+  .social-icon:hover{ color:var(--on-accent); background:var(--accent-grad); border-color:transparent; transform:translateY(-3px); }
+  .social-icon[data-tech]:hover{ background:var(--tag-c); color:var(--tag-fg, var(--on-accent)); }
+
+  /* Laptop scene: laptop virtual/holográfico flotando en el aire, con logos de
+     tecnologías deslizándose en su pantalla (sin textos ni chips alrededor). */
+  .hero-photo-wrap{ display:flex; justify-content:center; }
+  .laptop-scene{
+    position:relative; width:340px; height:340px;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1200px;
+  }
+
+  .laptop-float{ animation: laptopFloat 7s ease-in-out infinite; transform-style:preserve-3d; }
+  @keyframes laptopFloat{
+    0%,100%{ transform:translateY(0) rotateZ(-1.1deg); }
+    50%{ transform:translateY(-16px) rotateZ(1.1deg); }
+  }
+  .laptop{
+    position:relative; width:270px; transform-style:preserve-3d;
+    animation: laptopTilt 9s ease-in-out infinite;
+  }
+  @keyframes laptopTilt{
+    0%,100%{ transform:rotateX(14deg) rotateY(-14deg); }
+    50%{ transform:rotateX(9deg) rotateY(-7deg); }
+  }
+  .laptop-glow{
+    position:absolute; left:50%; bottom:-22px; width:210px; height:30px;
+    transform:translateX(-50%); background:var(--text-primary);
+    filter:blur(20px); opacity:.16; border-radius:50%;
+    animation: laptopGlowPulse 7s ease-in-out infinite;
+  }
+  @keyframes laptopGlowPulse{ 0%,100%{ opacity:.12; } 50%{ opacity:.22; } }
+
+  .laptop-screen{
+    position:relative; background:var(--bg-elevated);
+    border:1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    border-bottom-width:2px; border-radius:14px 14px 4px 4px; padding:12px 12px 10px;
+    box-shadow:var(--shadow-lg), 0 0 34px rgba(var(--accent-rgb), .12);
+    overflow:hidden; aspect-ratio: 8 / 5.4; display:flex; flex-direction:column;
+  }
+  .laptop-hud-bar{
+    display:flex; align-items:center; gap:.4rem; margin-bottom:8px;
+    font-size:.6rem; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--text-muted); font-weight:700; flex-shrink:0;
+  }
+  .laptop-hud-bar .dot{
+    width:6px; height:6px; border-radius:50%; background:var(--accent);
+    animation: hudBlink 1.8s ease-in-out infinite;
+  }
+  @keyframes hudBlink{ 0%,100%{ opacity:1; } 50%{ opacity:.25; } }
+
+  .tech-stage{
+    position:relative; flex:1; border-radius:8px; overflow:hidden;
+    background:color-mix(in srgb, var(--bg-primary) 55%, transparent);
+  }
+  .tech-stage::after{
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:.6;
+    background:repeating-linear-gradient(to bottom, rgba(var(--accent-rgb),.05) 0 1px, transparent 1px 3px);
+  }
+  .tech-slide{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:.5rem; opacity:0;
+    animation: techCycle 25.2s ease-in-out infinite;
+  }
+  .tech-slide .tech-badge{
+    width:52px; height:52px; border-radius:14px; background:#fff; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(0,0,0,.28), 0 0 0 1px rgba(0,0,0,.06);
+  }
+  .tech-slide img{ width:100%; height:100%; object-fit:contain; padding:6px; }
+  .tech-slide i{ font-size:1.7rem; color:var(--accent); }
+  .tech-slide span{ font-size:.72rem; font-weight:700; letter-spacing:.4px; color:var(--text-secondary); }
+  .tech-slide:nth-child(1){ animation-delay:0s; }
+  .tech-slide:nth-child(2){ animation-delay:-2.8s; }
+  .tech-slide:nth-child(3){ animation-delay:-5.6s; }
+  .tech-slide:nth-child(4){ animation-delay:-8.4s; }
+  .tech-slide:nth-child(5){ animation-delay:-11.2s; }
+  .tech-slide:nth-child(6){ animation-delay:-14s; }
+  .tech-slide:nth-child(7){ animation-delay:-16.8s; }
+  .tech-slide:nth-child(8){ animation-delay:-19.6s; }
+  .tech-slide:nth-child(9){ animation-delay:-22.4s; }
+  @keyframes techCycle{
+    0%{ opacity:0; transform:translateY(16px) scale(.92); }
+    1.6%{ opacity:1; transform:translateY(0) scale(1); }
+    8.6%{ opacity:1; transform:translateY(0) scale(1); }
+    11.1%{ opacity:0; transform:translateY(-16px) scale(.92); }
+    100%{ opacity:0; transform:translateY(16px) scale(.92); }
+  }
+
+  .laptop-base{
+    height:16px; margin:0 -14px; background:linear-gradient(var(--bg-card), var(--bg-elevated));
+    border-radius:0 0 10px 10px; position:relative; box-shadow:var(--shadow);
+    border:1px solid color-mix(in srgb, var(--accent) 22%, var(--border)); border-top:none;
+  }
+  .laptop-trackpad{
+    width:50px; height:4px; border-radius:4px; background:var(--border);
+    position:absolute; left:50%; top:5px; transform:translateX(-50%);
+  }
+
+
+  .scroll-cue{
+    position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:.4rem;
+    color:var(--text-muted); font-size:.78rem; animation: bounce 2s infinite;
+  }
+  @keyframes bounce{ 0%,100%{ transform:translate(-50%,0); } 50%{ transform:translate(-50%,8px); } }
+
+  /* SECTION HEADERS */
+  .section-head{ text-align:center; margin-bottom:3.5rem; }
+  .section-tag{
+    display:inline-block; font-size:.8rem; font-weight:700; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--accent); margin-bottom:.7rem;
+  }
+  .section-head h2{ font-size:clamp(1.7rem, 3vw, 2.3rem); font-weight:700; }
+  .section-head p{ color:var(--text-secondary); max-width:560px; margin:.8rem auto 0; }
+
+  /* Reveal animation */
+  .reveal{ opacity:0; transform:translateY(40px); transition: all .7s cubic-bezier(.16,.8,.3,1); }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+
+  /* ABOUT */
+  .about{ background:var(--bg-secondary); }
+  .about-grid{ display:grid; grid-template-columns: .9fr 1.1fr; gap:3.5rem; align-items:center; }
+  .about-text p{ color:var(--text-secondary); line-height:1.85; margin-bottom:1.1rem; }
+  .stats-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.2rem; }
+  .stat-card{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:1.6rem; text-align:center; transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .stat-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-lg); }
+  .stat-card .num{ font-size:2rem; font-weight:800; font-family:var(--font-serif); background:var(--accent-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .stat-card .label{ font-size:.85rem; color:var(--text-secondary); margin-top:.3rem; }
+  .stat-card-link{
+    appearance:none; -webkit-appearance:none; width:100%; font:inherit; color:inherit;
+    cursor:pointer; display:block; text-decoration:none;
+  }
+  .stat-card-link:hover .label{ color:var(--text-primary); }
+
+  /* TIMELINE (Experiencia / Educación) */
+  .timeline{ position:relative; max-width:820px; margin:0 auto; }
+  .timeline::before{
+    content:''; position:absolute; left:20px; top:0; bottom:0; width:2px;
+    background:var(--border);
+  }
+  .timeline-item{ position:relative; padding-left:60px; margin-bottom:2.6rem; }
+  .timeline-item:last-child{ margin-bottom:0; }
+  .timeline-dot{
+    position:absolute; left:11px; top:6px; width:20px; height:20px; border-radius:50%;
+    background:var(--bg-primary); border:3px solid var(--accent);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .timeline-dot::after{ content:''; width:7px; height:7px; border-radius:50%; background:var(--accent); }
+  .timeline-card{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:1.6rem 1.8rem; transition: all .3s ease;
+  }
+  .timeline-card:hover{ transform:translateX(6px); box-shadow:var(--shadow-lg); border-color:var(--accent); }
+  .timeline-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; margin-bottom:.4rem; }
+  .timeline-top h3{ font-size:1.1rem; }
+  .timeline-period{
+    font-size:.78rem; font-weight:700; color:var(--accent);
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    padding:.25rem .7rem; border-radius:999px; white-space:nowrap; height:fit-content;
+  }
+  .timeline-company{ font-size:.9rem; color:var(--text-secondary); font-weight:600; margin-bottom:.7rem; }
+  .timeline-card p.desc{ color:var(--text-secondary); font-size:.92rem; line-height:1.7; margin-bottom:.8rem; }
+  .timeline-list{ margin:0 0 1rem; padding-left:1.1rem; }
+  .timeline-list li{
+    color:var(--text-secondary); font-size:.92rem; line-height:1.7; margin-bottom:.5rem;
+    list-style:disc;
+  }
+  .timeline-list.collapsed li:nth-child(n+5){ display:none; }
+  .timeline-toggle{
+    background:none; border:none; cursor:pointer; font-size:.85rem; font-weight:700;
+    color:var(--accent); display:inline-flex; align-items:center; gap:.4rem; margin-bottom:.8rem;
+    padding:0;
+  }
+  .timeline-toggle i{ transition:transform .3s ease; }
+  .timeline-toggle.open i{ transform:rotate(180deg); }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:.5rem; }
+  .tag{
+    font-size:.75rem; font-weight:600; padding:.3rem .6rem; border-radius:8px;
+    background:var(--bg-elevated); color:var(--text-secondary);
+    display:inline-flex; align-items:center; gap:.4rem;
+    border:1px solid transparent; transition: all .22s ease;
+  }
+  .tag i{ font-size:.95em; color:var(--tag-c, var(--accent-2)); }
+  .tag:hover{
+    border-color:var(--tag-c, var(--border)); color:var(--text-primary);
+    background:color-mix(in srgb, var(--tag-c, var(--accent)) 14%, var(--bg-elevated));
+    transform:translateY(-2px);
+  }
+
+  /* Colores de marca por tecnología: se activan con el atributo data-tech
+     y los usan .tag, .skill-pill, .social-icon, .icon-box y .tech-slide. */
+  [data-tech="python"]{ --tag-c:#3776ab; }
+  [data-tech="javascript"]{ --tag-c:#d4b400; }
+  [data-tech="react"]{ --tag-c:#61dafb; }
+  [data-tech="node-js"]{ --tag-c:#3c873a; }
+  [data-tech="sql"]{ --tag-c:#e0793c; }
+  [data-tech="sql-server"]{ --tag-c:#a6192e; }
+  [data-tech="oracle"]{ --tag-c:#f80000; }
+  [data-tech="power-bi"]{ --tag-c:#f2c811; }
+  [data-tech="power-automate"]{ --tag-c:#0066ff; }
+  [data-tech="excel"]{ --tag-c:#217346; }
+  [data-tech="zoho"]{ --tag-c:#e42527; }
+  [data-tech="openai"]{ --tag-c:#10a37f; }
+  [data-tech="gemini"]{ --tag-c:#4285f4; }
+  [data-tech="claude"]{ --tag-c:#cc785c; }
+  [data-tech="obsidian"]{ --tag-c:#7c3aed; }
+  [data-tech="youtube"]{ --tag-c:#ff0000; }
+  [data-tech="ffmpeg"]{ --tag-c:#007808; }
+  [data-tech="telegram"]{ --tag-c:#26a5e4; }
+  [data-tech="streamlit"]{ --tag-c:#ff4b4b; }
+  [data-tech="supabase"]{ --tag-c:#3ecf8e; }
+  [data-tech="linux"]{ --tag-c:#e6ac00; }
+  [data-tech="linkedin"]{ --tag-c:#0a66c2; --tag-fg:#fff; }
+  [data-tech="github"]{ --tag-c:#181717; --tag-fg:#fff; }
+  [data-tech="email"]{ --tag-c:#ea4335; --tag-fg:#fff; }
+
+  /* SPECIALTIES (áreas de especialidad) */
+  .specialties{ background:var(--bg-secondary); }
+  .specialty-tabs{
+    display:flex; justify-content:center; gap:.8rem; flex-wrap:wrap; margin-bottom:2.5rem;
+  }
+  .specialty-tab{
+    display:flex; align-items:center; gap:.6rem; padding:.85rem 1.4rem; border-radius:999px;
+    background:var(--bg-card); border:1px solid var(--border); color:var(--text-secondary);
+    font-weight:700; font-size:.9rem; cursor:pointer; transition: all .28s ease;
+  }
+  .specialty-tab i{ font-size:1rem; }
+  .specialty-tab:hover{ border-color:var(--accent); color:var(--text-primary); transform:translateY(-2px); }
+  .specialty-tab.active{ background:var(--accent-grad); color:var(--on-accent); border-color:transparent; box-shadow:var(--shadow); }
+
+  .specialty-panel{ display:none; }
+  .specialty-panel.active{ display:block; animation: fadeInUp .5s ease; }
+  @keyframes fadeInUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+
+  .specialty-body{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:2.4rem; display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:center;
+  }
+  .specialty-body .num{
+    font-family:var(--font-serif); font-style:italic; font-size:3.2rem; font-weight:700;
+    color:var(--accent); opacity:.6; line-height:1; margin-bottom:.6rem;
+  }
+  .specialty-body h3{ font-size:1.4rem; margin-bottom:.9rem; }
+  .specialty-body p{ color:var(--text-secondary); line-height:1.8; margin-bottom:1.2rem; }
+
+  /* PROJECTS: carrusel de una tarjeta a la vez, con loop infinito. Las
+     tarjetas curadas viven en el HTML; las automáticas (repos públicos
+     nuevos de GitHub) se agregan por JS al final de .project-track. */
+  .projects{ background:var(--bg-secondary); }
+  .project-carousel{ display:flex; align-items:center; gap:.9rem; }
+  .carousel-viewport{ overflow:hidden; flex:1; border-radius:var(--radius); cursor:grab; touch-action:pan-y; }
+  .carousel-viewport.dragging{ cursor:grabbing; }
+  .project-track{ display:flex; transition:transform .45s cubic-bezier(.65,0,.35,1); }
+  .project-track.no-transition{ transition:none; }
+  .project-track .project-card{ flex:0 0 100%; width:100%; }
+  .carousel-arrow{
+    width:44px; height:44px; min-width:44px; border-radius:50%;
+    border:1px solid var(--border); background:var(--bg-card); color:var(--text-primary);
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    font-size:1rem; transition: all .25s ease;
+  }
+  .carousel-arrow:hover{ border-color:var(--accent); transform:translateY(-2px); box-shadow:var(--shadow); }
+  .carousel-dots{ display:flex; justify-content:center; gap:.5rem; margin-top:1.4rem; }
+  .carousel-dot{
+    width:9px; height:9px; border-radius:50%; border:none; padding:0;
+    background:var(--border); cursor:pointer; transition: all .25s ease;
+  }
+  .carousel-dot:hover{ background:var(--accent-2); }
+  .carousel-dot.active{ background:var(--accent); width:22px; border-radius:5px; }
+
+  .project-card{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; transition: border-color .35s ease; display:flex; flex-direction:column;
+  }
+  .project-thumb{
+    height:170px; background:var(--accent-grad); display:flex; align-items:center; justify-content:center;
+    font-size:2.8rem; color:var(--on-accent); position:relative; overflow:hidden;
+  }
+  .project-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .project-body{ padding:1.5rem; display:flex; flex-direction:column; gap:.8rem; flex:1; }
+  .project-body h3{ font-size:1.1rem; }
+  .project-body p{ font-size:.9rem; color:var(--text-secondary); line-height:1.65; flex:1; }
+  .project-links{ display:flex; gap:1rem; margin-top:.4rem; flex-wrap:wrap; }
+  .project-links a{
+    font-size:.85rem; font-weight:600; color:var(--accent); display:inline-flex; align-items:center; gap:.4rem;
+    transition: gap .25s ease;
+  }
+  .project-links a:hover{ gap:.65rem; }
+  .project-links .project-private{
+    font-size:.85rem; font-weight:600; color:var(--text-muted); display:inline-flex; align-items:center; gap:.4rem;
+  }
+
+  /* CERTIFICATIONS */
+  .cert-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+  .cert-card{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:1.6rem; display:flex; gap:1.1rem; align-items:flex-start;
+    transition: all .3s ease;
+  }
+  .cert-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-lg); border-color:var(--accent-2); }
+  .cert-icon{
+    width:50px; height:50px; min-width:50px; border-radius:12px; background:var(--accent-grad);
+    display:flex; align-items:center; justify-content:center; color:var(--on-accent); font-size:1.3rem;
+  }
+  .cert-card h3{ font-size:1rem; margin-bottom:.3rem; }
+  .cert-card .cert-issuer{ font-size:.83rem; color:var(--text-secondary); margin-bottom:.3rem; }
+  .cert-card .cert-date{ font-size:.76rem; color:var(--text-muted); }
+  .cert-card .cert-extra{ font-size:.76rem; color:var(--text-muted); margin-top:.2rem; }
+
+  /* MODAL genérico (usado por el modal de Certificaciones) */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,.55);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; visibility:hidden; transition:opacity .25s ease;
+  }
+  .modal-overlay.open{ opacity:1; visibility:visible; }
+  .modal-panel{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    max-width:800px; width:100%; max-height:85vh; overflow-y:auto; padding:2.2rem;
+    position:relative; box-shadow:var(--shadow-lg);
+    transform:translateY(16px) scale(.97); transition:transform .25s ease;
+  }
+  .modal-overlay.open .modal-panel{ transform:translateY(0) scale(1); }
+  .modal-close{
+    position:absolute; top:1.1rem; right:1.1rem; width:36px; height:36px; border-radius:50%;
+    border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-primary);
+    cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:.95rem;
+    transition: all .2s ease;
+  }
+  .modal-close:hover{ border-color:var(--accent); transform:rotate(90deg); }
+
+  /* Modal "Solicitar CV" */
+  .cv-modal-panel{ max-width:420px; text-align:center; }
+  .cv-modal-icon{
+    width:64px; height:64px; border-radius:50%; background:var(--bg-elevated);
+    display:flex; align-items:center; justify-content:center; font-size:1.6rem;
+    color:var(--accent); margin:0 auto 1.2rem;
+  }
+  .cv-modal-panel h2{ font-size:1.3rem; margin-bottom:.5rem; }
+  .cv-modal-panel .modal-intro{ color:var(--text-secondary); font-size:.92rem; margin-bottom:1.5rem; }
+  .cv-request-form{ display:flex; flex-direction:column; gap:.9rem; }
+  .cv-request-form input{
+    padding:.85rem 1rem; border-radius:10px; border:1px solid var(--border);
+    background:var(--bg-elevated); color:var(--text-primary); font-family:inherit;
+    font-size:.92rem; text-align:center;
+  }
+  .cv-request-form input:focus{ outline:none; border-color:var(--accent); }
+  .cv-request-form button{ justify-content:center; position:relative; }
+  .cv-btn-sending, .cv-btn-success{ display:none; align-items:center; gap:.55rem; }
+  .cv-request-form button.is-sending .cv-btn-label,
+  .cv-request-form button.is-success .cv-btn-label{ display:none; }
+  .cv-request-form button.is-sending .cv-btn-sending{ display:inline-flex; }
+  .cv-request-form button.is-success .cv-btn-success{ display:inline-flex; }
+  .cv-request-form button.is-sending, .cv-request-form button.is-success{ pointer-events:none; opacity:.92; }
+  .cv-envelope-fly{ animation: cvEnvelopeFly 1s ease-in-out infinite; }
+  @keyframes cvEnvelopeFly{
+    0%,100%{ transform:translateX(0) rotate(0deg); }
+    50%{ transform:translateX(4px) rotate(-6deg); }
+  }
+  .cv-request-status{ margin-top:.9rem; font-size:.85rem; min-height:1.2rem; }
+  .cv-request-status.error{ color:#e0675e; }
+  .cv-request-status.success{ color:#3ecf8e; }
+
+  /* SKILLS */
+  .skills{ background:var(--bg-secondary); }
+  .skills-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; }
+  .skill-cat h3{ font-size:1.05rem; margin-bottom:1.2rem; display:flex; align-items:center; gap:.6rem; }
+  .skill-cat h3 i{ color:var(--accent); }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:.6rem; }
+  .skill-pill{
+    padding:.5rem .95rem; border-radius:10px; background:var(--bg-card); border:1px solid var(--border);
+    font-size:.85rem; font-weight:600; display:inline-flex; align-items:center; gap:.5rem;
+    transition: all .25s ease;
+  }
+  .skill-pill:hover{
+    border-color:var(--tag-c, var(--accent)); color:var(--text-primary); transform:translateY(-3px);
+    background:color-mix(in srgb, var(--tag-c, var(--accent)) 12%, var(--bg-card));
+  }
+  .skill-pill i{ color:var(--tag-c, var(--accent-2)); }
+
+  /* GITHUB: calendario de contribuciones propio (mismo tamaño/color/cantidad
+     de cuadros que github.com), armado con datos reales vía API pública. */
+  .github-card{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:1.5rem;
+  }
+  .gh-cal-head{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    gap:.6rem; margin-bottom:1.1rem;
+  }
+  .gh-cal-total{ font-size:.92rem; font-weight:600; color:var(--text-secondary); }
+  .gh-cal-total strong{ color:var(--text-primary); }
+  .gh-cal-link{
+    font-size:.85rem; font-weight:600; color:var(--accent);
+    display:inline-flex; align-items:center; gap:.4rem; transition: gap .25s ease;
+  }
+  .gh-cal-link:hover{ gap:.6rem; }
+
+  .gh-cal-loading{ padding:2.4rem 1rem; text-align:center; color:var(--text-muted); font-size:.88rem; }
+  .gh-cal-error{ padding:1.4rem 1rem; text-align:center; color:var(--text-secondary); font-size:.88rem; }
+  .gh-cal-error a{ color:var(--accent); font-weight:600; text-decoration:underline; }
+
+  .github-calendar-wrap{ overflow-x:auto; padding-bottom:2px; }
+  .gh-cal{ display:flex; gap:6px; align-items:flex-start; width:100%; }
+  .gh-cal-weekdays{
+    display:grid; grid-template-rows:repeat(7,var(--gh-cell, 10px)); gap:3px;
+    font-size:.6rem; color:var(--text-muted); padding-top:16px; flex-shrink:0;
+    width:22px; text-align:right; line-height:var(--gh-cell, 10px);
+  }
+  .gh-cal-scroll{ display:flex; flex-direction:column; flex:1; min-width:0; }
+  .gh-cal-months{
+    position:relative; height:14px; margin-bottom:2px;
+    font-size:.62rem; color:var(--text-muted);
+  }
+  .gh-cal-months span{ position:absolute; top:0; white-space:nowrap; }
+  .gh-cal-grid{
+    display:grid; grid-template-rows:repeat(7,var(--gh-cell, 10px));
+    grid-auto-flow:column; grid-auto-columns:var(--gh-cell, 10px); gap:3px;
+  }
+  .gh-cal-day{
+    width:var(--gh-cell, 10px); height:var(--gh-cell, 10px); border-radius:2px; background:var(--gh-l0);
+    position:relative;
+  }
+  .gh-cal-day.is-empty{ background:transparent; }
+  .gh-cal-day[data-level="1"]{ background:var(--gh-l1); }
+  .gh-cal-day[data-level="2"]{ background:var(--gh-l2); }
+  .gh-cal-day[data-level="3"]{ background:var(--gh-l3); }
+  .gh-cal-day[data-level="4"]{ background:var(--gh-l4); }
+  .gh-cal-day[data-tooltip]{ cursor:pointer; }
+  .gh-cal-day[data-tooltip]:hover{ outline:1px solid color-mix(in srgb, var(--text-primary) 45%, transparent); outline-offset:1px; }
+
+  .gh-cal-legend{
+    display:flex; align-items:center; gap:.3rem; margin-top:1rem;
+    font-size:.68rem; color:var(--text-muted); justify-content:flex-end;
+  }
+  .gh-cal-legend .gh-cal-day{ cursor:default; }
+
+  .gh-tooltip{
+    position:fixed; top:0; left:0; z-index:2100; pointer-events:none;
+    background:var(--text-primary); color:var(--bg-primary);
+    font-size:.72rem; font-weight:600; padding:.35rem .6rem; border-radius:6px;
+    box-shadow:var(--shadow-lg); opacity:0; transform:translateY(4px);
+    transition: opacity .12s ease, transform .12s ease; white-space:nowrap;
+  }
+  .gh-tooltip.show{ opacity:1; transform:translateY(0); }
+
+  /* CONTACT */
+  .contact{ background:var(--bg-secondary); }
+  .contact-grid{ display:grid; grid-template-columns:.9fr 1.1fr; gap:3rem; }
+  .contact-info-card{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:1.3rem 1.5rem; display:flex; align-items:center; gap:1rem; margin-bottom:1.1rem;
+    transition: all .28s ease; cursor:pointer;
+  }
+  .contact-info-card:hover{ transform:translateX(6px); border-color:var(--tag-c, var(--accent)); box-shadow:var(--shadow); }
+  .contact-info-card .icon-box{
+    width:48px; height:48px; min-width:48px; border-radius:12px; background:var(--accent-grad);
+    display:flex; align-items:center; justify-content:center; color:var(--on-accent); font-size:1.2rem;
+    transition: background .28s ease, color .28s ease;
+  }
+  .contact-info-card:hover .icon-box{ background:var(--tag-c, var(--accent-grad)); color:var(--tag-fg, var(--on-accent)); }
+  .contact-info-card > div{ min-width:0; }
+  .contact-info-card .label{ font-size:.78rem; color:var(--text-muted); }
+  .contact-info-card .value{ font-size:.95rem; font-weight:600; overflow-wrap:break-word; }
+
+  .contact-form{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:2rem;
+  }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  .form-group{ display:flex; flex-direction:column; gap:.4rem; margin-bottom:1rem; }
+  .form-group label{ font-size:.82rem; font-weight:600; color:var(--text-secondary); }
+  .form-group input, .form-group textarea{
+    padding:.85rem 1rem; border-radius:10px; border:1px solid var(--border);
+    background:var(--bg-elevated); color:var(--text-primary); font-family:inherit; font-size:.92rem;
+    transition: border-color .25s ease;
+  }
+  .form-group input:focus, .form-group textarea:focus{ outline:none; border-color:var(--accent); }
+  .form-group textarea{ resize:vertical; min-height:120px; }
+  .form-status{ font-size:.85rem; margin-top:.8rem; color:var(--accent-2); min-height:1.2rem; }
+
+  /* FOOTER */
+  footer{
+    padding:2.5rem 8vw; border-top:1px solid var(--border); background:var(--bg-primary);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+  }
+  footer p{ font-size:.85rem; color:var(--text-muted); }
+  footer .footer-social{ display:flex; gap:.8rem; }
+
+  /* BACK TO TOP */
+  #backToTop{
+    position:fixed; bottom:28px; right:28px; width:48px; height:48px; border-radius:50%;
+    background:var(--accent-grad); color:var(--on-accent); border:none; cursor:pointer; font-size:1.1rem;
+    display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-lg);
+    opacity:0; visibility:hidden; transform:translateY(20px); transition: all .35s ease; z-index:900;
+  }
+  #backToTop.show{ opacity:1; visibility:visible; transform:translateY(0); }
+  #backToTop:hover{ transform:translateY(-5px); }
+
+  /* Toast */
+  #toast{
+    position:fixed; bottom:28px; left:50%; transform:translate(-50%, 40px);
+    background:var(--bg-card); border:1px solid var(--border); color:var(--text-primary);
+    padding:.85rem 1.4rem; border-radius:12px; box-shadow:var(--shadow-lg); font-size:.88rem;
+    display:flex; align-items:center; gap:.6rem; opacity:0; visibility:hidden; transition: all .35s ease; z-index:2000;
+  }
+  #toast.show{ opacity:1; visibility:visible; transform:translate(-50%, 0); }
+  #toast i{ color:var(--accent-2); }
+
+  /* Robotito flotante (respuestas predefinidas por ahora, se conectará a IA después).
+     Diseño propio inspirado libremente en la estética "robot amigable" de juegos
+     tipo Astro Bot: cuerpo redondeado, ojos grandes, antena y gestos de saludo. */
+  :root{
+    --bot-body:#eef2f7; --bot-shade:#c3ccd8; --bot-visor:#1b2a3a;
+    --bot-accent:#3aa0ff; --bot-glow:#7fe6ff; --bot-warm:#ff8a5c;
+  }
+  .robot-fab{
+    position:fixed; bottom:90px; right:22px; width:84px; height:104px;
+    background:none; border:none; padding:0; cursor:pointer; z-index:1000;
+    transition: transform .25s ease;
+  }
+  .robot-fab:hover{ transform:translateY(-4px) scale(1.05); }
+  .robot-fab:active{ transform:translateY(0) scale(.97); }
+
+  .robot-thruster-glow{
+    position:absolute; left:50%; bottom:6px; width:38px; height:14px; transform:translateX(-50%);
+    background:radial-gradient(ellipse at center, var(--bot-glow) 0%, transparent 72%);
+    opacity:.55; filter:blur(2px); animation: botThruster 3.6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes botThruster{
+    0%,100%{ opacity:.35; transform:translateX(-50%) scaleX(.85); }
+    50%{ opacity:.65; transform:translateX(-50%) scaleX(1.1); }
+  }
+
+  .robot-figure{
+    position:relative; width:100%; height:100%;
+    animation: robotFloat 3.6s ease-in-out infinite;
+  }
+  .robot-fab.open .robot-figure{ animation-play-state:paused; transform:translateY(-8px) rotate(0deg); }
+  @keyframes robotFloat{
+    0%,100%{ transform:translateY(0) rotate(-2deg); }
+    50%{ transform:translateY(-9px) rotate(2deg); }
+  }
+  .robot-svg{ width:100%; height:100%; display:block; overflow:visible; filter:drop-shadow(0 10px 10px rgba(0,0,0,.3)); }
+
+  .bot-antenna{ stroke:var(--bot-accent); stroke-width:3; stroke-linecap:round; }
+  .bot-antenna-tip{
+    fill:var(--bot-glow); transform-box:fill-box; transform-origin:50% 50%;
+    animation: botGlow 2.2s ease-in-out infinite;
+  }
+  @keyframes botGlow{ 0%,100%{ opacity:.7; transform:scale(1); } 50%{ opacity:1; transform:scale(1.3); } }
+
+  .bot-body-shape{ fill:var(--bot-body); stroke:var(--bot-shade); stroke-width:1.5; }
+  .bot-shade{ fill:var(--bot-shade); opacity:.4; }
+  .bot-gloss{ fill:#fff; opacity:.4; }
+
+  .bot-eye{
+    fill:var(--bot-visor); transform-box:fill-box; transform-origin:50% 50%;
+    animation: botBlink 5s ease-in-out infinite;
+  }
+  .bot-eye-r{ animation-delay:.06s; }
+  @keyframes botBlink{ 0%,92%,100%{ transform:scaleY(1); } 95%{ transform:scaleY(.12); } }
+  .bot-eye-glint{ fill:#fff; }
+
+  .bot-chest-light{
+    fill:var(--bot-warm); transform-box:fill-box; transform-origin:50% 50%;
+    animation: botGlow 2.6s ease-in-out infinite .4s;
+  }
+
+  .bot-arm{ fill:var(--bot-body); stroke:var(--bot-shade); stroke-width:1.2; transform-box:view-box; }
+  .bot-arm-l{ transform-origin:14px 44px; animation: botIdleArm 3.6s ease-in-out infinite; }
+  .bot-arm-r{ transform-origin:86px 44px; animation: botWave 6s ease-in-out infinite; }
+  @keyframes botIdleArm{ 0%,100%{ transform:rotate(6deg); } 50%{ transform:rotate(-4deg); } }
+  @keyframes botWave{
+    0%, 50%, 100%{ transform:rotate(0deg); }
+    56%{ transform:rotate(-108deg); }
+    62%{ transform:rotate(-90deg); }
+    68%{ transform:rotate(-112deg); }
+    74%{ transform:rotate(-92deg); }
+    80%{ transform:rotate(-108deg); }
+    86%{ transform:rotate(0deg); }
+  }
+
+  .bot-foot{ fill:var(--bot-shade); }
+
+  .chatbot-fab-dot{
+    position:absolute; top:2px; right:8px; width:12px; height:12px; border-radius:50%;
+    background:#3ecf8e; border:2px solid var(--bg-primary); z-index:2;
+  }
+  .robot-fab.open .chatbot-fab-dot{ display:none; }
+
+  .chatbot-panel{
+    position:fixed; bottom:206px; right:22px; width:340px; max-width:calc(100vw - 40px);
+    max-height:min(520px, 70vh); background:var(--bg-card); border:1px solid var(--border);
+    border-radius:18px; box-shadow:var(--shadow-lg); display:flex; flex-direction:column;
+    overflow:hidden; z-index:999; opacity:0; visibility:hidden; transform:translateY(16px) scale(.96);
+    transform-origin:bottom right; transition: all .28s ease;
+  }
+  .chatbot-panel.open{ opacity:1; visibility:visible; transform:translateY(0) scale(1); }
+
+  .chatbot-header{
+    display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem;
+    background:var(--accent-grad); color:var(--on-accent); flex-shrink:0;
+  }
+  .chatbot-avatar{
+    width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.18);
+    display:flex; align-items:center; justify-content:center; font-size:1.05rem; flex-shrink:0;
+  }
+  .chatbot-title{ font-size:.92rem; font-weight:700; }
+  .chatbot-subtitle{ font-size:.72rem; opacity:.85; display:flex; align-items:center; gap:.35rem; }
+  .chatbot-status-dot{ width:7px; height:7px; border-radius:50%; background:#3ecf8e; display:inline-block; }
+  .chatbot-close{
+    margin-left:auto; background:none; border:none; color:inherit; cursor:pointer;
+    font-size:1rem; opacity:.85; padding:.3rem;
+  }
+  .chatbot-close:hover{ opacity:1; }
+
+  .chatbot-messages{
+    flex:1; overflow-y:auto; padding:1rem 1rem .3rem; display:flex; flex-direction:column; gap:.7rem;
+  }
+  .chat-msg{ max-width:84%; font-size:.85rem; line-height:1.5; padding:.6rem .8rem; border-radius:14px; overflow-wrap:break-word; white-space:pre-wrap; }
+  .chat-msg.bot{ align-self:flex-start; background:var(--bg-elevated); color:var(--text-primary); border-bottom-left-radius:4px; }
+  .chat-msg.user{ align-self:flex-end; background:var(--accent-grad); color:var(--on-accent); border-bottom-right-radius:4px; }
+  .chat-typing{ align-self:flex-start; display:flex; gap:4px; padding:.7rem .9rem; background:var(--bg-elevated); border-radius:14px; border-bottom-left-radius:4px; }
+  .chat-typing span{ width:6px; height:6px; border-radius:50%; background:var(--text-muted); animation:chatTyping 1.1s ease-in-out infinite; }
+  .chat-typing span:nth-child(2){ animation-delay:.15s; }
+  .chat-typing span:nth-child(3){ animation-delay:.3s; }
+  @keyframes chatTyping{ 0%,60%,100%{ transform:translateY(0); opacity:.4; } 30%{ transform:translateY(-4px); opacity:1; } }
+
+  .chatbot-suggestions{ display:flex; flex-wrap:wrap; gap:.4rem; padding:.5rem 1rem; flex-shrink:0; }
+  .chat-chip{
+    font-size:.72rem; font-weight:600; padding:.35rem .7rem; border-radius:999px;
+    background:var(--bg-elevated); border:1px solid var(--border); color:var(--text-secondary);
+    cursor:pointer; transition: all .2s ease;
+  }
+  .chat-chip:hover{ border-color:var(--accent); color:var(--text-primary); }
+
+  .chatbot-input-row{ display:flex; gap:.5rem; padding:.8rem 1rem; border-top:1px solid var(--border); flex-shrink:0; }
+  .chatbot-input-row input{
+    flex:1; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-primary);
+    border-radius:10px; padding:.55rem .8rem; font-size:.85rem; font-family:inherit; min-width:0;
+  }
+  .chatbot-input-row input:focus{ outline:none; border-color:var(--accent); }
+  .chatbot-input-row button{
+    width:38px; height:38px; border-radius:10px; border:none; background:var(--accent-grad);
+    color:var(--on-accent); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; font-size:.9rem;
+  }
+  .chatbot-disclaimer{ font-size:.66rem; color:var(--text-muted); text-align:center; padding:0 1rem .7rem; flex-shrink:0; }
+
+  /* RESPONSIVE */
+  /* El menú colapsa a hamburguesa bastante antes que el hero, porque con 8
+     enlaces (incluye "Especialidades"/"Certificaciones") se amontona o se
+     corta en ventanas medianas (~780-1000px, ej. una pestaña de escritorio
+     angosta) si se espera a un punto de quiebre más bajo. */
+  @media (max-width: 1024px){
+    .nav-links{
+      position:fixed; top:var(--nav-h); left:0; right:0; flex-direction:column;
+      background:var(--bg-secondary); border-bottom:1px solid var(--border);
+      padding:1.5rem 2rem; gap:1.2rem; transform:translateY(-140%); opacity:0;
+      transition: all .35s ease; box-shadow:var(--shadow-lg);
+    }
+    .nav-links.open{ transform:translateY(0); opacity:1; }
+    .menu-toggle{ display:flex; }
+    section{ padding:100px 6vw 60px; }
+    .form-row{ grid-template-columns:1fr; }
+  }
+
+  @media (max-width: 1000px){
+    .hero-content{ grid-template-columns:1fr; text-align:center; }
+    .hero p.bio{ margin-left:auto; margin-right:auto; }
+    .hero-buttons, .social-row{ justify-content:center; }
+    .hero-photo-wrap{ order:-1; }
+    .about-grid, .contact-grid{ grid-template-columns:1fr; }
+    .specialty-body{ grid-template-columns:1fr; }
+  }
+
+  @media (max-width: 640px){
+    .cert-grid, .skills-grid{ grid-template-columns:1fr; }
+    .carousel-arrow{ width:36px; height:36px; min-width:36px; font-size:.85rem; }
+    .project-carousel{ gap:.5rem; }
+  }
+
+  @media (max-width: 520px){
+    .laptop-scene{ width:260px; height:260px; }
+    .laptop{ width:220px; }
+    .tech-slide .tech-badge{ width:40px; height:40px; border-radius:11px; }
+    .tech-slide i{ font-size:1.3rem; }
+    .tech-slide span{ font-size:.62rem; }
+    .stats-grid{ grid-template-columns:1fr 1fr; }
+    .specialty-tabs{ flex-direction:column; align-items:stretch; }
+    .specialty-tab{ justify-content:center; }
+    .timeline::before{ left:12px; }
+    .timeline-item{ padding-left:42px; }
+    .timeline-dot{ left:3px; width:18px; height:18px; }
+    #backToTop{ right:16px; }
+    .robot-fab{ right:12px; bottom:86px; width:72px; height:90px; }
+    .chatbot-panel{ right:12px; bottom:188px; width:calc(100vw - 24px); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .laptop-float, .laptop, .laptop-glow, .laptop-hud-bar .dot, .tech-slide,
+    .robot-figure, .robot-thruster-glow, .bot-antenna-tip, .bot-eye,
+    .bot-chest-light, .bot-arm-l, .bot-arm-r, .chat-typing span{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<header class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#inicio" class="logo">JF<span>.</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#inicio" class="nav-link" data-i18n="nav.home">Inicio</a>
+      <a href="#perfil" class="nav-link" data-i18n="nav.profile">Perfil</a>
+      <a href="#experiencia" class="nav-link" data-i18n="nav.experience">Experiencia</a>
+      <a href="#especialidades" class="nav-link" data-i18n="nav.specialties">Especialidades</a>
+      <a href="#proyectos" class="nav-link" data-i18n="nav.projects">Proyectos</a>
+      <a href="#skills" class="nav-link" data-i18n="nav.skills">Skills</a>
+      <a href="#contacto" class="nav-link" data-i18n="nav.contact">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang-switch" id="langSwitch">
+        <button id="langToggle" class="lang-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Cambiar idioma">
+          <span class="fi fi-es" id="langFlagCurrent"></span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="lang-menu" id="langMenu" role="listbox">
+          <button type="button" class="lang-option active" data-lang="es" role="option" aria-selected="true"><span class="fi fi-es"></span> Español</button>
+          <button type="button" class="lang-option" data-lang="en" role="option" aria-selected="false"><span class="fi fi-us"></span> English</button>
+          <button type="button" class="lang-option" data-lang="pt" role="option" aria-selected="false"><span class="fi fi-br"></span> Português</button>
+          <button type="button" class="lang-option" data-lang="fr" role="option" aria-selected="false"><span class="fi fi-fr"></span> Français</button>
+          <button type="button" class="lang-option" data-lang="zh" role="option" aria-selected="false"><span class="fi fi-cn"></span> 中文</button>
+        </div>
+      </div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema" data-i18n-aria="aria.themeToggle">
+        <i class="fa-solid fa-sun"></i>
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button id="menuToggle" class="menu-toggle" aria-label="Abrir menú" data-i18n-aria="aria.menuToggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="inicio" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1><span data-i18n="hero.greeting">Hola, soy</span> <span class="highlight">Javier Fiestas</span></h1>
+      <div class="hero-role"><span id="typedRole"></span><span class="cursor">|</span></div>
+      <p class="bio" data-i18n="hero.bio">
+        Bachiller en Ingeniería de Sistemas por la Universidad de Lima, con cerca de 2 años
+        transformando datos dispersos en dashboards, automatizaciones e integraciones que
+        realmente se usan para tomar decisiones. Trabajo a diario con SQL, Python, Zoho y
+        herramientas de IA generativa como parte de mi flujo de trabajo.
+      </p>
+      <div class="hero-buttons">
+        <a href="#contacto" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="hero.ctaContact">Contáctame</span></a>
+        <button class="btn btn-outline" id="requestCvBtn" type="button"><i class="fa-solid fa-file-arrow-down"></i> <span data-i18n="hero.ctaCv">Solicitar CV</span></button>
+      </div>
+      <div class="social-row">
+        <a href="https://www.linkedin.com/in/javier-fiestas-6457ba240/" target="_blank" rel="noopener" class="social-icon" data-tech="linkedin" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://github.com/Javier3921" target="_blank" rel="noopener" class="social-icon" data-tech="github" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:javierfiestas44@gmail.com" class="social-icon" data-tech="email" aria-label="Correo"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="laptop-scene">
+        <div class="laptop-float">
+          <div class="laptop">
+            <div class="laptop-glow"></div>
+            <div class="laptop-screen">
+              <div class="laptop-hud-bar"><span class="dot"></span> <span data-i18n="hero.liveStack">Stack en vivo</span></div>
+              <div class="tech-stage">
+                <div class="tech-slide"><div class="tech-badge"><img src="Animation/Tecnologias/gpt.png" alt="ChatGPT" loading="lazy"></div><span>ChatGPT</span></div>
+                <div class="tech-slide"><div class="tech-badge" style="background:#f0ece7;"><i class="fa-solid fa-robot" style="color:#da7756;"></i></div><span>Claude</span></div>
+                <div class="tech-slide"><div class="tech-badge"><img src="Animation/Tecnologias/Python.png" alt="Python" loading="lazy"></div><span>Python</span></div>
+                <div class="tech-slide"><div class="tech-badge"><img src="Animation/Tecnologias/sql.jpeg" alt="SQL" loading="lazy"></div><span>SQL</span></div>
+                <div class="tech-slide"><div class="tech-badge"><img src="Animation/Tecnologias/powerbi.jpeg" alt="Power BI" loading="lazy"></div><span>Power BI</span></div>
+                <div class="tech-slide"><div class="tech-badge"><img src="Animation/Tecnologias/power_automate.jpeg" alt="Power Automate" loading="lazy"></div><span>Power Automate</span></div>
+                <div class="tech-slide"><div class="tech-badge"><img src="Animation/Tecnologias/javascript.png" alt="JavaScript" loading="lazy"></div><span>JavaScript</span></div>
+                <div class="tech-slide"><div class="tech-badge"><img src="Animation/Tecnologias/zoho.png" alt="Zoho" loading="lazy"></div><span>Zoho</span></div>
+                <div class="tech-slide"><div class="tech-badge"><img src="Animation/Tecnologias/linux.jpg" alt="Linux" loading="lazy"></div><span>Linux</span></div>
+              </div>
+            </div>
+            <div class="laptop-base"><div class="laptop-trackpad"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"><i class="fa-solid fa-chevron-down"></i> <span data-i18n="hero.scroll">Desplázate</span></div>
+</section>
+
+<!-- PERFIL -->
+<section id="perfil" class="about">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="profile.tag">Perfil</span>
+      <h2 data-i18n="profile.title">Un poco de mi historia</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p data-i18n="profile.p1">
+          Soy Bachiller en Ingeniería de Sistemas por la Universidad de Lima, con cerca de 2 años
+          de experiencia en análisis de datos, Business Intelligence, automatización de procesos
+          e integración de sistemas. He trabajado con SQL, Python, Zoho Analytics, Power BI, Zoho
+          CRM y APIs REST para extraer, validar, transformar y visualizar información proveniente
+          de múltiples fuentes corporativas.
+        </p>
+        <p data-i18n="profile.p2">
+          He implementado soluciones de consulta y procesamiento para datasets superiores a
+          244 mil registros, además de procesos para asegurar la calidad, consistencia y
+          trazabilidad de la información y automatizar tareas recurrentes que antes eran manuales.
+        </p>
+        <p data-i18n="profile.p3">
+          Complemento mi trabajo diario con herramientas de IA generativa (ChatGPT, Gemini,
+          Claude) para el desarrollo, revisión y documentación de código, y me interesa seguir
+          creciendo hacia Data Engineering, Data Integration y Business Intelligence.
+        </p>
+      </div>
+      <div class="stats-grid reveal">
+        <div class="stat-card">
+          <div class="num" data-count="2">0</div>
+          <div class="label" data-i18n="profile.statYears">Años de experiencia</div>
+        </div>
+        <button class="stat-card stat-card-link" id="statCertsBtn" type="button" aria-haspopup="dialog">
+          <div class="num" data-count="4">0</div>
+          <div class="label" data-i18n="profile.statCerts">Certificaciones</div>
+        </button>
+        <a class="stat-card stat-card-link" href="#proyectos">
+          <div class="num" data-count="2">0</div>
+          <div class="label" data-i18n="profile.statProjects">Proyectos personales</div>
+        </a>
+        <div class="stat-card">
+          <div class="num" data-count="244">0</div>
+          <div class="label" data-i18n="profile.statRecords">Miles de registros procesados</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCIA -->
+<section id="experiencia">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="experience.tag">Trayectoria</span>
+      <h2 data-i18n="experience.title">Experiencia profesional</h2>
+      <p data-i18n="experience.intro">Mi rol actual, donde aplico análisis de datos y automatización sobre procesos reales.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-top">
+            <h3 data-i18n="experience.role">Practicante / Analista de Automatización y Datos</h3>
+            <span class="timeline-period" data-i18n="experience.period">Agosto 2024 — Actualidad</span>
+          </div>
+          <div class="timeline-company">Payet, Rey, Cauvi, Pérez Abogados · Lima</div>
+          <ul class="timeline-list collapsed" id="expList">
+            <li data-i18n="experience.b1">Diseño y mantenimiento de dashboards en Zoho Analytics para facturación, liquidaciones, horas trabajadas y KPIs financieros/operativos, con consultas SQL (JOIN, GROUP BY, funciones de agregación) sobre múltiples fuentes corporativas.</li>
+            <li data-i18n="experience.b2">Validación y control de calidad de datos: detección de inconsistencias, duplicados y desviaciones entre fuentes, con reglas de priorización por origen y fecha de actualización.</li>
+            <li data-i18n="experience.b3">Automatizaciones end-to-end en Zoho CRM, Zoho Flow y Deluge, además de Power Automate Desktop, sincronizando sistemas y eliminando tareas manuales recurrentes.</li>
+            <li data-i18n="experience.b4">Scripts en Python para procesamiento de bases de datos y generación de comunicaciones masivas personalizadas; macros en Excel y Zoho Sheet para consolidación de información.</li>
+            <li data-i18n="experience.b5">Integración de sistemas mediante APIs REST y Zoho CRM API (OAuth 2.0).</li>
+            <li data-i18n="experience.b6">Documentación de procesos y reglas de negocio para asegurar su mantenimiento y continuidad operativa.</li>
+          </ul>
+          <button class="timeline-toggle" id="expToggle" aria-expanded="false">
+            <span data-i18n="experience.toggleMore">Ver historial completo</span> <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="tag-row">
+            <span class="tag" data-tech="sql"><i class="fa-solid fa-database"></i>SQL</span>
+            <span class="tag" data-tech="python"><i class="fa-brands fa-python"></i>Python</span>
+            <span class="tag" data-tech="zoho"><i class="fa-solid fa-chart-simple"></i>Zoho Analytics</span>
+            <span class="tag" data-tech="zoho"><i class="fa-solid fa-address-book"></i>Zoho CRM</span>
+            <span class="tag" data-tech="power-bi"><i class="fa-solid fa-chart-pie"></i>Power BI</span>
+            <span class="tag" data-tech="zoho"><i class="fa-solid fa-code-branch"></i>Zoho Flow</span>
+            <span class="tag" data-tech="power-automate"><i class="fa-solid fa-desktop"></i>Power Automate</span>
+            <span class="tag"><i class="fa-solid fa-plug"></i>REST APIs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCACIÓN -->
+<section id="educacion" class="about">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="education.tag">Formación</span>
+      <h2 data-i18n="education.title">Educación</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-top">
+            <h3 data-i18n="education.degree">Bachiller en Ingeniería de Sistemas</h3>
+          </div>
+          <div class="timeline-company">Universidad de Lima</div>
+          <p class="desc" data-i18n="education.desc">
+            Formación en desarrollo de software, bases de datos, análisis de sistemas y
+            fundamentos de ciberseguridad, complementada con cursos propios en la carrera
+            sobre ethical hacking y buenas prácticas de TI.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESPECIALIDADES -->
+<section id="especialidades" class="specialties">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="specialties.tag">Áreas de especialidad</span>
+      <h2 data-i18n="specialties.title">En qué me enfoco</h2>
+      <p data-i18n="specialties.intro">Tres frentes donde combino análisis, automatización e IA para resolver problemas reales de información.</p>
+    </div>
+    <div class="specialty-tabs reveal" role="tablist">
+      <button class="specialty-tab active" data-tab="data" role="tab" aria-selected="true">
+        <i class="fa-solid fa-chart-line"></i> <span data-i18n="specialties.tabData">Data & BI</span>
+      </button>
+      <button class="specialty-tab" data-tab="auto" role="tab" aria-selected="false">
+        <i class="fa-solid fa-gears"></i> <span data-i18n="specialties.tabAuto">Automatización</span>
+      </button>
+      <button class="specialty-tab" data-tab="ai" role="tab" aria-selected="false">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="specialties.tabAi">IA Generativa</span>
+      </button>
+    </div>
+
+    <div class="specialty-panels reveal">
+      <div class="specialty-panel active" data-panel="data">
+        <div class="specialty-body">
+          <div>
+            <div class="num">01</div>
+            <h3 data-i18n="specialties.dataTitle">Data Analytics & Business Intelligence</h3>
+            <p data-i18n="specialties.dataDesc">
+              Dashboards, reportes e indicadores que traducen datos financieros, operativos y de
+              clientes en información lista para tomar decisiones. Consultas SQL sobre datasets
+              superiores a 244 mil registros, integrando múltiples fuentes corporativas y
+              aplicando reglas de calidad, consistencia y trazabilidad.
+            </p>
+            <div class="tag-row">
+              <span class="tag" data-tech="sql"><i class="fa-solid fa-database"></i>SQL</span><span class="tag" data-tech="zoho"><i class="fa-solid fa-chart-simple"></i>Zoho Analytics</span><span class="tag" data-tech="power-bi"><i class="fa-solid fa-chart-pie"></i>Power BI</span>
+              <span class="tag" data-tech="excel"><i class="fa-solid fa-file-excel"></i>Excel</span><span class="tag" data-tech="zoho"><i class="fa-solid fa-table"></i>Zoho Sheet</span><span class="tag"><i class="fa-solid fa-gauge-high"></i><span data-i18n="specialties.kpis">KPIs</span></span>
+              <span class="tag"><i class="fa-solid fa-chart-line"></i><span data-i18n="specialties.dataViz">Data Visualization</span></span>
+            </div>
+          </div>
+          <div>
+            <div class="tag-row" style="flex-direction:column; gap:.7rem;">
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.dataChip1">Dashboards de facturación y liquidaciones</span>
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.dataChip2">Detección de duplicados e inconsistencias</span>
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.dataChip3">Reglas de priorización por fuente y fecha</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="specialty-panel" data-panel="auto">
+        <div class="specialty-body">
+          <div>
+            <div class="num">02</div>
+            <h3 data-i18n="specialties.autoTitle">Automatización & Integración de Datos</h3>
+            <p data-i18n="specialties.autoDesc">
+              Procesos end-to-end que eliminan tareas manuales y conectan sistemas entre sí:
+              desde macros de limpieza de datos hasta flujos completos con Zoho Flow, Power
+              Automate Desktop y scripts en Python para tareas recurrentes y comunicaciones
+              masivas personalizadas.
+            </p>
+            <div class="tag-row">
+              <span class="tag" data-tech="python"><i class="fa-brands fa-python"></i>Python</span><span class="tag" data-tech="zoho"><i class="fa-solid fa-code-branch"></i>Zoho Flow</span><span class="tag" data-tech="zoho"><i class="fa-solid fa-diagram-project"></i>Deluge</span>
+              <span class="tag" data-tech="power-automate"><i class="fa-solid fa-desktop"></i>Power Automate Desktop</span><span class="tag"><i class="fa-solid fa-plug"></i>REST APIs</span>
+              <span class="tag" data-tech="zoho"><i class="fa-solid fa-plug"></i>Zoho CRM API</span><span class="tag"><i class="fa-solid fa-key"></i>OAuth 2.0</span>
+            </div>
+          </div>
+          <div>
+            <div class="tag-row" style="flex-direction:column; gap:.7rem;">
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.autoChip1">Automatizaciones end-to-end con Zoho CRM</span>
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.autoChip2">Scripts Python para procesos recurrentes</span>
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.autoChip3">Integración de sistemas vía API REST</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="specialty-panel" data-panel="ai">
+        <div class="specialty-body">
+          <div>
+            <div class="num">03</div>
+            <h3 data-i18n="specialties.aiTitle">IA Generativa aplicada</h3>
+            <p data-i18n="specialties.aiDesc">
+              Uso ChatGPT, Gemini y Claude como parte de mi flujo de trabajo diario: diseño de
+              prompts estructurados, desarrollo y revisión de código asistido por IA, validación
+              y contraste de resultados, y gestión de contexto mediante flujos con Claude y
+              Obsidian.
+            </p>
+            <div class="tag-row">
+              <span class="tag" data-tech="openai"><i class="fa-solid fa-comments"></i>ChatGPT</span><span class="tag" data-tech="gemini"><i class="fa-brands fa-google"></i>Gemini</span><span class="tag" data-tech="claude"><i class="fa-solid fa-robot"></i>Claude</span>
+              <span class="tag"><i class="fa-solid fa-pen-nib"></i><span data-i18n="specialties.promptEng">Prompt Engineering</span></span><span class="tag" data-tech="obsidian"><i class="fa-brands fa-obsidian"></i>Obsidian</span>
+            </div>
+          </div>
+          <div>
+            <div class="tag-row" style="flex-direction:column; gap:.7rem;">
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.aiChip1">Desarrollo asistido por IA</span>
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.aiChip2">Transcripción y traducción con IA (Whisper + Gemini)</span>
+              <span class="tag" style="width:fit-content;" data-i18n="specialties.aiChip3">Gestión de contexto y optimización de tokens</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROYECTOS -->
+<section id="proyectos" class="projects">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="projects.tag">Portafolio</span>
+      <h2 data-i18n="projects.title">Proyectos personales</h2>
+      <p data-i18n="projects.intro">Proyectos que desarrollé por mi cuenta, fuera del horario laboral.</p>
+    </div>
+    <div class="project-carousel">
+      <button class="carousel-arrow carousel-prev" id="projPrev" type="button" aria-label="Proyecto anterior"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="carousel-viewport" id="projViewport">
+        <div class="project-track" id="projectTrack">
+          <div class="project-card reveal">
+            <div class="project-thumb">
+              <!-- Reemplaza este bloque por: <img src="proyectos/extractor-tiktok.png" alt="Extractor de Texto de Video"> -->
+              <i class="fa-solid fa-closed-captioning"></i>
+            </div>
+            <div class="project-body">
+              <h3 data-i18n="projects.p1Title">Extractor de Texto de Video</h3>
+              <p data-i18n="projects.p1Desc">
+                Herramienta de línea de comandos en Python que transcribe el audio de un vídeo
+                (TikTok o archivo local) con Whisper, detecta el idioma y traduce automáticamente
+                al español, genera un análisis técnico asistido por IA y produce un PDF profesional
+                listo para leer.
+              </p>
+              <div class="tag-row">
+                <span class="tag" data-tech="python"><i class="fa-brands fa-python"></i>Python</span><span class="tag" data-tech="openai"><i class="fa-solid fa-microphone"></i>OpenAI Whisper</span>
+                <span class="tag" data-tech="gemini"><i class="fa-brands fa-google"></i>Gemini API</span><span class="tag" data-tech="youtube"><i class="fa-brands fa-youtube"></i>yt-dlp</span><span class="tag" data-tech="ffmpeg"><i class="fa-solid fa-film"></i>FFmpeg</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/Javier3921/Extractor_texto_tiktok" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> <span data-i18n="projects.codeLink">Código</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="project-card reveal">
+            <div class="project-thumb">
+              <!-- Reemplaza este bloque por: <img src="proyectos/finanzas-gestor.png" alt="Finanzas Gestor"> -->
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="project-body">
+              <h3>Finanzas Gestor</h3>
+              <p data-i18n="projects.p2Desc">
+                Bot de Telegram para el control de ingresos y gastos personales, con dashboard de
+                visualización en Streamlit y base de datos en Supabase. Desplegado 24/7 en una VM
+                Always Free de Oracle Cloud, gestionado con systemd, a costo cero.
+              </p>
+              <div class="tag-row">
+                <span class="tag" data-tech="python"><i class="fa-brands fa-python"></i>Python</span><span class="tag" data-tech="telegram"><i class="fa-brands fa-telegram"></i>Telegram Bot API</span>
+                <span class="tag" data-tech="streamlit"><i class="fa-solid fa-layer-group"></i>Streamlit</span><span class="tag" data-tech="supabase"><i class="fa-solid fa-bolt"></i>Supabase</span><span class="tag" data-tech="oracle"><i class="fa-solid fa-cloud"></i>Oracle Cloud</span>
+              </div>
+              <div class="project-links">
+                <span class="project-private"><i class="fa-solid fa-lock"></i> <span data-i18n="projects.privateRepo">Repositorio privado</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-arrow carousel-next" id="projNext" type="button" aria-label="Siguiente proyecto"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="carousel-dots" id="projectDots"></div>
+  </div>
+</section>
+
+<!-- CERTIFICACIONES: se ven en un modal, disparado desde el widget "4
+     Certificaciones" de la sección Perfil (la sección fija se quitó del
+     recorrido normal de la página hasta sumar más certificados). -->
+<div class="modal-overlay" id="certModalOverlay">
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="certModalTitle">
+    <button class="modal-close" id="certModalClose" type="button" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+    <div class="section-head" style="margin-bottom:2rem;">
+      <span class="section-tag" data-i18n="certs.tag">Reconocimientos</span>
+      <h2 id="certModalTitle" data-i18n="certs.title">Certificaciones</h2>
+      <p data-i18n="certs.intro">Cursos y certificados enfocados en ciberseguridad y fundamentos de infraestructura.</p>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <h3>Ciberseguridad: Ethical Hacking (C|EH)</h3>
+          <div class="cert-issuer">Universidad Nacional de Ingeniería · CTIC</div>
+          <div class="cert-date">Setiembre 2025</div>
+          <div class="cert-extra" data-i18n="certs.extra1">16 horas · Nota final: 18/20</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon"><i class="fa-solid fa-user-secret"></i></div>
+        <div>
+          <h3>Ethical Hacking Essentials (EHE)</h3>
+          <div class="cert-issuer">Universidad de Lima · Facultad de Ingeniería</div>
+          <div class="cert-date">Agosto 2025</div>
+          <div class="cert-extra" data-i18n="certs.extra2">15 horas · EC-Council Academia Partner</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon"><i class="fa-solid fa-lock"></i></div>
+        <div>
+          <h3>Introduction to Cybersecurity</h3>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <div class="cert-date">Julio 2026</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon"><i class="fa-brands fa-linux"></i></div>
+        <div>
+          <h3>Linux Unhatched</h3>
+          <div class="cert-issuer">Cisco Networking Academy · NDG</div>
+          <div class="cert-date">Mayo 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Solicitar CV: pide el correo del visitante y le envía el CV en PDF por ahí,
+     así queda registro de a quién se le mandó (ver EMAILJS_CONFIG en el script,
+     falta completar con una cuenta de EmailJS para que el envío sea real). -->
+<div class="modal-overlay" id="cvModalOverlay">
+  <div class="modal-panel cv-modal-panel" role="dialog" aria-modal="true" aria-labelledby="cvModalTitle">
+    <button class="modal-close" id="cvModalClose" type="button" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+    <div class="cv-modal-icon"><i class="fa-solid fa-file-pdf"></i></div>
+    <h2 id="cvModalTitle" data-i18n="cvModal.title">Solicitar CV</h2>
+    <p class="modal-intro" data-i18n="cvModal.intro">Escribe tu correo y te envío mi CV en PDF al instante.</p>
+    <form id="cvRequestForm" class="cv-request-form">
+      <input type="email" id="cvRequestEmail" required placeholder="tu@correo.com" data-i18n-placeholder="cvModal.placeholder" autocomplete="email">
+      <button type="submit" class="btn btn-primary" id="cvRequestSubmit">
+        <span class="cv-btn-label"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="cvModal.submit">Solicitar</span></span>
+        <span class="cv-btn-sending"><i class="fa-solid fa-envelope cv-envelope-fly"></i> <span data-i18n="cvModal.sending">Enviando...</span></span>
+        <span class="cv-btn-success"><i class="fa-solid fa-check"></i> <span data-i18n="cvModal.sent">¡Enviado!</span></span>
+      </button>
+    </form>
+    <div class="cv-request-status" id="cvRequestStatus"></div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills" class="skills">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="skills.tag">Habilidades</span>
+      <h2 data-i18n="skills.title">Skills técnicas</h2>
+      <p data-i18n="skills.intro">Herramientas y tecnologías con las que trabajo con mayor frecuencia.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-cat reveal">
+        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="skills.catAi">IA Generativa & LLM-Assisted</span></h3>
+        <div class="skill-tags">
+          <span class="skill-pill" data-tech="openai"><i class="fa-solid fa-comments"></i> ChatGPT</span>
+          <span class="skill-pill" data-tech="gemini"><i class="fa-brands fa-google"></i> Gemini</span>
+          <span class="skill-pill" data-tech="claude"><i class="fa-solid fa-robot"></i> Claude</span>
+          <span class="skill-pill"><i class="fa-solid fa-pen-nib"></i> Prompt Engineering</span>
+          <span class="skill-pill" data-tech="obsidian"><i class="fa-brands fa-obsidian"></i> Obsidian</span>
+        </div>
+      </div>
+      <div class="skill-cat reveal">
+        <h3><i class="fa-solid fa-chart-line"></i> Data Analytics & BI</h3>
+        <div class="skill-tags">
+          <span class="skill-pill" data-tech="sql"><i class="fa-solid fa-database"></i> SQL</span>
+          <span class="skill-pill" data-tech="zoho"><i class="fa-solid fa-chart-simple"></i> Zoho Analytics</span>
+          <span class="skill-pill" data-tech="power-bi"><i class="fa-solid fa-chart-pie"></i> Power BI</span>
+          <span class="skill-pill" data-tech="excel"><i class="fa-solid fa-file-excel"></i> Excel</span>
+          <span class="skill-pill" data-tech="zoho"><i class="fa-solid fa-table"></i> Zoho Sheet</span>
+        </div>
+      </div>
+      <div class="skill-cat reveal">
+        <h3><i class="fa-solid fa-gears"></i> <span data-i18n="skills.catAuto">Automatización & Integración</span></h3>
+        <div class="skill-tags">
+          <span class="skill-pill" data-tech="python"><i class="fa-brands fa-python"></i> Python</span>
+          <span class="skill-pill" data-tech="zoho"><i class="fa-solid fa-code-branch"></i> Zoho Flow</span>
+          <span class="skill-pill" data-tech="zoho"><i class="fa-solid fa-diagram-project"></i> Deluge</span>
+          <span class="skill-pill" data-tech="power-automate"><i class="fa-solid fa-desktop"></i> Power Automate Desktop</span>
+          <span class="skill-pill"><i class="fa-solid fa-plug"></i> REST APIs</span>
+          <span class="skill-pill" data-tech="zoho"><i class="fa-solid fa-address-book"></i> Zoho CRM</span>
+        </div>
+      </div>
+      <div class="skill-cat reveal">
+        <h3><i class="fa-solid fa-code"></i> <span data-i18n="skills.catDev">Desarrollo & Bases de Datos</span></h3>
+        <div class="skill-tags">
+          <span class="skill-pill" data-tech="javascript"><i class="fa-brands fa-js"></i> JavaScript</span>
+          <span class="skill-pill" data-tech="react"><i class="fa-brands fa-react"></i> React</span>
+          <span class="skill-pill" data-tech="node-js"><i class="fa-brands fa-node-js"></i> Node.js</span>
+          <span class="skill-pill"><i class="fa-solid fa-bolt"></i> Express.js</span>
+          <span class="skill-pill" data-tech="oracle"><i class="fa-solid fa-database"></i> Oracle SQL Developer</span>
+          <span class="skill-pill" data-tech="sql-server"><i class="fa-solid fa-server"></i> SQL Server Management Studio</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GITHUB -->
+<section id="github">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="github.tag">Actividad</span>
+      <h2>GitHub</h2>
+      <p data-i18n="github.intro">Mi actividad de código en tiempo real, directo desde GitHub.</p>
+    </div>
+    <div class="github-card reveal">
+      <div class="gh-cal-head">
+        <div class="gh-cal-total" id="ghCalTotal" data-i18n="github.loading">Cargando actividad de GitHub…</div>
+        <a class="gh-cal-link" href="https://github.com/Javier3921" target="_blank" rel="noopener">
+          <span data-i18n="github.viewProfile">Ver perfil completo</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+      <div class="github-calendar-wrap" id="ghCalWrap">
+        <div class="gh-cal-loading"><i class="fa-solid fa-spinner fa-spin"></i> <span data-i18n="github.loadingCal">Cargando calendario de contribuciones...</span></div>
+      </div>
+      <div class="gh-cal-legend">
+        <span data-i18n="github.less">Menos</span>
+        <span class="gh-cal-day" data-level="0"></span>
+        <span class="gh-cal-day" data-level="1"></span>
+        <span class="gh-cal-day" data-level="2"></span>
+        <span class="gh-cal-day" data-level="3"></span>
+        <span class="gh-cal-day" data-level="4"></span>
+        <span data-i18n="github.more">Más</span>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="gh-tooltip" id="ghTooltip" role="tooltip"></div>
+
+<!-- CONTACTO -->
+<section id="contacto" class="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="contact.tag">Hablemos</span>
+      <h2 data-i18n="contact.title">Contacto</h2>
+      <p data-i18n="contact.intro">¿Tienes un proyecto en mente o una oportunidad laboral? Escríbeme.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-info-card" id="copyEmail" data-tech="email">
+          <div class="icon-box"><i class="fa-solid fa-envelope"></i></div>
+          <div>
+            <div class="label" data-i18n="contact.emailLabel">Correo electrónico</div>
+            <div class="value">javierfiestas44@gmail.com</div>
+          </div>
+        </div>
+        <a class="contact-info-card" data-tech="linkedin" href="https://www.linkedin.com/in/javier-fiestas-6457ba240/" target="_blank" rel="noopener">
+          <div class="icon-box"><i class="fa-brands fa-linkedin-in"></i></div>
+          <div>
+            <div class="label">LinkedIn</div>
+            <div class="value">/in/javier-fiestas</div>
+          </div>
+        </a>
+        <a class="contact-info-card" data-tech="github" href="https://github.com/Javier3921" target="_blank" rel="noopener">
+          <div class="icon-box"><i class="fa-brands fa-github"></i></div>
+          <div>
+            <div class="label">GitHub</div>
+            <div class="value">@Javier3921</div>
+          </div>
+        </a>
+        <div class="contact-info-card">
+          <div class="icon-box"><i class="fa-solid fa-location-dot"></i></div>
+          <div>
+            <div class="label" data-i18n="contact.locationLabel">Ubicación</div>
+            <div class="value">San Miguel, Lima</div>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form reveal" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name" data-i18n="contact.formName">Nombre</label>
+            <input type="text" id="name" required placeholder="Tu nombre" data-i18n-placeholder="contact.formNamePh">
+          </div>
+          <div class="form-group">
+            <label for="email" data-i18n="contact.formEmail">Correo</label>
+            <input type="email" id="email" required placeholder="tu@correo.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subject" data-i18n="contact.formSubject">Asunto</label>
+          <input type="text" id="subject" required placeholder="¿En qué puedo ayudarte?" data-i18n-placeholder="contact.formSubjectPh">
+        </div>
+        <div class="form-group">
+          <label for="message" data-i18n="contact.formMessage">Mensaje</label>
+          <textarea id="message" required placeholder="Escribe tu mensaje aquí..." data-i18n-placeholder="contact.formMessagePh"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="contact.formSubmit">Enviar mensaje</span></button>
+        <div class="form-status" id="formStatus"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; <span id="year"></span> Javier Fiestas. <span data-i18n="footer.rights">Todos los derechos reservados.</span></p>
+  <div class="footer-social">
+    <a href="https://www.linkedin.com/in/javier-fiestas-6457ba240/" target="_blank" rel="noopener" class="social-icon" data-tech="linkedin"><i class="fa-brands fa-linkedin-in"></i></a>
+    <a href="https://github.com/Javier3921" target="_blank" rel="noopener" class="social-icon" data-tech="github"><i class="fa-brands fa-github"></i></a>
+    <a href="mailto:javierfiestas44@gmail.com" class="social-icon" data-tech="email"><i class="fa-solid fa-envelope"></i></a>
+  </div>
+</footer>
+
+<button id="backToTop" aria-label="Volver arriba" data-i18n-aria="aria.backToTop"><i class="fa-solid fa-arrow-up"></i></button>
+<div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toastMsg"></span></div>
+
+<!-- Robotito flotante: por ahora responde con un set fijo de respuestas predefinidas
+     (buscadas por palabra clave); más adelante se conectará a una IA real. Diseño propio
+     inspirado libremente en la estética "robot amigable" de juegos tipo Astro Bot. -->
+<button class="robot-fab" id="chatbotFab" aria-expanded="false" aria-controls="chatbotPanel" aria-label="Abrir asistente virtual sobre el perfil de Javier">
+  <span class="robot-thruster-glow" aria-hidden="true"></span>
+  <div class="robot-figure">
+    <svg class="robot-svg" viewBox="0 0 100 130" aria-hidden="true">
+      <ellipse class="bot-foot" cx="38" cy="108" rx="9" ry="6"></ellipse>
+      <ellipse class="bot-foot" cx="62" cy="108" rx="9" ry="6"></ellipse>
+      <line class="bot-antenna" x1="50" y1="20" x2="50" y2="6"></line>
+      <circle class="bot-antenna-tip" cx="50" cy="6" r="5"></circle>
+      <rect class="bot-body-shape" x="14" y="18" width="72" height="78" rx="34"></rect>
+      <ellipse class="bot-shade" cx="50" cy="86" rx="30" ry="14"></ellipse>
+      <ellipse class="bot-gloss" cx="32" cy="36" rx="12" ry="8" transform="rotate(-20 32 36)"></ellipse>
+      <ellipse class="bot-eye bot-eye-l" cx="36" cy="56" rx="8" ry="11"></ellipse>
+      <ellipse class="bot-eye bot-eye-r" cx="64" cy="56" rx="8" ry="11"></ellipse>
+      <circle class="bot-eye-glint" cx="33" cy="50" r="2.4"></circle>
+      <circle class="bot-eye-glint" cx="61" cy="50" r="2.4"></circle>
+      <circle class="bot-chest-light" cx="50" cy="88" r="4.5"></circle>
+      <g class="bot-arm bot-arm-l"><rect x="4" y="44" width="10" height="30" rx="5"></rect><circle cx="9" cy="76" r="6"></circle></g>
+      <g class="bot-arm bot-arm-r"><rect x="86" y="44" width="10" height="30" rx="5"></rect><circle cx="91" cy="76" r="6"></circle></g>
+    </svg>
+  </div>
+  <span class="chatbot-fab-dot" aria-hidden="true"></span>
+</button>
+
+<div class="chatbot-panel" id="chatbotPanel" role="dialog" aria-label="Asistente virtual de Javier Fiestas">
+  <div class="chatbot-header">
+    <div class="chatbot-avatar"><i class="fa-solid fa-robot"></i></div>
+    <div>
+      <div class="chatbot-title">Asistente de Javier</div>
+      <div class="chatbot-subtitle"><span class="chatbot-status-dot"></span> Respuestas rápidas</div>
+    </div>
+    <button class="chatbot-close" id="chatbotClose" type="button" aria-label="Cerrar chat"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="chatbot-messages" id="chatbotMessages"></div>
+  <div class="chatbot-suggestions" id="chatbotSuggestions"></div>
+  <form class="chatbot-input-row" id="chatbotForm">
+    <input type="text" id="chatbotInput" placeholder="Escribe tu pregunta..." autocomplete="off" maxlength="140">
+    <button type="submit" aria-label="Enviar"><i class="fa-solid fa-paper-plane"></i></button>
+  </form>
+  <div class="chatbot-disclaimer">Respuestas predefinidas por ahora · pronto conectado a IA</div>
+</div>
+
+<script>
+  // ---- Idiomas (i18n) ----
+  // Diccionario + función que recorre [data-i18n] / [data-i18n-placeholder] /
+  // [data-i18n-aria] y reemplaza el contenido. El contenido del chatbot NO se
+  // traduce todavía (se rehará con info nueva más adelante); tampoco los
+  // nombres propios de tecnologías/certificados/empresas.
+  const I18N = {
+    es: {
+      "nav.home":"Inicio","nav.profile":"Perfil","nav.experience":"Experiencia","nav.specialties":"Especialidades",
+      "nav.projects":"Proyectos","nav.skills":"Skills","nav.contact":"Contacto",
+      "hero.greeting":"Hola, soy",
+      "hero.bio":"Bachiller en Ingeniería de Sistemas por la Universidad de Lima, con cerca de 2 años transformando datos dispersos en dashboards, automatizaciones e integraciones que realmente se usan para tomar decisiones. Trabajo a diario con SQL, Python, Zoho y herramientas de IA generativa como parte de mi flujo de trabajo.",
+      "hero.ctaContact":"Contáctame","hero.ctaCv":"Solicitar CV","hero.liveStack":"Stack en vivo","hero.scroll":"Desplázate",
+      "profile.tag":"Perfil","profile.title":"Un poco de mi historia",
+      "profile.p1":"Soy Bachiller en Ingeniería de Sistemas por la Universidad de Lima, con cerca de 2 años de experiencia en análisis de datos, Business Intelligence, automatización de procesos e integración de sistemas. He trabajado con SQL, Python, Zoho Analytics, Power BI, Zoho CRM y APIs REST para extraer, validar, transformar y visualizar información proveniente de múltiples fuentes corporativas.",
+      "profile.p2":"He implementado soluciones de consulta y procesamiento para datasets superiores a 244 mil registros, además de procesos para asegurar la calidad, consistencia y trazabilidad de la información y automatizar tareas recurrentes que antes eran manuales.",
+      "profile.p3":"Complemento mi trabajo diario con herramientas de IA generativa (ChatGPT, Gemini, Claude) para el desarrollo, revisión y documentación de código, y me interesa seguir creciendo hacia Data Engineering, Data Integration y Business Intelligence.",
+      "profile.statYears":"Años de experiencia","profile.statCerts":"Certificaciones","profile.statProjects":"Proyectos personales","profile.statRecords":"Miles de registros procesados",
+      "experience.tag":"Trayectoria","experience.title":"Experiencia profesional","experience.intro":"Mi rol actual, donde aplico análisis de datos y automatización sobre procesos reales.",
+      "experience.role":"Practicante / Analista de Automatización y Datos","experience.period":"Agosto 2024 — Actualidad",
+      "experience.b1":"Diseño y mantenimiento de dashboards en Zoho Analytics para facturación, liquidaciones, horas trabajadas y KPIs financieros/operativos, con consultas SQL (JOIN, GROUP BY, funciones de agregación) sobre múltiples fuentes corporativas.",
+      "experience.b2":"Validación y control de calidad de datos: detección de inconsistencias, duplicados y desviaciones entre fuentes, con reglas de priorización por origen y fecha de actualización.",
+      "experience.b3":"Automatizaciones end-to-end en Zoho CRM, Zoho Flow y Deluge, además de Power Automate Desktop, sincronizando sistemas y eliminando tareas manuales recurrentes.",
+      "experience.b4":"Scripts en Python para procesamiento de bases de datos y generación de comunicaciones masivas personalizadas; macros en Excel y Zoho Sheet para consolidación de información.",
+      "experience.b5":"Integración de sistemas mediante APIs REST y Zoho CRM API (OAuth 2.0).",
+      "experience.b6":"Documentación de procesos y reglas de negocio para asegurar su mantenimiento y continuidad operativa.",
+      "experience.toggleMore":"Ver historial completo","experience.toggleLess":"Ver menos",
+      "education.tag":"Formación","education.title":"Educación","education.degree":"Bachiller en Ingeniería de Sistemas",
+      "education.desc":"Formación en desarrollo de software, bases de datos, análisis de sistemas y fundamentos de ciberseguridad, complementada con cursos propios en la carrera sobre ethical hacking y buenas prácticas de TI.",
+      "specialties.tag":"Áreas de especialidad","specialties.title":"En qué me enfoco",
+      "specialties.intro":"Tres frentes donde combino análisis, automatización e IA para resolver problemas reales de información.",
+      "specialties.tabData":"Data & BI","specialties.tabAuto":"Automatización","specialties.tabAi":"IA Generativa",
+      "specialties.dataTitle":"Data Analytics & Business Intelligence",
+      "specialties.dataDesc":"Dashboards, reportes e indicadores que traducen datos financieros, operativos y de clientes en información lista para tomar decisiones. Consultas SQL sobre datasets superiores a 244 mil registros, integrando múltiples fuentes corporativas y aplicando reglas de calidad, consistencia y trazabilidad.",
+      "specialties.kpis":"KPIs","specialties.dataViz":"Visualización de Datos",
+      "specialties.dataChip1":"Dashboards de facturación y liquidaciones","specialties.dataChip2":"Detección de duplicados e inconsistencias","specialties.dataChip3":"Reglas de priorización por fuente y fecha",
+      "specialties.autoTitle":"Automatización & Integración de Datos",
+      "specialties.autoDesc":"Procesos end-to-end que eliminan tareas manuales y conectan sistemas entre sí: desde macros de limpieza de datos hasta flujos completos con Zoho Flow, Power Automate Desktop y scripts en Python para tareas recurrentes y comunicaciones masivas personalizadas.",
+      "specialties.autoChip1":"Automatizaciones end-to-end con Zoho CRM","specialties.autoChip2":"Scripts Python para procesos recurrentes","specialties.autoChip3":"Integración de sistemas vía API REST",
+      "specialties.aiTitle":"IA Generativa aplicada",
+      "specialties.aiDesc":"Uso ChatGPT, Gemini y Claude como parte de mi flujo de trabajo diario: diseño de prompts estructurados, desarrollo y revisión de código asistido por IA, validación y contraste de resultados, y gestión de contexto mediante flujos con Claude y Obsidian.",
+      "specialties.promptEng":"Prompt Engineering",
+      "specialties.aiChip1":"Desarrollo asistido por IA","specialties.aiChip2":"Transcripción y traducción con IA (Whisper + Gemini)","specialties.aiChip3":"Gestión de contexto y optimización de tokens",
+      "projects.tag":"Portafolio","projects.title":"Proyectos personales","projects.intro":"Proyectos que desarrollé por mi cuenta, fuera del horario laboral.",
+      "projects.p1Title":"Extractor de Texto de Video",
+      "projects.p1Desc":"Herramienta de línea de comandos en Python que transcribe el audio de un vídeo (TikTok o archivo local) con Whisper, detecta el idioma y traduce automáticamente al español, genera un análisis técnico asistido por IA y produce un PDF profesional listo para leer.",
+      "projects.p2Desc":"Bot de Telegram para el control de ingresos y gastos personales, con dashboard de visualización en Streamlit y base de datos en Supabase. Desplegado 24/7 en una VM Always Free de Oracle Cloud, gestionado con systemd, a costo cero.",
+      "projects.codeLink":"Código","projects.privateRepo":"Repositorio privado",
+      "certs.tag":"Reconocimientos","certs.title":"Certificaciones","certs.intro":"Cursos y certificados enfocados en ciberseguridad y fundamentos de infraestructura.",
+      "certs.extra1":"16 horas · Nota final: 18/20","certs.extra2":"15 horas · EC-Council Academia Partner",
+      "skills.tag":"Habilidades","skills.title":"Skills técnicas","skills.intro":"Herramientas y tecnologías con las que trabajo con mayor frecuencia.",
+      "skills.catAi":"IA Generativa & LLM-Assisted","skills.catAuto":"Automatización & Integración","skills.catDev":"Desarrollo & Bases de Datos",
+      "github.tag":"Actividad","github.intro":"Mi actividad de código en tiempo real, directo desde GitHub.",
+      "github.loading":"Cargando actividad de GitHub…","github.viewProfile":"Ver perfil completo","github.loadingCal":"Cargando calendario de contribuciones...",
+      "github.less":"Menos","github.more":"Más",
+      "github.noContrib":"Sin contribuciones el {date}","github.oneContrib":"1 contribución el {date}","github.nContrib":"{n} contribuciones el {date}",
+      "github.totalSingular":"1 contribución en {year}","github.totalPlural":"{n} contribuciones en {year}",
+      "github.errorLoad":"No se pudo cargar el calendario justo ahora.","github.errorLink":"Ver la actividad directo en GitHub","github.activityFallback":"Actividad de GitHub",
+      "contact.tag":"Hablemos","contact.title":"Contacto","contact.intro":"¿Tienes un proyecto en mente o una oportunidad laboral? Escríbeme.",
+      "contact.emailLabel":"Correo electrónico","contact.locationLabel":"Ubicación",
+      "contact.formName":"Nombre","contact.formNamePh":"Tu nombre","contact.formEmail":"Correo",
+      "contact.formSubject":"Asunto","contact.formSubjectPh":"¿En qué puedo ayudarte?",
+      "contact.formMessage":"Mensaje","contact.formMessagePh":"Escribe tu mensaje aquí...","contact.formSubmit":"Enviar mensaje",
+      "cvModal.title":"Solicitar CV","cvModal.intro":"Escribe tu correo y te envío mi CV en PDF al instante.",
+      "cvModal.placeholder":"tu@correo.com","cvModal.submit":"Solicitar","cvModal.sending":"Enviando...","cvModal.sent":"¡Enviado!",
+      "cvModal.notConfigured":"El envío automático todavía no está configurado. Escríbeme directo a javierfiestas44@gmail.com mientras tanto.",
+      "cvModal.errorGeneric":"No se pudo enviar el correo. Intenta de nuevo o escríbeme directo a javierfiestas44@gmail.com.",
+      "cvModal.successMsg":"Listo, revisa tu bandeja de entrada (y spam) en un par de minutos.",
+      "footer.rights":"Todos los derechos reservados.",
+      "aria.themeToggle":"Cambiar tema","aria.menuToggle":"Abrir menú","aria.backToTop":"Volver arriba",
+      "toast.emailCopied":"Correo copiado: ","toast.copyFailed":"No se pudo copiar el correo",
+      "heroRoles":["Analista de Datos","Especialista en Automatización","Business Intelligence","IA Generativa & Desarrollo"]
+    },
+    en: {
+      "nav.home":"Home","nav.profile":"Profile","nav.experience":"Experience","nav.specialties":"Specialties",
+      "nav.projects":"Projects","nav.skills":"Skills","nav.contact":"Contact",
+      "hero.greeting":"Hi, I'm",
+      "hero.bio":"Bachelor's degree in Systems Engineering from Universidad de Lima, with close to 2 years turning scattered data into dashboards, automations, and integrations that are actually used to make decisions. I work daily with SQL, Python, Zoho, and generative AI tools as part of my workflow.",
+      "hero.ctaContact":"Contact me","hero.ctaCv":"Request CV","hero.liveStack":"Live stack","hero.scroll":"Scroll down",
+      "profile.tag":"Profile","profile.title":"A bit about my story",
+      "profile.p1":"I hold a Bachelor's degree in Systems Engineering from Universidad de Lima, with close to 2 years of experience in data analysis, Business Intelligence, process automation, and systems integration. I've worked with SQL, Python, Zoho Analytics, Power BI, Zoho CRM, and REST APIs to extract, validate, transform, and visualize information from multiple corporate sources.",
+      "profile.p2":"I've implemented query and processing solutions for datasets of over 244 thousand records, along with processes to ensure data quality, consistency, and traceability, and to automate recurring tasks that used to be manual.",
+      "profile.p3":"I complement my daily work with generative AI tools (ChatGPT, Gemini, Claude) for code development, review, and documentation, and I'm interested in continuing to grow toward Data Engineering, Data Integration, and Business Intelligence.",
+      "profile.statYears":"Years of experience","profile.statCerts":"Certifications","profile.statProjects":"Personal projects","profile.statRecords":"Thousand records processed",
+      "experience.tag":"Career","experience.title":"Professional experience","experience.intro":"My current role, where I apply data analysis and automation to real processes.",
+      "experience.role":"Intern / Automation & Data Analyst","experience.period":"August 2024 — Present",
+      "experience.b1":"Design and maintenance of Zoho Analytics dashboards for billing, settlements, worked hours, and financial/operational KPIs, using SQL queries (JOIN, GROUP BY, aggregate functions) across multiple corporate sources.",
+      "experience.b2":"Data validation and quality control: detecting inconsistencies, duplicates, and deviations between sources, with prioritization rules based on origin and update date.",
+      "experience.b3":"End-to-end automations in Zoho CRM, Zoho Flow, and Deluge, as well as Power Automate Desktop, synchronizing systems and eliminating recurring manual tasks.",
+      "experience.b4":"Python scripts for database processing and generating personalized mass communications; Excel and Zoho Sheet macros for consolidating information.",
+      "experience.b5":"System integration via REST APIs and the Zoho CRM API (OAuth 2.0).",
+      "experience.b6":"Documentation of processes and business rules to ensure their maintenance and operational continuity.",
+      "experience.toggleMore":"View full history","experience.toggleLess":"View less",
+      "education.tag":"Education","education.title":"Education","education.degree":"Bachelor's Degree in Systems Engineering",
+      "education.desc":"Training in software development, databases, systems analysis, and cybersecurity fundamentals, complemented by elective courses in ethical hacking and IT best practices.",
+      "specialties.tag":"Areas of expertise","specialties.title":"What I focus on",
+      "specialties.intro":"Three areas where I combine analysis, automation, and AI to solve real information problems.",
+      "specialties.tabData":"Data & BI","specialties.tabAuto":"Automation","specialties.tabAi":"Generative AI",
+      "specialties.dataTitle":"Data Analytics & Business Intelligence",
+      "specialties.dataDesc":"Dashboards, reports, and indicators that turn financial, operational, and customer data into decision-ready information. SQL queries over datasets of more than 244 thousand records, integrating multiple corporate sources and applying quality, consistency, and traceability rules.",
+      "specialties.kpis":"KPIs","specialties.dataViz":"Data Visualization",
+      "specialties.dataChip1":"Billing and settlement dashboards","specialties.dataChip2":"Duplicate and inconsistency detection","specialties.dataChip3":"Prioritization rules by source and date",
+      "specialties.autoTitle":"Automation & Data Integration",
+      "specialties.autoDesc":"End-to-end processes that eliminate manual tasks and connect systems together: from data-cleaning macros to full workflows with Zoho Flow, Power Automate Desktop, and Python scripts for recurring tasks and personalized mass communications.",
+      "specialties.autoChip1":"End-to-end automations with Zoho CRM","specialties.autoChip2":"Python scripts for recurring processes","specialties.autoChip3":"System integration via REST API",
+      "specialties.aiTitle":"Applied Generative AI",
+      "specialties.aiDesc":"I use ChatGPT, Gemini, and Claude as part of my daily workflow: designing structured prompts, AI-assisted code development and review, validating and cross-checking results, and context management through workflows with Claude and Obsidian.",
+      "specialties.promptEng":"Prompt Engineering",
+      "specialties.aiChip1":"AI-assisted development","specialties.aiChip2":"AI transcription and translation (Whisper + Gemini)","specialties.aiChip3":"Context management and token optimization",
+      "projects.tag":"Portfolio","projects.title":"Personal projects","projects.intro":"Projects I built on my own, outside of work hours.",
+      "projects.p1Title":"Video Text Extractor",
+      "projects.p1Desc":"Python command-line tool that transcribes a video's audio (TikTok or local file) with Whisper, detects the language and automatically translates it to Spanish, generates an AI-assisted technical analysis, and produces a professional, ready-to-read PDF.",
+      "projects.p2Desc":"Telegram bot for tracking personal income and expenses, with a Streamlit visualization dashboard and a Supabase database. Deployed 24/7 on an Oracle Cloud Always Free VM, managed with systemd, at zero cost.",
+      "projects.codeLink":"Code","projects.privateRepo":"Private repository",
+      "certs.tag":"Recognitions","certs.title":"Certifications","certs.intro":"Courses and certificates focused on cybersecurity and infrastructure fundamentals.",
+      "certs.extra1":"16 hours · Final grade: 18/20","certs.extra2":"15 hours · EC-Council Academia Partner",
+      "skills.tag":"Skills","skills.title":"Technical skills","skills.intro":"Tools and technologies I work with most often.",
+      "skills.catAi":"IA Generativa & LLM-Assisted","skills.catAuto":"Automation & Integration","skills.catDev":"Development & Databases",
+      "github.tag":"Activity","github.intro":"My real-time coding activity, straight from GitHub.",
+      "github.loading":"Loading GitHub activity…","github.viewProfile":"View full profile","github.loadingCal":"Loading contribution calendar...",
+      "github.less":"Less","github.more":"More",
+      "github.noContrib":"No contributions on {date}","github.oneContrib":"1 contribution on {date}","github.nContrib":"{n} contributions on {date}",
+      "github.totalSingular":"1 contribution in {year}","github.totalPlural":"{n} contributions in {year}",
+      "github.errorLoad":"Couldn't load the calendar right now.","github.errorLink":"View activity directly on GitHub","github.activityFallback":"GitHub Activity",
+      "contact.tag":"Let's talk","contact.title":"Contact","contact.intro":"Have a project in mind or a job opportunity? Write to me.",
+      "contact.emailLabel":"Email","contact.locationLabel":"Location",
+      "contact.formName":"Name","contact.formNamePh":"Your name","contact.formEmail":"Email",
+      "contact.formSubject":"Subject","contact.formSubjectPh":"How can I help you?",
+      "contact.formMessage":"Message","contact.formMessagePh":"Write your message here...","contact.formSubmit":"Send message",
+      "cvModal.title":"Request CV","cvModal.intro":"Enter your email and I'll send you my CV in PDF right away.",
+      "cvModal.placeholder":"you@email.com","cvModal.submit":"Request","cvModal.sending":"Sending...","cvModal.sent":"Sent!",
+      "cvModal.notConfigured":"Automatic sending isn't set up yet. Email me directly at javierfiestas44@gmail.com in the meantime.",
+      "cvModal.errorGeneric":"Couldn't send the email. Try again or email me directly at javierfiestas44@gmail.com.",
+      "cvModal.successMsg":"Done, check your inbox (and spam folder) in a couple of minutes.",
+      "footer.rights":"All rights reserved.",
+      "aria.themeToggle":"Toggle theme","aria.menuToggle":"Open menu","aria.backToTop":"Back to top",
+      "toast.emailCopied":"Email copied: ","toast.copyFailed":"Couldn't copy the email",
+      "heroRoles":["Data Analyst","Automation Specialist","Business Intelligence","Generative AI & Development"]
+    },
+    pt: {
+      "nav.home":"Início","nav.profile":"Perfil","nav.experience":"Experiência","nav.specialties":"Especialidades",
+      "nav.projects":"Projetos","nav.skills":"Skills","nav.contact":"Contato",
+      "hero.greeting":"Olá, eu sou",
+      "hero.bio":"Bacharel em Engenharia de Sistemas pela Universidade de Lima, com quase 2 anos transformando dados dispersos em dashboards, automações e integrações que realmente são usadas para tomar decisões. Trabalho diariamente com SQL, Python, Zoho e ferramentas de IA generativa como parte do meu fluxo de trabalho.",
+      "hero.ctaContact":"Fale comigo","hero.ctaCv":"Solicitar CV","hero.liveStack":"Stack ao vivo","hero.scroll":"Role para baixo",
+      "profile.tag":"Perfil","profile.title":"Um pouco da minha história",
+      "profile.p1":"Sou bacharel em Engenharia de Sistemas pela Universidade de Lima, com quase 2 anos de experiência em análise de dados, Business Intelligence, automação de processos e integração de sistemas. Trabalhei com SQL, Python, Zoho Analytics, Power BI, Zoho CRM e APIs REST para extrair, validar, transformar e visualizar informações de múltiplas fontes corporativas.",
+      "profile.p2":"Implementei soluções de consulta e processamento para bases de dados com mais de 244 mil registros, além de processos para garantir a qualidade, consistência e rastreabilidade das informações e automatizar tarefas recorrentes que antes eram manuais.",
+      "profile.p3":"Complemento meu trabalho diário com ferramentas de IA generativa (ChatGPT, Gemini, Claude) para desenvolvimento, revisão e documentação de código, e tenho interesse em continuar crescendo em direção a Data Engineering, Data Integration e Business Intelligence.",
+      "profile.statYears":"Anos de experiência","profile.statCerts":"Certificações","profile.statProjects":"Projetos pessoais","profile.statRecords":"Mil registros processados",
+      "experience.tag":"Trajetória","experience.title":"Experiência profissional","experience.intro":"Meu cargo atual, onde aplico análise de dados e automação em processos reais.",
+      "experience.role":"Estagiário / Analista de Automação e Dados","experience.period":"Agosto de 2024 — Atualmente",
+      "experience.b1":"Criação e manutenção de dashboards no Zoho Analytics para faturamento, liquidações, horas trabalhadas e KPIs financeiros/operacionais, com consultas SQL (JOIN, GROUP BY, funções de agregação) sobre múltiplas fontes corporativas.",
+      "experience.b2":"Validação e controle de qualidade de dados: detecção de inconsistências, duplicados e desvios entre fontes, com regras de priorização por origem e data de atualização.",
+      "experience.b3":"Automações ponta a ponta no Zoho CRM, Zoho Flow e Deluge, além do Power Automate Desktop, sincronizando sistemas e eliminando tarefas manuais recorrentes.",
+      "experience.b4":"Scripts em Python para processamento de bancos de dados e geração de comunicações em massa personalizadas; macros em Excel e Zoho Sheet para consolidação de informações.",
+      "experience.b5":"Integração de sistemas por meio de APIs REST e da API do Zoho CRM (OAuth 2.0).",
+      "experience.b6":"Documentação de processos e regras de negócio para garantir sua manutenção e continuidade operacional.",
+      "experience.toggleMore":"Ver histórico completo","experience.toggleLess":"Ver menos",
+      "education.tag":"Formação","education.title":"Educação","education.degree":"Bacharelado em Engenharia de Sistemas",
+      "education.desc":"Formação em desenvolvimento de software, bancos de dados, análise de sistemas e fundamentos de cibersegurança, complementada por disciplinas eletivas do curso sobre ethical hacking e boas práticas de TI.",
+      "specialties.tag":"Áreas de especialização","specialties.title":"No que eu me concentro",
+      "specialties.intro":"Três frentes onde combino análise, automação e IA para resolver problemas reais de informação.",
+      "specialties.tabData":"Data & BI","specialties.tabAuto":"Automação","specialties.tabAi":"IA Generativa",
+      "specialties.dataTitle":"Data Analytics & Business Intelligence",
+      "specialties.dataDesc":"Dashboards, relatórios e indicadores que transformam dados financeiros, operacionais e de clientes em informações prontas para decisão. Consultas SQL sobre bases de dados com mais de 244 mil registros, integrando múltiplas fontes corporativas e aplicando regras de qualidade, consistência e rastreabilidade.",
+      "specialties.kpis":"KPIs","specialties.dataViz":"Visualização de Dados",
+      "specialties.dataChip1":"Dashboards de faturamento e liquidações","specialties.dataChip2":"Detecção de duplicados e inconsistências","specialties.dataChip3":"Regras de priorização por fonte e data",
+      "specialties.autoTitle":"Automação & Integração de Dados",
+      "specialties.autoDesc":"Processos ponta a ponta que eliminam tarefas manuais e conectam sistemas entre si: desde macros de limpeza de dados até fluxos completos com Zoho Flow, Power Automate Desktop e scripts em Python para tarefas recorrentes e comunicações em massa personalizadas.",
+      "specialties.autoChip1":"Automações ponta a ponta com Zoho CRM","specialties.autoChip2":"Scripts Python para processos recorrentes","specialties.autoChip3":"Integração de sistemas via API REST",
+      "specialties.aiTitle":"IA Generativa aplicada",
+      "specialties.aiDesc":"Uso ChatGPT, Gemini e Claude como parte do meu fluxo de trabalho diário: criação de prompts estruturados, desenvolvimento e revisão de código assistidos por IA, validação e comparação de resultados, e gestão de contexto por meio de fluxos com Claude e Obsidian.",
+      "specialties.promptEng":"Prompt Engineering",
+      "specialties.aiChip1":"Desenvolvimento assistido por IA","specialties.aiChip2":"Transcrição e tradução com IA (Whisper + Gemini)","specialties.aiChip3":"Gestão de contexto e otimização de tokens",
+      "projects.tag":"Portfólio","projects.title":"Projetos pessoais","projects.intro":"Projetos que desenvolvi por conta própria, fora do horário de trabalho.",
+      "projects.p1Title":"Extrator de Texto de Vídeo",
+      "projects.p1Desc":"Ferramenta de linha de comando em Python que transcreve o áudio de um vídeo (TikTok ou arquivo local) com Whisper, detecta o idioma e traduz automaticamente para o espanhol, gera uma análise técnica assistida por IA e produz um PDF profissional pronto para leitura.",
+      "projects.p2Desc":"Bot do Telegram para controle de receitas e despesas pessoais, com dashboard de visualização em Streamlit e banco de dados no Supabase. Implantado 24/7 em uma VM Always Free da Oracle Cloud, gerenciado com systemd, a custo zero.",
+      "projects.codeLink":"Código","projects.privateRepo":"Repositório privado",
+      "certs.tag":"Reconhecimentos","certs.title":"Certificações","certs.intro":"Cursos e certificados focados em cibersegurança e fundamentos de infraestrutura.",
+      "certs.extra1":"16 horas · Nota final: 18/20","certs.extra2":"15 horas · EC-Council Academia Partner",
+      "skills.tag":"Habilidades","skills.title":"Skills técnicas","skills.intro":"Ferramentas e tecnologias com as quais trabalho com mais frequência.",
+      "skills.catAi":"IA Generativa & LLM-Assisted","skills.catAuto":"Automação & Integração","skills.catDev":"Desenvolvimento & Bancos de Dados",
+      "github.tag":"Atividade","github.intro":"Minha atividade de código em tempo real, direto do GitHub.",
+      "github.loading":"Carregando atividade do GitHub…","github.viewProfile":"Ver perfil completo","github.loadingCal":"Carregando calendário de contribuições...",
+      "github.less":"Menos","github.more":"Mais",
+      "github.noContrib":"Nenhuma contribuição em {date}","github.oneContrib":"1 contribuição em {date}","github.nContrib":"{n} contribuições em {date}",
+      "github.totalSingular":"1 contribuição em {year}","github.totalPlural":"{n} contribuições em {year}",
+      "github.errorLoad":"Não foi possível carregar o calendário agora.","github.errorLink":"Ver a atividade direto no GitHub","github.activityFallback":"Atividade do GitHub",
+      "contact.tag":"Vamos conversar","contact.title":"Contato","contact.intro":"Tem um projeto em mente ou uma oportunidade de trabalho? Escreva para mim.",
+      "contact.emailLabel":"E-mail","contact.locationLabel":"Localização",
+      "contact.formName":"Nome","contact.formNamePh":"Seu nome","contact.formEmail":"E-mail",
+      "contact.formSubject":"Assunto","contact.formSubjectPh":"Como posso ajudar?",
+      "contact.formMessage":"Mensagem","contact.formMessagePh":"Escreva sua mensagem aqui...","contact.formSubmit":"Enviar mensagem",
+      "cvModal.title":"Solicitar CV","cvModal.intro":"Digite seu e-mail e envio meu CV em PDF na hora.",
+      "cvModal.placeholder":"seu@email.com","cvModal.submit":"Solicitar","cvModal.sending":"Enviando...","cvModal.sent":"Enviado!",
+      "cvModal.notConfigured":"O envio automático ainda não está configurado. Escreva-me diretamente em javierfiestas44@gmail.com enquanto isso.",
+      "cvModal.errorGeneric":"Não foi possível enviar o e-mail. Tente novamente ou escreva-me em javierfiestas44@gmail.com.",
+      "cvModal.successMsg":"Pronto, confira sua caixa de entrada (e spam) em alguns minutos.",
+      "footer.rights":"Todos os direitos reservados.",
+      "aria.themeToggle":"Alternar tema","aria.menuToggle":"Abrir menu","aria.backToTop":"Voltar ao topo",
+      "toast.emailCopied":"E-mail copiado: ","toast.copyFailed":"Não foi possível copiar o e-mail",
+      "heroRoles":["Analista de Dados","Especialista em Automação","Business Intelligence","IA Generativa & Desenvolvimento"]
+    },
+    fr: {
+      "nav.home":"Accueil","nav.profile":"Profil","nav.experience":"Expérience","nav.specialties":"Spécialités",
+      "nav.projects":"Projets","nav.skills":"Compétences","nav.contact":"Contact",
+      "hero.greeting":"Bonjour, je suis",
+      "hero.bio":"Titulaire d'une licence en génie des systèmes de l'Universidad de Lima, avec près de 2 ans d'expérience à transformer des données éparses en tableaux de bord, automatisations et intégrations réellement utilisés pour la prise de décision. Je travaille au quotidien avec SQL, Python, Zoho et des outils d'IA générative dans mon flux de travail.",
+      "hero.ctaContact":"Contactez-moi","hero.ctaCv":"Demander mon CV","hero.liveStack":"Stack en direct","hero.scroll":"Défiler",
+      "profile.tag":"Profil","profile.title":"Un peu de mon histoire",
+      "profile.p1":"Je suis titulaire d'une licence en génie des systèmes de l'Universidad de Lima, avec près de 2 ans d'expérience en analyse de données, Business Intelligence, automatisation des processus et intégration de systèmes. J'ai travaillé avec SQL, Python, Zoho Analytics, Power BI, Zoho CRM et des API REST pour extraire, valider, transformer et visualiser des informations provenant de multiples sources d'entreprise.",
+      "profile.p2":"J'ai mis en place des solutions de requêtage et de traitement pour des jeux de données de plus de 244 000 enregistrements, ainsi que des processus garantissant la qualité, la cohérence et la traçabilité des informations, et automatisant des tâches récurrentes auparavant manuelles.",
+      "profile.p3":"Je complète mon travail quotidien avec des outils d'IA générative (ChatGPT, Gemini, Claude) pour le développement, la relecture et la documentation de code, et je souhaite continuer à évoluer vers le Data Engineering, l'intégration de données et la Business Intelligence.",
+      "profile.statYears":"Années d'expérience","profile.statCerts":"Certifications","profile.statProjects":"Projets personnels","profile.statRecords":"Milliers d'enregistrements traités",
+      "experience.tag":"Parcours","experience.title":"Expérience professionnelle","experience.intro":"Mon poste actuel, où j'applique l'analyse de données et l'automatisation à des processus réels.",
+      "experience.role":"Stagiaire / Analyste Automatisation et Données","experience.period":"Août 2024 — Aujourd'hui",
+      "experience.b1":"Conception et maintenance de tableaux de bord Zoho Analytics pour la facturation, les règlements, les heures travaillées et les KPI financiers/opérationnels, avec des requêtes SQL (JOIN, GROUP BY, fonctions d'agrégation) sur de multiples sources d'entreprise.",
+      "experience.b2":"Validation et contrôle qualité des données : détection des incohérences, doublons et écarts entre sources, avec des règles de priorisation par origine et date de mise à jour.",
+      "experience.b3":"Automatisations de bout en bout dans Zoho CRM, Zoho Flow et Deluge, ainsi que Power Automate Desktop, synchronisant les systèmes et éliminant les tâches manuelles récurrentes.",
+      "experience.b4":"Scripts Python pour le traitement de bases de données et la génération de communications de masse personnalisées ; macros Excel et Zoho Sheet pour la consolidation des informations.",
+      "experience.b5":"Intégration de systèmes via des API REST et l'API Zoho CRM (OAuth 2.0).",
+      "experience.b6":"Documentation des processus et règles métier pour en assurer la maintenance et la continuité opérationnelle.",
+      "experience.toggleMore":"Voir l'historique complet","experience.toggleLess":"Voir moins",
+      "education.tag":"Formation","education.title":"Éducation","education.degree":"Licence en Génie des Systèmes",
+      "education.desc":"Formation en développement logiciel, bases de données, analyse de systèmes et fondamentaux de la cybersécurité, complétée par des cours optionnels sur l'ethical hacking et les bonnes pratiques informatiques.",
+      "specialties.tag":"Domaines de spécialité","specialties.title":"Sur quoi je me concentre",
+      "specialties.intro":"Trois axes où je combine analyse, automatisation et IA pour résoudre de vrais problèmes d'information.",
+      "specialties.tabData":"Data & BI","specialties.tabAuto":"Automatisation","specialties.tabAi":"IA Générative",
+      "specialties.dataTitle":"Data Analytics & Business Intelligence",
+      "specialties.dataDesc":"Tableaux de bord, rapports et indicateurs qui transforment les données financières, opérationnelles et clients en informations prêtes à l'emploi pour la décision. Requêtes SQL sur des jeux de données de plus de 244 000 enregistrements, intégrant de multiples sources d'entreprise et appliquant des règles de qualité, cohérence et traçabilité.",
+      "specialties.kpis":"KPIs","specialties.dataViz":"Visualisation de Données",
+      "specialties.dataChip1":"Tableaux de bord de facturation et règlements","specialties.dataChip2":"Détection des doublons et incohérences","specialties.dataChip3":"Règles de priorisation par source et date",
+      "specialties.autoTitle":"Automatisation & Intégration de Données",
+      "specialties.autoDesc":"Processus de bout en bout qui éliminent les tâches manuelles et connectent les systèmes entre eux : des macros de nettoyage de données aux flux complets avec Zoho Flow, Power Automate Desktop et des scripts Python pour les tâches récurrentes et les communications de masse personnalisées.",
+      "specialties.autoChip1":"Automatisations de bout en bout avec Zoho CRM","specialties.autoChip2":"Scripts Python pour processus récurrents","specialties.autoChip3":"Intégration de systèmes via API REST",
+      "specialties.aiTitle":"IA Générative appliquée",
+      "specialties.aiDesc":"J'utilise ChatGPT, Gemini et Claude au quotidien : conception de prompts structurés, développement et relecture de code assistés par IA, validation et confrontation des résultats, et gestion du contexte via des flux avec Claude et Obsidian.",
+      "specialties.promptEng":"Prompt Engineering",
+      "specialties.aiChip1":"Développement assisté par IA","specialties.aiChip2":"Transcription et traduction par IA (Whisper + Gemini)","specialties.aiChip3":"Gestion du contexte et optimisation des tokens",
+      "projects.tag":"Portfolio","projects.title":"Projets personnels","projects.intro":"Projets que j'ai développés seul, en dehors des heures de travail.",
+      "projects.p1Title":"Extracteur de Texte Vidéo",
+      "projects.p1Desc":"Outil en ligne de commande Python qui transcrit l'audio d'une vidéo (TikTok ou fichier local) avec Whisper, détecte la langue et la traduit automatiquement en espagnol, génère une analyse technique assistée par IA et produit un PDF professionnel prêt à lire.",
+      "projects.p2Desc":"Bot Telegram pour le suivi des revenus et dépenses personnels, avec un tableau de bord Streamlit et une base de données Supabase. Déployé 24 h/24 et 7 j/7 sur une VM Always Free d'Oracle Cloud, gérée avec systemd, à coût nul.",
+      "projects.codeLink":"Code","projects.privateRepo":"Dépôt privé",
+      "certs.tag":"Reconnaissances","certs.title":"Certifications","certs.intro":"Cours et certificats axés sur la cybersécurité et les fondamentaux de l'infrastructure.",
+      "certs.extra1":"16 heures · Note finale : 18/20","certs.extra2":"15 heures · EC-Council Academia Partner",
+      "skills.tag":"Compétences","skills.title":"Compétences techniques","skills.intro":"Outils et technologies que j'utilise le plus fréquemment.",
+      "skills.catAi":"IA Generativa & LLM-Assisted","skills.catAuto":"Automatisation & Intégration","skills.catDev":"Développement & Bases de Données",
+      "github.tag":"Activité","github.intro":"Mon activité de code en temps réel, directement depuis GitHub.",
+      "github.loading":"Chargement de l'activité GitHub…","github.viewProfile":"Voir le profil complet","github.loadingCal":"Chargement du calendrier de contributions...",
+      "github.less":"Moins","github.more":"Plus",
+      "github.noContrib":"Aucune contribution le {date}","github.oneContrib":"1 contribution le {date}","github.nContrib":"{n} contributions le {date}",
+      "github.totalSingular":"1 contribution en {year}","github.totalPlural":"{n} contributions en {year}",
+      "github.errorLoad":"Impossible de charger le calendrier pour le moment.","github.errorLink":"Voir l'activité directement sur GitHub","github.activityFallback":"Activité GitHub",
+      "contact.tag":"Discutons","contact.title":"Contact","contact.intro":"Vous avez un projet en tête ou une opportunité professionnelle ? Écrivez-moi.",
+      "contact.emailLabel":"E-mail","contact.locationLabel":"Localisation",
+      "contact.formName":"Nom","contact.formNamePh":"Votre nom","contact.formEmail":"E-mail",
+      "contact.formSubject":"Sujet","contact.formSubjectPh":"Comment puis-je vous aider ?",
+      "contact.formMessage":"Message","contact.formMessagePh":"Écrivez votre message ici...","contact.formSubmit":"Envoyer le message",
+      "cvModal.title":"Demander le CV","cvModal.intro":"Indiquez votre e-mail et je vous envoie mon CV en PDF immédiatement.",
+      "cvModal.placeholder":"vous@email.com","cvModal.submit":"Demander","cvModal.sending":"Envoi en cours...","cvModal.sent":"Envoyé !",
+      "cvModal.notConfigured":"L'envoi automatique n'est pas encore configuré. Écrivez-moi directement à javierfiestas44@gmail.com en attendant.",
+      "cvModal.errorGeneric":"L'envoi de l'e-mail a échoué. Réessayez ou écrivez-moi directement à javierfiestas44@gmail.com.",
+      "cvModal.successMsg":"C'est fait, vérifiez votre boîte de réception (et vos spams) dans quelques minutes.",
+      "footer.rights":"Tous droits réservés.",
+      "aria.themeToggle":"Changer de thème","aria.menuToggle":"Ouvrir le menu","aria.backToTop":"Retour en haut",
+      "toast.emailCopied":"E-mail copié : ","toast.copyFailed":"Impossible de copier l'e-mail",
+      "heroRoles":["Analyste de Données","Spécialiste en Automatisation","Business Intelligence","IA Générative & Développement"]
+    },
+    zh: {
+      "nav.home":"首页","nav.profile":"简介","nav.experience":"经验","nav.specialties":"专长",
+      "nav.projects":"项目","nav.skills":"技能","nav.contact":"联系方式",
+      "hero.greeting":"你好，我是",
+      "hero.bio":"秘鲁利马大学系统工程学士，拥有近2年经验，将分散的数据转化为真正用于决策的仪表盘、自动化流程和系统集成。我在日常工作中使用SQL、Python、Zoho以及生成式AI工具。",
+      "hero.ctaContact":"联系我","hero.ctaCv":"索取简历","hero.liveStack":"实时技术栈","hero.scroll":"向下滚动",
+      "profile.tag":"简介","profile.title":"关于我的一点经历",
+      "profile.p1":"我拥有秘鲁利马大学系统工程学士学位，在数据分析、商业智能、流程自动化和系统集成方面拥有近2年经验。我使用过SQL、Python、Zoho Analytics、Power BI、Zoho CRM和REST API，从多个企业数据源中提取、验证、转换和可视化信息。",
+      "profile.p2":"我为超过24.4万条记录的数据集实施了查询和处理方案，并建立了保障数据质量、一致性和可追溯性的流程，将原本手动的重复性任务实现自动化。",
+      "profile.p3":"我在日常工作中借助生成式AI工具（ChatGPT、Gemini、Claude）进行代码开发、审查和文档编写，并希望继续向数据工程、数据集成和商业智能方向发展。",
+      "profile.statYears":"工作年限","profile.statCerts":"认证证书","profile.statProjects":"个人项目","profile.statRecords":"处理的记录数（千）",
+      "experience.tag":"职业经历","experience.title":"工作经历","experience.intro":"我目前的职位，将数据分析和自动化应用于实际业务流程。",
+      "experience.role":"实习生／自动化与数据分析师","experience.period":"2024年8月至今",
+      "experience.b1":"在Zoho Analytics中设计和维护用于账单、结算、工时和财务/运营KPI的仪表盘，通过SQL查询（JOIN、GROUP BY、聚合函数）整合多个企业数据源。",
+      "experience.b2":"数据验证与质量控制：检测各数据源之间的不一致、重复和偏差，并根据来源和更新日期制定优先级规则。",
+      "experience.b3":"在Zoho CRM、Zoho Flow和Deluge以及Power Automate Desktop中实现端到端自动化，实现系统同步并消除重复性人工任务。",
+      "experience.b4":"编写Python脚本处理数据库并生成个性化批量通讯；使用Excel和Zoho Sheet宏进行信息整合。",
+      "experience.b5":"通过REST API和Zoho CRM API（OAuth 2.0）实现系统集成。",
+      "experience.b6":"编写流程和业务规则文档，以保障其可维护性和运营连续性。",
+      "experience.toggleMore":"查看完整履历","experience.toggleLess":"收起",
+      "education.tag":"教育背景","education.title":"教育经历","education.degree":"系统工程学士学位",
+      "education.desc":"系统学习软件开发、数据库、系统分析和网络安全基础，并选修了道德黑客技术和IT最佳实践相关课程。",
+      "specialties.tag":"专业领域","specialties.title":"我的专注方向",
+      "specialties.intro":"我在这三个方向上结合分析、自动化和AI来解决实际的信息问题。",
+      "specialties.tabData":"Data & BI","specialties.tabAuto":"自动化","specialties.tabAi":"生成式AI",
+      "specialties.dataTitle":"Data Analytics & Business Intelligence",
+      "specialties.dataDesc":"通过仪表盘、报表和指标，将财务、运营和客户数据转化为可用于决策的信息。对超过24.4万条记录的数据集执行SQL查询，整合多个企业数据源，并应用质量、一致性和可追溯性规则。",
+      "specialties.kpis":"KPI","specialties.dataViz":"数据可视化",
+      "specialties.dataChip1":"账单与结算仪表盘","specialties.dataChip2":"重复项与不一致检测","specialties.dataChip3":"按来源和日期设定优先级规则",
+      "specialties.autoTitle":"自动化与数据集成",
+      "specialties.autoDesc":"端到端流程，消除人工任务并实现系统互联：从数据清洗宏到使用Zoho Flow、Power Automate Desktop的完整工作流，以及用于重复性任务和个性化批量通讯的Python脚本。",
+      "specialties.autoChip1":"基于Zoho CRM的端到端自动化","specialties.autoChip2":"用于重复流程的Python脚本","specialties.autoChip3":"通过REST API实现系统集成",
+      "specialties.aiTitle":"生成式AI应用",
+      "specialties.aiDesc":"我在日常工作中使用ChatGPT、Gemini和Claude：设计结构化提示词，进行AI辅助的代码开发与审查，验证和核对结果，并通过Claude和Obsidian管理上下文。",
+      "specialties.promptEng":"Prompt Engineering",
+      "specialties.aiChip1":"AI辅助开发","specialties.aiChip2":"AI转录与翻译（Whisper + Gemini）","specialties.aiChip3":"上下文管理与Token优化",
+      "projects.tag":"作品集","projects.title":"个人项目","projects.intro":"我在工作之余自主开发的项目。",
+      "projects.p1Title":"视频文本提取工具",
+      "projects.p1Desc":"一款Python命令行工具，使用Whisper转录视频（TikTok或本地文件）的音频，检测语言并自动翻译为西班牙语，生成AI辅助的技术分析，并输出一份可直接阅读的专业PDF文档。",
+      "projects.p2Desc":"一款Telegram机器人，用于管理个人收支，配有Streamlit可视化仪表盘和Supabase数据库。全天候部署在Oracle Cloud的Always Free虚拟机上，使用systemd管理，零成本运行。",
+      "projects.codeLink":"源代码","projects.privateRepo":"私有仓库",
+      "certs.tag":"资质认证","certs.title":"证书","certs.intro":"专注于网络安全和基础设施基础的课程与证书。",
+      "certs.extra1":"16小时 · 最终成绩：18/20","certs.extra2":"15小时 · EC-Council学院合作伙伴",
+      "skills.tag":"技能","skills.title":"技术技能","skills.intro":"我最常使用的工具和技术。",
+      "skills.catAi":"生成式AI与LLM辅助","skills.catAuto":"自动化与集成","skills.catDev":"开发与数据库",
+      "github.tag":"活动","github.intro":"我在GitHub上的实时代码活动。",
+      "github.loading":"正在加载GitHub活动…","github.viewProfile":"查看完整主页","github.loadingCal":"正在加载贡献日历...",
+      "github.less":"少","github.more":"多",
+      "github.noContrib":"{date}没有贡献","github.oneContrib":"{date}有1次贡献","github.nContrib":"{date}有{n}次贡献",
+      "github.totalSingular":"{year}年共1次贡献","github.totalPlural":"{year}年共{n}次贡献",
+      "github.errorLoad":"暂时无法加载日历。","github.errorLink":"直接在GitHub上查看活动","github.activityFallback":"GitHub活动",
+      "contact.tag":"联系交流","contact.title":"联系方式","contact.intro":"有项目想法或工作机会？欢迎给我留言。",
+      "contact.emailLabel":"电子邮箱","contact.locationLabel":"所在地",
+      "contact.formName":"姓名","contact.formNamePh":"您的姓名","contact.formEmail":"邮箱",
+      "contact.formSubject":"主题","contact.formSubjectPh":"有什么可以帮您的？",
+      "contact.formMessage":"留言内容","contact.formMessagePh":"请在此输入您的留言...","contact.formSubmit":"发送留言",
+      "cvModal.title":"索取简历","cvModal.intro":"输入您的邮箱，我将立即把PDF简历发送给您。",
+      "cvModal.placeholder":"you@email.com","cvModal.submit":"提交申请","cvModal.sending":"发送中…","cvModal.sent":"已发送！",
+      "cvModal.notConfigured":"自动发送功能暂未配置。请先直接发邮件到 javierfiestas44@gmail.com。",
+      "cvModal.errorGeneric":"邮件发送失败，请重试，或直接发邮件到 javierfiestas44@gmail.com。",
+      "cvModal.successMsg":"已发送，请在几分钟内查收收件箱（包括垃圾邮件）。",
+      "footer.rights":"版权所有。",
+      "aria.themeToggle":"切换主题","aria.menuToggle":"打开菜单","aria.backToTop":"返回顶部",
+      "toast.emailCopied":"邮箱已复制：","toast.copyFailed":"邮箱复制失败",
+      "heroRoles":["数据分析师","自动化专家","商业智能（BI）","生成式AI与开发"]
+    }
+  };
+  const LANG_LOCALE = { es:'es-PE', en:'en-US', pt:'pt-BR', fr:'fr-FR', zh:'zh-CN' };
+  const LANG_FLAG = { es:'fi-es', en:'fi-us', pt:'fi-br', fr:'fi-fr', zh:'fi-cn' };
+  let currentLang = localStorage.getItem('lang') || 'es';
+  if (!I18N[currentLang]) currentLang = 'es';
+
+  function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || I18N.es[key] || key; }
+
+  // Otros bloques (efecto de tipeo, calendario de GitHub) se suscriben acá
+  // para re-renderizar su contenido dinámico cuando cambia el idioma.
+  const languageChangeHooks = [];
+  function onLangChange(fn) { languageChangeHooks.push(fn); }
+
+  function applyLanguage(lang) {
+    if (!I18N[lang]) return;
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const val = t(el.getAttribute('data-i18n'));
+      if (typeof val === 'string') el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+      el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+    });
+
+    document.querySelectorAll('.lang-option').forEach((btn) => {
+      const active = btn.getAttribute('data-lang') === lang;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', String(active));
+    });
+    const flagCurrent = document.getElementById('langFlagCurrent');
+    if (flagCurrent) flagCurrent.className = 'fi ' + LANG_FLAG[lang];
+
+    languageChangeHooks.forEach((fn) => fn(lang));
+  }
+
+  // ---- Selector de idioma (dropdown en la navbar) ----
+  const langSwitch = document.getElementById('langSwitch');
+  const langToggle = document.getElementById('langToggle');
+  if (langSwitch && langToggle) {
+    langToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = langSwitch.classList.toggle('open');
+      langToggle.setAttribute('aria-expanded', String(open));
+    });
+    document.querySelectorAll('.lang-option').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        applyLanguage(btn.getAttribute('data-lang'));
+        langSwitch.classList.remove('open');
+        langToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    document.addEventListener('click', (e) => {
+      if (!langSwitch.contains(e.target)) {
+        langSwitch.classList.remove('open');
+        langToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { langSwitch.classList.remove('open'); langToggle.setAttribute('aria-expanded', 'false'); }
+    });
+  }
+
+  // ---- Theme toggle ---- (el tema ya se aplicó antes de pintar, ver <head>)
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+
+  themeToggle.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  // ---- Mobile menu ----
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    const icon = menuToggle.querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-xmark');
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.querySelector('i').classList.add('fa-bars');
+      menuToggle.querySelector('i').classList.remove('fa-xmark');
+    });
+  });
+
+  // ---- Navbar scroll style + progress bar ----
+  const navbar = document.getElementById('navbar');
+  const progressBar = document.getElementById('progressBar');
+  const backToTop = document.getElementById('backToTop');
+
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+    backToTop.classList.toggle('show', window.scrollY > 500);
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+
+  backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // ---- Active nav link on scroll ----
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-link');
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navAnchors.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector('.nav-link[href="#' + entry.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(sec => navObserver.observe(sec));
+
+  // ---- Reveal on scroll ----
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ---- Typing effect ---- (los roles cambian según el idioma activo)
+  const typedEl = document.getElementById('typedRole');
+  let roles = I18N[currentLang].heroRoles;
+  let roleIndex = 0, charIndex = 0, deleting = false, typeTimer = null;
+
+  function typeLoop() {
+    const current = roles[roleIndex % roles.length];
+    if (!deleting) {
+      typedEl.textContent = current.slice(0, ++charIndex);
+      if (charIndex === current.length) { deleting = true; typeTimer = setTimeout(typeLoop, 1600); return; }
+    } else {
+      typedEl.textContent = current.slice(0, --charIndex);
+      if (charIndex === 0) { deleting = false; roleIndex = (roleIndex + 1) % roles.length; }
+    }
+    typeTimer = setTimeout(typeLoop, deleting ? 45 : 90);
+  }
+  typeLoop();
+
+  function restartTypingForLanguage() {
+    clearTimeout(typeTimer);
+    roles = I18N[currentLang].heroRoles;
+    roleIndex = 0; charIndex = 0; deleting = false;
+    typedEl.textContent = '';
+    typeLoop();
+  }
+  onLangChange(restartTypingForLanguage);
+
+  // ---- Animated counters ----
+  const counters = document.querySelectorAll('.num[data-count]');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 40));
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(timer); }
+          el.textContent = current;
+        }, 35);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => counterObserver.observe(c));
+
+  // ---- Timeline "ver historial completo" toggle ----
+  const expToggle = document.getElementById('expToggle');
+  const expList = document.getElementById('expList');
+  if (expToggle && expList) {
+    function updateExpToggleLabel(open) {
+      expToggle.innerHTML = `<span data-i18n="${open ? 'experience.toggleLess' : 'experience.toggleMore'}">${t(open ? 'experience.toggleLess' : 'experience.toggleMore')}</span> <i class="fa-solid fa-chevron-down"></i>`;
+    }
+    expToggle.addEventListener('click', () => {
+      const open = expList.classList.toggle('collapsed') === false;
+      expToggle.classList.toggle('open', open);
+      expToggle.setAttribute('aria-expanded', String(open));
+      updateExpToggleLabel(open);
+    });
+  }
+
+  // ---- Specialty tabs ----
+  const specialtyTabs = document.querySelectorAll('.specialty-tab');
+  const specialtyPanels = document.querySelectorAll('.specialty-panel');
+  specialtyTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      specialtyTabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      const target = tab.getAttribute('data-tab');
+      specialtyPanels.forEach(panel => {
+        panel.classList.toggle('active', panel.getAttribute('data-panel') === target);
+      });
+    });
+  });
+
+  // ---- Proyectos: carrusel infinito (una tarjeta a la vez, loop en ambos
+  // sentidos) + repos públicos nuevos de GitHub se agregan solos al final.
+  // Las 2 tarjetas curadas a mano (Extractor_texto_tiktok, Finanzas Gestor)
+  // se quedan tal cual; cualquier OTRO repo público que aparezca en la
+  // cuenta se suma automáticamente, con su descripción/topics de GitHub y
+  // una miniatura generada por GitHub (opengraph), sin token ni backend. ----
+  (function () {
+    const track = document.getElementById('projectTrack');
+    const viewport = document.getElementById('projViewport');
+    const dotsWrap = document.getElementById('projectDots');
+    const prevBtn = document.getElementById('projPrev');
+    const nextBtn = document.getElementById('projNext');
+    if (!track || !viewport || !prevBtn || !nextBtn || !dotsWrap) return;
+
+    const GH_USER = 'Javier3921';
+    const GH_EXCLUDE = new Set(['Extractor_texto_tiktok']); // ya está curado a mano arriba
+
+    function prettifyName(name) {
+      return name.replace(/[-_]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    }
+
+    function buildAutoCard(repo) {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      const rawTags = repo.topics && repo.topics.length ? repo.topics : (repo.language ? [repo.language] : []);
+      const tagsHtml = rawTags.slice(0, 4)
+        .map((tag) => `<span class="tag" data-tech="${tag.toLowerCase()}"><i class="fa-solid fa-tag"></i>${tag}</span>`)
+        .join('');
+      const desc = repo.description ? repo.description : 'Repositorio público en GitHub.';
+      card.innerHTML = `
+        <div class="project-thumb project-thumb-auto">
+          <img src="https://opengraph.githubassets.com/1/${GH_USER}/${repo.name}" alt="${repo.name}" loading="lazy">
+        </div>
+        <div class="project-body">
+          <h3>${prettifyName(repo.name)}</h3>
+          <p>${desc}</p>
+          <div class="tag-row">${tagsHtml}</div>
+          <div class="project-links">
+            <a href="${repo.html_url}" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Código</a>
+          </div>
+        </div>`;
+      const img = card.querySelector('img');
+      img.addEventListener('error', () => {
+        card.querySelector('.project-thumb').innerHTML = '<i class="fa-solid fa-code"></i>';
+      }, { once: true });
+      return card;
+    }
+
+    function fetchAutoProjects() {
+      return fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=created&direction=desc`, { cache: 'no-store' })
+        .then((res) => (res.ok ? res.json() : []))
+        .then((repos) => {
+          if (!Array.isArray(repos)) return;
+          repos
+            .filter((r) => !r.fork && !r.archived && !GH_EXCLUDE.has(r.name))
+            .forEach((r) => track.appendChild(buildAutoCard(r)));
+        })
+        .catch(() => {});
+    }
+
+    // ---- Carrusel: loop infinito con un clon del primero al final y un
+    // clon del último al inicio; al terminar la transición sobre un clon,
+    // se salta sin animación a la slide real equivalente. ----
+    let index = 1; // 1 = primera slide real (0 queda para el clon del último)
+    let slideCount = 0;
+    let isDragging = false, dragStartX = 0, dragDeltaX = 0, viewportWidth = 0;
+
+    function buildClones() {
+      const real = Array.from(track.children);
+      slideCount = real.length;
+      if (slideCount < 2) return;
+      const firstClone = real[0].cloneNode(true);
+      const lastClone = real[real.length - 1].cloneNode(true);
+      firstClone.classList.remove('reveal');
+      lastClone.classList.remove('reveal');
+      firstClone.setAttribute('aria-hidden', 'true');
+      lastClone.setAttribute('aria-hidden', 'true');
+      track.appendChild(firstClone);
+      track.insertBefore(lastClone, real[0]);
+    }
+
+    function buildDots() {
+      dotsWrap.innerHTML = '';
+      for (let i = 0; i < slideCount; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Ir al proyecto ' + (i + 1));
+        dot.addEventListener('click', () => goTo(i + 1, true));
+        dotsWrap.appendChild(dot);
+      }
+    }
+
+    function updateDots() {
+      const real = ((index - 1) % slideCount + slideCount) % slideCount;
+      dotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === real));
+    }
+
+    function setPosition(withTransition) {
+      track.classList.toggle('no-transition', !withTransition);
+      track.style.transform = `translateX(${-index * 100}%)`;
+    }
+
+    function goTo(newIndex, withTransition) {
+      index = newIndex;
+      setPosition(withTransition !== false);
+      updateDots();
+    }
+
+    function next() { goTo(index + 1, true); }
+    function prev() { goTo(index - 1, true); }
+
+    track.addEventListener('transitionend', () => {
+      if (index === 0) { index = slideCount; setPosition(false); }
+      else if (index === slideCount + 1) { index = 1; setPosition(false); }
+    });
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    // ---- Swipe/arrastre (mouse, táctil y lápiz, vía Pointer Events) ----
+    function onDragStart(clientX) {
+      isDragging = true;
+      dragStartX = clientX;
+      dragDeltaX = 0;
+      viewportWidth = viewport.clientWidth;
+      viewport.classList.add('dragging');
+      track.classList.add('no-transition');
+    }
+    function onDragMove(clientX) {
+      if (!isDragging) return;
+      dragDeltaX = clientX - dragStartX;
+      const percent = (dragDeltaX / viewportWidth) * 100;
+      track.style.transform = `translateX(${-index * 100 + percent}%)`;
+    }
+    function onDragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      viewport.classList.remove('dragging');
+      track.classList.remove('no-transition');
+      const threshold = viewportWidth * 0.18;
+      if (dragDeltaX > threshold) prev();
+      else if (dragDeltaX < -threshold) next();
+      else setPosition(true);
+    }
+
+    viewport.addEventListener('pointerdown', (e) => {
+      viewport.setPointerCapture(e.pointerId);
+      onDragStart(e.clientX);
+    });
+    viewport.addEventListener('pointermove', (e) => onDragMove(e.clientX));
+    viewport.addEventListener('pointerup', onDragEnd);
+    viewport.addEventListener('pointercancel', onDragEnd);
+
+    function initCarousel() {
+      buildClones();
+      if (slideCount < 2) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        return;
+      }
+      buildDots();
+      setPosition(false);
+    }
+
+    fetchAutoProjects().finally(initCarousel);
+  })();
+
+  // ---- Modal genérico: abrir/cerrar con botón, backdrop o Escape ----
+  function setupModal(overlay, openTriggers, closeBtn, onClose) {
+    if (!overlay) return null;
+    function open(e) { if (e) e.preventDefault(); overlay.classList.add('open'); }
+    function close() { overlay.classList.remove('open'); if (onClose) onClose(); }
+    openTriggers.forEach((t) => t && t.addEventListener('click', open));
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+    });
+    return { open, close };
+  }
+
+  // ---- Modal de Certificaciones (desde el widget "4 Certificaciones") ----
+  setupModal(
+    document.getElementById('certModalOverlay'),
+    [document.getElementById('statCertsBtn')],
+    document.getElementById('certModalClose')
+  );
+
+  // ---- Solicitar CV: pide un correo y le envía el CV en PDF por ahí ----
+  // Usa EmailJS (sin backend). Para que el envío sea real hace falta:
+  //   1) Crear una cuenta gratis en https://www.emailjs.com/
+  //   2) Conectar un servicio de correo (ej. Gmail) -> copiar el Service ID.
+  //   3) Crear una plantilla con el CV adjunto como archivo fijo del template,
+  //      usando {{to_email}} como destinatario -> copiar el Template ID.
+  //      (Tip: agrégate a ti mismo en CC/BCC de la plantilla para saber quién
+  //      lo pidió, ya que EmailJS no expone esa lista en ningún otro lado.)
+  //   4) Copiar la Public Key (Account > General).
+  //   5) Reemplazar los 3 valores de EMAILJS_CONFIG de abajo.
+  // Mientras no estén configurados, el formulario avisa en vez de fallar en
+  // silencio o fingir que se envió.
+  (function () {
+    const EMAILJS_CONFIG = {
+      publicKey: 'TU_PUBLIC_KEY',
+      serviceId: 'TU_SERVICE_ID',
+      templateId: 'TU_TEMPLATE_ID',
+    };
+    const isConfigured = ![EMAILJS_CONFIG.publicKey, EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId]
+      .some((v) => /^TU_/.test(v));
+
+    const overlay = document.getElementById('cvModalOverlay');
+    const form = document.getElementById('cvRequestForm');
+    const emailInput = document.getElementById('cvRequestEmail');
+    const submitBtn = document.getElementById('cvRequestSubmit');
+    const statusEl = document.getElementById('cvRequestStatus');
+    if (!overlay || !form || !submitBtn || !statusEl) return;
+
+    const modal = setupModal(
+      overlay,
+      [document.getElementById('requestCvBtn')],
+      document.getElementById('cvModalClose'),
+      () => {
+        submitBtn.classList.remove('is-sending', 'is-success');
+        statusEl.textContent = '';
+        statusEl.className = 'cv-request-status';
+      }
+    );
+
+    if (window.emailjs && isConfigured) {
+      emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      if (!isConfigured || !window.emailjs) {
+        statusEl.textContent = t('cvModal.notConfigured');
+        statusEl.className = 'cv-request-status error';
+        return;
+      }
+
+      submitBtn.classList.remove('is-success');
+      submitBtn.classList.add('is-sending');
+      statusEl.textContent = '';
+      statusEl.className = 'cv-request-status';
+
+      emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, { to_email: email })
+        .then(() => {
+          submitBtn.classList.remove('is-sending');
+          submitBtn.classList.add('is-success');
+          statusEl.textContent = t('cvModal.successMsg');
+          statusEl.className = 'cv-request-status success';
+          setTimeout(() => { modal.close(); form.reset(); }, 2600);
+        })
+        .catch(() => {
+          submitBtn.classList.remove('is-sending');
+          statusEl.textContent = t('cvModal.errorGeneric');
+          statusEl.className = 'cv-request-status error';
+        });
+    });
+  })();
+
+  // ---- Toast helper ----
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
+  function showToast(msg) {
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  // ---- Copy email ----
+  function copyToClipboard(text){
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    }
+    // Alternativa para cuando se prueba el archivo localmente (file://) o sin
+    // HTTPS, donde la API moderna de portapapeles no está disponible.
+    return new Promise((resolve, reject) => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand('copy') ? resolve() : reject();
+      } catch (err) {
+        reject(err);
+      } finally {
+        textarea.remove();
+      }
+    });
+  }
+
+  document.getElementById('copyEmail').addEventListener('click', () => {
+    const email = 'javierfiestas44@gmail.com';
+    copyToClipboard(email).then(() => showToast(t('toast.emailCopied') + email))
+      .catch(() => showToast(t('toast.copyFailed')));
+  });
+
+  // ---- Contact form (mailto) ----
+  document.getElementById('contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+    const body = encodeURIComponent(`Nombre: ${name}\nCorreo: ${email}\n\n${message}`);
+    window.location.href = `mailto:javierfiestas44@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+    document.getElementById('formStatus').textContent = 'Abriendo tu cliente de correo...';
+  });
+
+  // ---- Footer year ----
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- Calendario de GitHub: datos reales del año actual, con el mismo
+  // tamaño/cantidad de cuadros/colores que github.com, tooltips por día y
+  // enlace al perfil. Se arma con la API pública github-contributions-api
+  // (misma fuente que usa github.com, sin necesitar un token ni backend). ----
+  (function(){
+    const wrap = document.getElementById('ghCalWrap');
+    const totalEl = document.getElementById('ghCalTotal');
+    const tooltip = document.getElementById('ghTooltip');
+    if (!wrap || !totalEl) return;
+
+    const USERNAME = 'Javier3921';
+    const YEAR = new Date().getFullYear();
+    let lastData = null;
+
+    // Nombres de mes y fecha completa localizados según el idioma activo,
+    // usando el formateador nativo del navegador (Intl) en vez de listas
+    // traducidas a mano, así el orden día/mes/año sale correcto en cada idioma.
+    function monthAbbr(monthIndex) {
+      return new Intl.DateTimeFormat(LANG_LOCALE[currentLang] || 'es-PE', { month: 'short', timeZone: 'UTC' })
+        .format(new Date(Date.UTC(2024, monthIndex, 1)));
+    }
+
+    function formatTooltip(dateStr, count) {
+      const date = new Date(dateStr + 'T00:00:00Z');
+      const dateText = new Intl.DateTimeFormat(LANG_LOCALE[currentLang] || 'es-PE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
+      if (count === 0) return t('github.noContrib').replace('{date}', dateText);
+      if (count === 1) return t('github.oneContrib').replace('{date}', dateText);
+      return t('github.nContrib').replace('{n}', count).replace('{date}', dateText);
+    }
+
+    // El tamaño de celda es fluido: se recalcula para que la grilla ocupe
+    // todo el ancho del recuadro (con un mínimo/máximo para que no se rompa
+    // en pantallas muy angostas ni se vea gigante en pantallas muy anchas).
+    const WEEKDAY_COL = 22, CAL_GAP = 6, CELL_GAP = 3, MIN_CELL = 8, MAX_CELL = 20;
+    let totalWeeks = 0;
+    let monthLabelState = [];
+
+    function computeCellSize() {
+      if (!totalWeeks) return 10;
+      const available = wrap.clientWidth - WEEKDAY_COL - CAL_GAP;
+      const raw = Math.floor((available - (totalWeeks - 1) * CELL_GAP) / totalWeeks);
+      return Math.max(MIN_CELL, Math.min(MAX_CELL, raw));
+    }
+
+    function applyLayout() {
+      if (!totalWeeks) return;
+      const cell = computeCellSize();
+      document.documentElement.style.setProperty('--gh-cell', cell + 'px');
+      const pitch = cell + CELL_GAP;
+      const monthsEl = wrap.querySelector('.gh-cal-months');
+      if (monthsEl) monthsEl.style.width = (totalWeeks * pitch) + 'px';
+      monthLabelState.forEach(({ el, week }) => { el.style.left = (week * pitch) + 'px'; });
+    }
+
+    function weekdayAbbr(dowMonBased) {
+      // dowMonBased: 0=lunes,2=miércoles,4=viernes sobre una semana de referencia real
+      const ref = new Date(Date.UTC(2024, 0, 1 + dowMonBased)); // 2024-01-01 fue lunes
+      return new Intl.DateTimeFormat(LANG_LOCALE[currentLang] || 'es-PE', { weekday: 'short', timeZone: 'UTC' }).format(ref);
+    }
+
+    function buildCalendar(data) {
+      lastData = data;
+      const days = data.contributions.filter((d) => d.date.startsWith(String(YEAR)));
+      if (!days.length) throw new Error('sin datos de contribuciones');
+
+      // Semana empieza en domingo, igual que en github.com
+      const firstDow = new Date(days[0].date + 'T00:00:00Z').getUTCDay();
+      const cells = new Array(firstDow).fill(null).concat(days);
+      totalWeeks = Math.ceil(cells.length / 7);
+
+      const monthLabels = [];
+      let lastMonth = -1;
+      for (let w = 0; w < totalWeeks; w++) {
+        const first = cells[w * 7];
+        if (!first) continue;
+        const m = Number(first.date.slice(5, 7)) - 1;
+        if (m !== lastMonth) { monthLabels.push({ week: w, label: monthAbbr(m) }); lastMonth = m; }
+      }
+
+      const dayCellsHtml = cells.map((c) => {
+        if (!c) return '<span class="gh-cal-day is-empty"></span>';
+        const tip = formatTooltip(c.date, c.count).replace(/"/g, '&quot;');
+        return `<span class="gh-cal-day" data-level="${c.level}" data-tooltip="${tip}"></span>`;
+      }).join('');
+      const monthsHtml = monthLabels.map((m) => `<span>${m.label}</span>`).join('');
+
+      wrap.innerHTML = `
+        <div class="gh-cal">
+          <div class="gh-cal-weekdays"><span></span><span>${weekdayAbbr(0)}</span><span></span><span>${weekdayAbbr(2)}</span><span></span><span>${weekdayAbbr(4)}</span><span></span></div>
+          <div class="gh-cal-scroll">
+            <div class="gh-cal-months">${monthsHtml}</div>
+            <div class="gh-cal-grid">${dayCellsHtml}</div>
+          </div>
+        </div>`;
+
+      const labelEls = wrap.querySelectorAll('.gh-cal-months span');
+      monthLabelState = monthLabels.map((m, i) => ({ el: labelEls[i], week: m.week }));
+      applyLayout();
+
+      const total = data.total[String(YEAR)] ?? days.reduce((s, d) => s + d.count, 0);
+      const totalText = (total === 1 ? t('github.totalSingular') : t('github.totalPlural').replace('{n}', total)).replace('{year}', YEAR);
+      totalEl.textContent = totalText;
+
+      // En pantallas angostas (donde no entran todas las semanas), arranca
+      // mostrando las más recientes en vez del enero del año.
+      requestAnimationFrame(() => { wrap.scrollLeft = wrap.scrollWidth; });
+    }
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(applyLayout, 150);
+    });
+
+    function positionTooltip(e) {
+      const pad = 14;
+      let x = e.clientX + pad, y = e.clientY - 12;
+      const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+      if (x + tw > window.innerWidth - 8) x = e.clientX - tw - pad;
+      if (y + th > window.innerHeight - 8) y = window.innerHeight - th - 8;
+      if (y < 8) y = 8;
+      tooltip.style.left = x + 'px';
+      tooltip.style.top = y + 'px';
+    }
+
+    if (tooltip) {
+      wrap.addEventListener('mouseover', (e) => {
+        const cell = e.target.closest('.gh-cal-day[data-tooltip]');
+        if (!cell) return;
+        tooltip.textContent = cell.getAttribute('data-tooltip');
+        tooltip.classList.add('show');
+        positionTooltip(e);
+      });
+      wrap.addEventListener('mousemove', (e) => {
+        if (tooltip.classList.contains('show')) positionTooltip(e);
+      });
+      wrap.addEventListener('mouseout', (e) => {
+        const to = e.relatedTarget;
+        if (!to || !to.closest || !to.closest('.gh-cal-day')) tooltip.classList.remove('show');
+      });
+      wrap.addEventListener('click', (e) => {
+        const cell = e.target.closest('.gh-cal-day[data-tooltip]');
+        if (!cell) return;
+        tooltip.textContent = cell.getAttribute('data-tooltip');
+        tooltip.classList.add('show');
+        positionTooltip(e);
+        clearTimeout(wrap._ghTipTimer);
+        wrap._ghTipTimer = setTimeout(() => tooltip.classList.remove('show'), 2000);
+      });
+    }
+
+    function showLoadError() {
+      wrap.innerHTML = `<div class="gh-cal-error">${t('github.errorLoad')} <a href="https://github.com/${USERNAME}" target="_blank" rel="noopener">${t('github.errorLink')}</a>.</div>`;
+      totalEl.textContent = t('github.activityFallback');
+    }
+
+    fetch(`https://github-contributions-api.jogruber.de/v4/${USERNAME}?y=${YEAR}`, { cache: 'no-store' })
+      .then((res) => { if (!res.ok) throw new Error('http ' + res.status); return res.json(); })
+      .then(buildCalendar)
+      .catch(showLoadError);
+
+    // Al cambiar de idioma, re-arma el calendario con los mismos datos (sin
+    // volver a pedirlos) para que meses, tooltips y el total salgan en el
+    // idioma nuevo.
+    onLangChange(() => {
+      if (lastData) { try { buildCalendar(lastData); } catch (err) { showLoadError(); } }
+      else if (wrap.querySelector('.gh-cal-error')) { showLoadError(); }
+    });
+  })();
+
+  // ---- Chatbot flotante: responde con Gemini (vía api/chat.js, la API key
+  // vive solo en el servidor) y, si esa llamada falla por lo que sea
+  // (función no desplegada todavía, sin GEMINI_API_KEY configurada, sin
+  // conexión, cuota agotada), cae de vuelta al set fijo de respuestas por
+  // palabra clave para que el chatbot nunca se quede roto. ----
+  (function(){
+    const fab = document.getElementById('chatbotFab');
+    const panel = document.getElementById('chatbotPanel');
+    const closeBtn = document.getElementById('chatbotClose');
+    const messages = document.getElementById('chatbotMessages');
+    const suggestions = document.getElementById('chatbotSuggestions');
+    const form = document.getElementById('chatbotForm');
+    const input = document.getElementById('chatbotInput');
+    if (!fab || !panel || !form || !input) return;
+
+    const FAQ = [
+      { k:['quien es','quien eres','presentate','sobre ti','perfil de javier','quien es javier'],
+        a:'Soy el asistente virtual de Javier Fiestas: Bachiller en Ingeniería de Sistemas (Universidad de Lima) y Analista de Datos con cerca de 2 años de experiencia en Business Intelligence, automatización de procesos e integración de sistemas.' },
+      { k:['experiencia','trabajaste','trabajado','empresa','laboral','puesto','donde trabaja'],
+        a:'Javier tiene experiencia en análisis de datos, BI y automatización: SQL, Python, Zoho (Analytics, CRM, Flow) y Power BI para extraer, validar y visualizar información corporativa. Mira el detalle en la sección "Experiencia profesional".' },
+      { k:['tecnologia','stack','herramientas','skill','habilidad','domina','lenguajes','sabe programar'],
+        a:'Trabaja con SQL, Python, Power BI, Zoho (Analytics/CRM/Flow/Sheet), Excel, JavaScript, React, Node.js y herramientas de IA generativa como ChatGPT, Claude y Gemini.' },
+      { k:['proyecto','portafolio','github','repositorio'],
+        a:'Tiene proyectos como un extractor y traductor de texto de vídeos (Python + Whisper) y un gestor de finanzas con bot de Telegram (Python + Streamlit + Supabase). Código en github.com/Javier3921.' },
+      { k:['educacion','estudios','universidad','bachiller','carrera','ingenieria de sistemas'],
+        a:'Es Bachiller en Ingeniería de Sistemas por la Universidad de Lima.' },
+      { k:['certificacion','certificado','curso','cisco'],
+        a:'Tiene certificaciones en ciberseguridad y Linux (Cisco Networking Academy), entre otras. Revisa la sección "Certificaciones" para verlas todas.' },
+      { k:['contacto','contactar','correo','email','escribir','comunicar','hablar con'],
+        a:'Puedes escribirle a javierfiestas44@gmail.com o usar el formulario de la sección Contacto. También está en LinkedIn y GitHub.' },
+      { k:['linkedin'],
+        a:'Su LinkedIn: linkedin.com/in/javier-fiestas-6457ba240' },
+      { k:['cv','curriculum','resume','descargar cv'],
+        a:'Por ahora el CV no está disponible para descarga directa desde la página, pero puedes pedírselo a Javier por correo (javierfiestas44@gmail.com) o LinkedIn y te lo comparte.' },
+      { k:['disponible','disponibilidad','contratar','freelance','vacante','oportunidad laboral'],
+        a:'Javier está abierto a nuevas oportunidades laborales. Escríbele por el formulario de contacto o a su correo para conversar.' },
+      { k:['ubicacion','donde vive','lima','peru','ciudad'],
+        a:'Está ubicado en San Miguel, Lima, Perú.' },
+      { k:['hola','buenas','hey','holi'],
+        a:'¡Hola! Soy el asistente de Javier. Pregúntame sobre su experiencia, tecnologías, proyectos o cómo contactarlo.' },
+      { k:['gracias','genial','perfecto','excelente'],
+        a:'¡De nada! Si tienes otra pregunta, aquí estoy.' },
+      { k:['eres una ia','eres real','eres un robot','eres humano','eres un bot'],
+        a:'Soy un asistente con respuestas predefinidas por ahora — Javier me conectará a una IA real más adelante.' }
+    ];
+    const FALLBACK = 'No tengo una respuesta preparada para eso todavía. Prueba preguntando sobre experiencia, tecnologías, proyectos, educación o cómo contactar a Javier, o escríbele directo por el formulario de contacto.';
+    const GREETING = '¡Hola! Soy el asistente virtual de Javier. Puedo contarte sobre su experiencia, tecnologías, proyectos, estudios o cómo contactarlo. ¿Qué quieres saber?';
+    const SUGGESTIONS = ['¿Qué tecnologías usas?', '¿Dónde has trabajado?', 'Cuéntame tus proyectos', '¿Cómo te contacto?'];
+
+    function normalize(s){
+      return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+    }
+
+    function findAnswer(text){
+      const q = normalize(text);
+      let best = null, bestScore = 0;
+      FAQ.forEach((entry) => {
+        let score = 0;
+        entry.k.forEach((kw) => { if (q.includes(normalize(kw))) score++; });
+        if (score > bestScore) { bestScore = score; best = entry; }
+      });
+      return best ? best.a : FALLBACK;
+    }
+
+    function addMessage(text, who){
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + who;
+      div.textContent = text;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function showTyping(){
+      const div = document.createElement('div');
+      div.className = 'chat-typing';
+      div.id = 'chatTypingIndicator';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+    function hideTyping(){
+      const el = document.getElementById('chatTypingIndicator');
+      if (el) el.remove();
+    }
+
+    // Historial de la sesión (solo en memoria, se reinicia al recargar la
+    // página). Se manda al backend para que Gemini tenga contexto, pero se
+    // limita el tamaño acá también para no acumular sin límite en una
+    // sesión larga (el backend además solo usa los últimos mensajes).
+    const chatHistory = [];
+    const MAX_CLIENT_HISTORY = 20;
+
+    async function askGemini(text){
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: chatHistory }),
+      });
+      if (!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+      if (!data.reply) throw new Error('sin respuesta');
+      return data.reply;
+    }
+
+    function respondTo(text){
+      addMessage(text, 'user');
+      showTyping();
+      const started = Date.now();
+      const minDelay = 450 + Math.random() * 400;
+
+      askGemini(text)
+        .then((reply) => {
+          chatHistory.push({ role: 'user', text }, { role: 'model', text: reply });
+          if (chatHistory.length > MAX_CLIENT_HISTORY) chatHistory.splice(0, chatHistory.length - MAX_CLIENT_HISTORY);
+          return reply;
+        })
+        .catch(() => findAnswer(text)) // Gemini no disponible todavía: usa el set predefinido
+        .then((reply) => {
+          const wait = Math.max(0, minDelay - (Date.now() - started));
+          setTimeout(() => { hideTyping(); addMessage(reply, 'bot'); }, wait);
+        });
+    }
+
+    function renderSuggestions(){
+      suggestions.innerHTML = '';
+      SUGGESTIONS.forEach((q) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chat-chip';
+        chip.textContent = q;
+        chip.addEventListener('click', () => respondTo(q));
+        suggestions.appendChild(chip);
+      });
+    }
+
+    let started = false;
+    function openChat(){
+      panel.classList.add('open');
+      fab.classList.add('open');
+      fab.setAttribute('aria-expanded', 'true');
+      if (!started) {
+        started = true;
+        addMessage(GREETING, 'bot');
+        renderSuggestions();
+      }
+      input.focus();
+    }
+    function closeChat(){
+      panel.classList.remove('open');
+      fab.classList.remove('open');
+      fab.setAttribute('aria-expanded', 'false');
+    }
+
+    fab.addEventListener('click', () => {
+      if (panel.classList.contains('open')) closeChat(); else openChat();
+    });
+    closeBtn.addEventListener('click', closeChat);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      respondTo(text);
+    });
+  })();
+
+  // ---- Aplica el idioma guardado (o español por defecto) ahora que todos
+  // los módulos de arriba ya se suscribieron a los cambios de idioma. ----
+  applyLanguage(currentLang);
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Notas privadas del proyecto (no se publican en el repo)
+README.md
+
+# Secretos locales (nunca deben subirse; los valores reales van en Vercel)
+.env
+.env.local
+.vercel
