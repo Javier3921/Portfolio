@@ -2179,7 +2179,7 @@
       const card = document.createElement('div');
       card.className = 'project-card';
       const rawTags = repo.topics && repo.topics.length ? repo.topics : (repo.language ? [repo.language] : []);
-      const tagsHtml = rawTags.slice(0, 4)
+      const tagsHtml = rawTags.slice(0, 12)
         .map((tag) => `<span class="tag" data-tech="${tag.toLowerCase()}"><i class="fa-solid fa-tag"></i>${tag}</span>`)
         .join('');
       const desc = repo.description ? repo.description : 'Repositorio público en GitHub.';
