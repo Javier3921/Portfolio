@@ -1,5 +1,6 @@
-# Notas privadas del proyecto (no se publican en el repo)
-README.md
+# Notas privadas del proyecto (no se publican en el repo).
+# README.md SÍ se sube ahora — es el reporte técnico público del repo.
+NOTES.md
 
 # Secretos locales (nunca deben subirse; los valores reales van en Vercel)
 .env
