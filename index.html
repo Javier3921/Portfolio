@@ -2159,7 +2159,7 @@
   // Las 2 tarjetas curadas a mano (Extractor_texto_tiktok, Finanzas Gestor)
   // se quedan tal cual; cualquier OTRO repo público que aparezca en la
   // cuenta se suma automáticamente, con su descripción/topics de GitHub y
-  // una miniatura generada por GitHub (opengraph), sin token ni backend. ----
+  // un ícono genérico como miniatura, sin token ni backend. ----
   (function () {
     const track = document.getElementById('projectTrack');
     const viewport = document.getElementById('projViewport');
@@ -2185,7 +2185,7 @@
       const desc = repo.description ? repo.description : 'Repositorio público en GitHub.';
       card.innerHTML = `
         <div class="project-thumb project-thumb-auto">
-          <img src="https://opengraph.githubassets.com/1/${GH_USER}/${repo.name}" alt="${repo.name}" loading="lazy" draggable="false">
+          <i class="fa-solid fa-code"></i>
         </div>
         <div class="project-body">
           <h3>${prettifyName(repo.name)}</h3>
@@ -2195,10 +2195,6 @@
             <a href="${repo.html_url}" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Código</a>
           </div>
         </div>`;
-      const img = card.querySelector('img');
-      img.addEventListener('error', () => {
-        card.querySelector('.project-thumb').innerHTML = '<i class="fa-solid fa-code"></i>';
-      }, { once: true });
       return card;
     }
 
