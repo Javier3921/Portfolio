@@ -2390,22 +2390,41 @@
     nextBtn.addEventListener('click', next);
 
     // ---- Swipe/arrastre (mouse, táctil y lápiz, vía Pointer Events) ----
+    // El puntero NO se captura desde el primer pixel: recién se confirma
+    // que es un arrastre (y ahí sí se llama setPointerCapture) cuando el
+    // movimiento supera DRAG_THRESHOLD. Capturar de entrada rompía el clic
+    // nativo en los links de las tarjetas (ej. "Código") porque el
+    // navegador redirige pointerup al contenedor y deja de asociarlo con el
+    // link donde arrancó el pointerdown, así que nunca disparaba el click.
+    // Un tap/clic normal (que nunca cruza el umbral) sigue su curso nativo.
+    const DRAG_THRESHOLD = 6; // px
+    let activePointerId = null;
+    let dragConfirmed = false;
+
     function onDragStart(clientX) {
-      isDragging = true;
       dragStartX = clientX;
       dragDeltaX = 0;
       viewportWidth = viewport.clientWidth;
-      viewport.classList.add('dragging');
-      track.classList.add('no-transition');
+      dragConfirmed = false;
     }
-    function onDragMove(clientX) {
-      if (!isDragging) return;
-      dragDeltaX = clientX - dragStartX;
+    function onDragMove(e) {
+      if (activePointerId === null) return;
+      dragDeltaX = e.clientX - dragStartX;
+      if (!dragConfirmed) {
+        if (Math.abs(dragDeltaX) < DRAG_THRESHOLD) return;
+        dragConfirmed = true;
+        isDragging = true;
+        viewport.setPointerCapture(activePointerId);
+        viewport.classList.add('dragging');
+        track.classList.add('no-transition');
+      }
       const percent = (dragDeltaX / viewportWidth) * 100;
       track.style.transform = `translateX(${-index * 100 + percent}%)`;
     }
     function onDragEnd() {
-      if (!isDragging) return;
+      activePointerId = null;
+      if (!dragConfirmed) return; // no cruzó el umbral: fue un clic normal, no tocar nada
+      dragConfirmed = false;
       isDragging = false;
       viewport.classList.remove('dragging');
       track.classList.remove('no-transition');
@@ -2417,13 +2436,21 @@
 
     viewport.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) return; // solo clic izquierdo
-      e.preventDefault(); // evita que el navegador seleccione texto o arrastre un link/imagen nativo
-      viewport.setPointerCapture(e.pointerId);
+      activePointerId = e.pointerId;
       onDragStart(e.clientX);
     });
-    viewport.addEventListener('pointermove', (e) => onDragMove(e.clientX));
-    viewport.addEventListener('pointerup', onDragEnd);
-    viewport.addEventListener('pointercancel', onDragEnd);
+    viewport.addEventListener('pointermove', (e) => {
+      if (activePointerId !== e.pointerId) return;
+      onDragMove(e);
+    });
+    viewport.addEventListener('pointerup', (e) => {
+      if (activePointerId !== e.pointerId) return;
+      onDragEnd();
+    });
+    viewport.addEventListener('pointercancel', (e) => {
+      if (activePointerId !== e.pointerId) return;
+      onDragEnd();
+    });
 
     function initCarousel() {
       // Antes de clonar (buildClones duplica el primero/último para el loop
@@ -2523,6 +2550,15 @@
       }`;
       const durationStr = duration.toFixed(2) + 's';
       slides.forEach((el, i) => {
+        // Se apaga y prende la animación (en vez de solo cambiar duration/
+        // delay en caliente) para forzar un reinicio limpio: si se cambian
+        // esos valores mientras la animación ya está corriendo, el
+        // navegador intenta "continuar" el progreso anterior con la nueva
+        // duración y eso producía un salto visible (pantalla en negro más
+        // larga de lo normal) justo cuando terminaba de cargar los repos.
+        el.style.animation = 'none';
+        void el.offsetWidth; // fuerza reflow para que el "none" se aplique de verdad
+        el.style.animation = '';
         el.style.animationDuration = durationStr;
         el.style.animationDelay = (-(i * STAGGER)).toFixed(2) + 's';
       });
