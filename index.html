@@ -1076,7 +1076,7 @@
           <div class="label" data-i18n="profile.statCerts">Certificaciones</div>
         </button>
         <a class="stat-card stat-card-link" href="#proyectos">
-          <div class="num" data-count="2">0</div>
+          <div class="num" id="statProjectsNum">0</div>
           <div class="label" data-i18n="profile.statProjects">Proyectos personales</div>
         </a>
         <div class="stat-card">
@@ -2084,20 +2084,24 @@
   onLangChange(restartTypingForLanguage);
 
   // ---- Animated counters ----
+  // animateCounter queda disponible para todo el script (hoisting de
+  // function declaration) — el contador de "Proyectos personales" lo usa
+  // por separado, más abajo, una vez que se sabe la cantidad real.
+  function animateCounter(el, target) {
+    let current = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = current;
+    }, 35);
+  }
   const counters = document.querySelectorAll('.num[data-count]');
   const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const el = entry.target;
-        const target = parseInt(el.getAttribute('data-count'), 10);
-        let current = 0;
-        const step = Math.max(1, Math.ceil(target / 40));
-        const timer = setInterval(() => {
-          current += step;
-          if (current >= target) { current = target; clearInterval(timer); }
-          el.textContent = current;
-        }, 35);
-        counterObserver.unobserve(el);
+        animateCounter(entry.target, parseInt(entry.target.getAttribute('data-count'), 10));
+        counterObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.5 });
@@ -2422,6 +2426,12 @@
     viewport.addEventListener('pointercancel', onDragEnd);
 
     function initCarousel() {
+      // Antes de clonar (buildClones duplica el primero/último para el loop
+      // infinito): la cantidad real de tarjetas = el stat "Proyectos
+      // personales" de Perfil, que ya no queda fijo en el HTML.
+      const statNum = document.getElementById('statProjectsNum');
+      if (statNum) animateCounter(statNum, track.children.length);
+
       buildClones();
       if (slideCount < 2) {
         prevBtn.style.display = 'none';
@@ -2483,11 +2493,37 @@
     if (!stage) return;
     const STAGGER = 2.8; // segundos por slide, igual al diseño original (25.2s / 9)
 
+    // Los puntos del keyframe original (1.6% / 8.6% / 11.1% de 25.2s) son en
+    // realidad tiempos FIJOS: ~0.403s de fade-in, visible hasta ~2.167s,
+    // fade-out completo a los ~2.797s (≈ 1 stagger exacto, para que un slide
+    // termine justo cuando empieza el siguiente). Si solo se escala la
+    // duración total (más slides) dejando esos % fijos, cada slide queda
+    // visible más segundos absolutos que el propio stagger y se solapan
+    // (el bug del "doble texto"). Por eso el keyframe se recalcula acá.
+    const T_IN = 0.4032, T_HOLD = 2.1672, T_OUT = 2.7972;
+    let styleEl = document.getElementById('techCycleDynamic');
+
     function restageAnimation() {
       const slides = Array.from(stage.children);
-      const duration = (STAGGER * slides.length).toFixed(2) + 's';
+      const duration = STAGGER * slides.length;
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'techCycleDynamic';
+        document.head.appendChild(styleEl);
+      }
+      const p1 = (T_IN / duration * 100).toFixed(3);
+      const p2 = (T_HOLD / duration * 100).toFixed(3);
+      const p3 = (T_OUT / duration * 100).toFixed(3);
+      styleEl.textContent = `@keyframes techCycle{
+        0%{ opacity:0; transform:translateY(16px) scale(.92); }
+        ${p1}%{ opacity:1; transform:translateY(0) scale(1); }
+        ${p2}%{ opacity:1; transform:translateY(0) scale(1); }
+        ${p3}%{ opacity:0; transform:translateY(-16px) scale(.92); }
+        100%{ opacity:0; transform:translateY(16px) scale(.92); }
+      }`;
+      const durationStr = duration.toFixed(2) + 's';
       slides.forEach((el, i) => {
-        el.style.animationDuration = duration;
+        el.style.animationDuration = durationStr;
         el.style.animationDelay = (-(i * STAGGER)).toFixed(2) + 's';
       });
     }
