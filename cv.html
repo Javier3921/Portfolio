@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Mismo tema e idioma que el portafolio (comparten localStorage). Se aplica
+  // antes de pintar para evitar el parpadeo. El CV web solo existe en español
+  // e inglés: cualquier otro idioma del portafolio cae a inglés.
+  (function(){
+    var t = null, l = null;
+    try { t = localStorage.getItem('theme'); l = localStorage.getItem('lang'); } catch (e) {}
+    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.lang = (!l || l === 'es') ? 'es' : 'en';
+  })();
+</script>
+<title>CV | Javier Fiestas — Analista de Datos y Automatización</title>
+<meta name="description" content="Currículum de Javier Fiestas Calixto: Bachiller en Ingeniería de Sistemas (Universidad de Lima), Analista de Datos y Automatización.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+  /* Mismos tokens que index.html (editorial blanco/negro). */
+  :root{
+    --bg-primary:#ffffff; --bg-secondary:#f4f7f6; --bg-card:#ffffff; --bg-elevated:#f1f1f3;
+    --text-primary:#111113; --text-secondary:#52525b; --text-muted:#6b6b74;
+    --accent:#0f766e; --on-accent:#ffffff; --border:#e4e4e8;
+    --shadow: 0 8px 22px rgba(0,0,0,.08); --shadow-lg: 0 16px 38px rgba(0,0,0,.14);
+    --accent-grad: var(--accent); --nav-h: 64px;
+    --font-serif:'Playfair Display', Georgia, serif;
+    --font-sans:'Plus Jakarta Sans', sans-serif;
+  }
+  :root[data-theme="dark"]{
+    --bg-primary:#0a0a0b; --bg-secondary:#141416; --bg-card:#141416; --bg-elevated:#1c1c1f;
+    --text-primary:#f5f5f6; --text-secondary:#a1a1aa; --text-muted:#8e8e97;
+    --accent:#2dd4bf; --on-accent:#04201c; --border:#2a2a2e;
+    --shadow: 0 8px 22px rgba(0,0,0,.4); --shadow-lg: 0 18px 40px rgba(0,0,0,.55);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:var(--font-sans); background:var(--bg-secondary); color:var(--text-primary);
+    line-height:1.6; transition:background .3s ease, color .3s ease;
+  }
+  a{ color:inherit; }
+  ::selection{ background:var(--accent); color:var(--on-accent); }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:6px; }
+
+  /* Barra de acciones */
+  .cv-bar{
+    position:sticky; top:0; z-index:10;
+    background:color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+    backdrop-filter:saturate(1.4) blur(8px); -webkit-backdrop-filter:saturate(1.4) blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .cv-bar-inner{
+    max-width:1040px; margin:0 auto; padding:.75rem 16px;
+    display:flex; align-items:center; gap:.6rem;
+  }
+  .cv-back{
+    display:inline-flex; align-items:center; gap:.5rem; text-decoration:none;
+    font-size:.88rem; font-weight:600; color:var(--text-secondary); margin-right:auto;
+    transition:color .2s ease, gap .2s ease;
+  }
+  .cv-back:hover{ color:var(--text-primary); gap:.7rem; }
+  .cv-btn{
+    height:38px; padding:0 .9rem; border-radius:999px; border:1px solid var(--border);
+    background:var(--bg-card); color:var(--text-primary); font:inherit; font-size:.82rem; font-weight:600;
+    display:inline-flex; align-items:center; gap:.45rem; cursor:pointer;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .cv-btn:hover{ border-color:var(--accent); transform:translateY(-1px); }
+  .cv-btn-primary{ background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+  .cv-btn-icon{ width:38px; padding:0; justify-content:center; }
+  .cv-lang{ display:inline-flex; border:1px solid var(--border); border-radius:999px; overflow:hidden; background:var(--bg-card); }
+  .cv-lang button{
+    height:36px; padding:0 .7rem; border:none; background:none; color:var(--text-secondary);
+    font:inherit; font-size:.78rem; font-weight:700; letter-spacing:.04em; cursor:pointer;
+  }
+  .cv-lang button[aria-pressed="true"]{ background:var(--accent); color:var(--on-accent); }
+  .theme-sun{ display:none; }
+  :root[data-theme="dark"] .theme-sun{ display:inline; }
+  :root[data-theme="dark"] .theme-moon{ display:none; }
+
+  /* Hoja */
+  .cv-sheet{
+    max-width:1040px; margin:2rem auto 3rem; background:var(--bg-card);
+    border:1px solid var(--border); border-radius:18px; box-shadow:var(--shadow);
+    padding:3rem 3.2rem;
+  }
+  .cv-head{ padding-bottom:1.8rem; border-bottom:1px solid var(--border); margin-bottom:2.2rem; }
+  .cv-head h1{
+    font-family:var(--font-serif); font-weight:800; font-size:clamp(1.9rem, 4.2vw, 2.7rem);
+    line-height:1.12; letter-spacing:-.01em; text-wrap:balance;
+  }
+  .cv-role{ font-size:1.08rem; font-weight:600; color:var(--text-secondary); margin-top:.35rem; }
+  .cv-contact{
+    display:flex; flex-wrap:wrap; gap:.5rem 1.4rem; margin-top:1.1rem; list-style:none;
+    font-size:.88rem; color:var(--text-secondary);
+  }
+  .cv-contact li{ display:inline-flex; align-items:center; gap:.45rem; }
+  .cv-contact i{ color:var(--text-primary); width:1em; text-align:center; }
+  .cv-contact a{ text-decoration:none; border-bottom:1px solid transparent; transition:border-color .2s ease, color .2s ease; }
+  .cv-contact a:hover{ color:var(--text-primary); border-color:currentColor; }
+  .cv-status{
+    display:inline-flex; align-items:center; gap:.45rem; margin-top:1rem;
+    font-size:.82rem; font-weight:600; color:var(--text-primary);
+    padding:.3rem .75rem; border:1px solid var(--border); border-radius:999px;
+  }
+  .cv-status::before{ content:''; width:7px; height:7px; border-radius:50%; background:#2f9e5a; }
+
+  .cv-grid{ display:grid; grid-template-columns:minmax(0, 1.75fr) minmax(0, 1fr); gap:2.8rem; }
+  .cv-section + .cv-section{ margin-top:2.3rem; }
+  .cv-section h2{
+    font-family:var(--font-serif); font-size:1.28rem; font-weight:700;
+    margin-bottom:1rem; display:flex; align-items:center; gap:.7rem;
+  }
+  .cv-section h2::after{ content:''; flex:1; height:1px; background:var(--border); }
+  .cv-section p{ color:var(--text-secondary); font-size:.94rem; max-width:70ch; }
+
+  /* Experiencia */
+  .cv-job-top{ display:flex; justify-content:space-between; align-items:baseline; gap:.4rem 1rem; flex-wrap:wrap; }
+  .cv-job h3{ font-size:1rem; font-weight:700; }
+  .cv-date{ font-size:.8rem; font-weight:600; color:var(--accent); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .cv-org{ font-size:.9rem; font-weight:600; color:var(--text-secondary); margin:.1rem 0 .7rem; }
+  .cv-list{ padding-left:1.1rem; display:grid; gap:.45rem; }
+  .cv-list li{ font-size:.9rem; color:var(--text-secondary); line-height:1.6; }
+  .cv-list li::marker{ color:var(--text-muted); }
+
+  /* Proyectos */
+  .cv-projects{ display:grid; gap:1.05rem; list-style:none; }
+  .cv-project h3{ font-size:.95rem; font-weight:700; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .cv-project h3 a{ font-size:.78rem; font-weight:600; color:var(--text-secondary); text-decoration:none; }
+  .cv-project h3 a:hover{ color:var(--text-primary); text-decoration:underline; text-underline-offset:3px; }
+  .cv-project p{ font-size:.88rem; margin-top:.15rem; }
+  .cv-stack{ font-size:.78rem; color:var(--text-secondary); margin-top:.3rem; }
+  .cv-stack span + span::before{ content:' · '; color:var(--text-muted); }
+
+  /* Columna lateral */
+  .cv-edu h3{ font-size:.95rem; font-weight:700; }
+  .cv-edu p{ font-size:.88rem; }
+  .cv-skill-group + .cv-skill-group{ margin-top:1.1rem; }
+  .cv-skill-group h3{ font-size:.8rem; font-weight:700; letter-spacing:.03em; color:var(--text-primary); margin-bottom:.45rem; }
+  .cv-skills{ list-style:none; display:grid; gap:.35rem; }
+  .cv-skills li{ display:flex; justify-content:space-between; align-items:center; gap:.8rem; font-size:.86rem; }
+
+  /* Herramientas: chips con el color de marca de cada tecnología (mismos
+     colores que en el portafolio). Entran escalonadas al hacer scroll. */
+  [data-tech="python"]{ --tag-c:#3776ab; }
+  [data-tech="javascript"]{ --tag-c:#d4b400; }
+  [data-tech="sql"]{ --tag-c:#e0793c; }
+  [data-tech="sql-server"]{ --tag-c:#a6192e; }
+  [data-tech="oracle"]{ --tag-c:#f80000; }
+  [data-tech="power-bi"]{ --tag-c:#f2c811; }
+  [data-tech="power-automate"]{ --tag-c:#0066ff; }
+  [data-tech="excel"]{ --tag-c:#217346; }
+  [data-tech="zoho"]{ --tag-c:#e42527; }
+  [data-tech="openai"]{ --tag-c:#10a37f; }
+  [data-tech="gemini"]{ --tag-c:#4285f4; }
+  [data-tech="claude"]{ --tag-c:#cc785c; }
+  [data-tech="html5"]{ --tag-c:#e34f26; }
+  [data-tech="git"]{ --tag-c:#f05032; }
+  [data-tech="node-js"]{ --tag-c:#3c873a; }
+  [data-tech="react"]{ --tag-c:#61dafb; }
+  [data-tech="streamlit"]{ --tag-c:#ff4b4b; }
+  [data-tech="postgresql"]{ --tag-c:#4f8cc9; }
+  .cv-chips{ list-style:none; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .cv-chip{
+    display:inline-flex; align-items:center; gap:.45rem;
+    font-size:.82rem; font-weight:600; color:var(--text-primary);
+    padding:.32rem .7rem; border:1px solid var(--border); border-radius:8px;
+    background:var(--bg-card);
+    transition:transform .2s cubic-bezier(.23,1,.32,1), border-color .2s ease, background-color .2s ease;
+  }
+  .cv-chip i{ font-size:.92em; color:var(--tag-c, var(--text-secondary)); transition:transform .25s cubic-bezier(.23,1,.32,1); }
+  @media (hover:hover) and (pointer:fine){
+    .cv-chip:hover{
+      transform:translateY(-2px);
+      border-color:var(--tag-c, var(--text-secondary));
+      background:color-mix(in srgb, var(--tag-c, var(--text-primary)) 10%, var(--bg-card));
+    }
+    .cv-chip:hover i{ transform:scale(1.15) rotate(-6deg); }
+  }
+  .cv-ai-note{ font-size:.8rem; color:var(--text-secondary); margin-top:.45rem; }
+  /* Solo con JS: sin él (o sin IntersectionObserver) todo se ve desde el inicio. */
+  .cv-anim .cv-chip{ opacity:0; transform:translateY(8px) scale(.96); }
+  .cv-anim .cv-skill-group.in .cv-chip{
+    opacity:1; transform:none;
+    transition:opacity .35s ease, transform .45s cubic-bezier(.23,1,.32,1), border-color .2s ease, background-color .2s ease;
+    transition-delay:calc(var(--i, 0) * 45ms), calc(var(--i, 0) * 45ms), 0s, 0s;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .cv-anim .cv-skill-group.in .cv-chip:hover{ transform:translateY(-2px); transition-delay:0s; }
+  }
+  .cv-level{ display:inline-flex; align-items:center; gap:.6rem; font-size:.74rem; color:var(--text-secondary); white-space:nowrap; }
+  /* Ancho fijo para la palabra del nivel: así las barras quedan alineadas en columna. */
+  .cv-lvl-word{ display:inline-block; min-width:6.4em; }
+  .cv-pips{ display:inline-flex; gap:3px; }
+  .cv-pips i{ width:14px; height:4px; border-radius:2px; background:var(--border); display:block; }
+  .cv-pips[data-level="1"] i:nth-child(-n+1),
+  .cv-pips[data-level="2"] i:nth-child(-n+2),
+  .cv-pips[data-level="3"] i:nth-child(-n+3){ background:var(--text-primary); }
+  .cv-plain{ font-size:.86rem; color:var(--text-secondary); }
+  .cv-certs{ list-style:none; display:grid; gap:.75rem; }
+  .cv-certs strong{ display:block; font-size:.88rem; }
+  .cv-certs span{ font-size:.8rem; color:var(--text-secondary); }
+
+  .cv-foot{ max-width:1040px; margin:0 auto 2.5rem; padding:0 16px; font-size:.78rem; color:var(--text-secondary); text-align:center; }
+
+  @media (max-width: 860px){
+    .cv-grid{ grid-template-columns:1fr; gap:2.3rem; }
+    .cv-sheet{ padding:2.2rem 1.6rem; margin:1rem 16px 2rem; }
+  }
+  @media (max-width: 520px){
+    .cv-sheet{ padding:1.6rem 1.1rem; border-radius:14px; }
+    .cv-btn-label{ display:none; }
+    .cv-btn{ width:38px; padding:0; justify-content:center; }
+    .cv-back span{ display:none; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important; }
+    .cv-anim .cv-chip{ opacity:1; transform:none; }
+    .cv-chip:hover, .cv-chip:hover i{ transform:none !important; }
+  }
+
+  /* Impresión / "Guardar como PDF": siempre en claro, sin barra ni sombras,
+     A4 con márgenes y sin cortar una entrada entre dos páginas. */
+  @page{ size:A4; margin:14mm 13mm; }
+  @media print{
+    :root, :root[data-theme="dark"]{
+      --bg-primary:#fff; --bg-secondary:#fff; --bg-card:#fff; --bg-elevated:#f1f1f3;
+      --text-primary:#111113; --text-secondary:#3f3f46; --text-muted:#71717a; --border:#d4d4d8; --accent:#111113;
+    }
+    /* Todo el CSS usa rem: bajar la raíz compacta la hoja entera. */
+    html{ font-size:13px; }
+    body{ background:#fff; }
+    .cv-bar, .cv-foot{ display:none; }
+    .cv-sheet{ margin:0; padding:0; border:none; box-shadow:none; max-width:none; border-radius:0; }
+    .cv-grid{ grid-template-columns:1.7fr 1fr; gap:8mm; }
+    .cv-head{ padding-bottom:4mm; margin-bottom:5mm; }
+    .cv-section + .cv-section{ margin-top:5mm; }
+    /* La experiencia puede partirse entre puntos (si no, una entrada larga
+       se va entera a la página siguiente y deja la primera medio vacía). */
+    .cv-list li, .cv-project, .cv-skill-group, .cv-certs li, .cv-edu, .cv-job-top{ break-inside:avoid; }
+    .cv-section h2{ break-after:avoid; }
+    a{ text-decoration:none; }
+    .cv-anim .cv-chip, .cv-chip{ opacity:1 !important; transform:none !important; transition:none !important; }
+    .cv-chip{ padding:.15rem .5rem; font-size:.78rem; }
+    .cv-chip i{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+
+  /* ===== Chatbot y Clawd: copiados de index.html (mantener iguales) ===== */
+  /* Avatar del chatbot: un joven en pixel art (pelo negro, lentes, piel trigueña,
+     polo negro, chaqueta crema, jean celeste y zapatillas negras). No se desplaza
+     de su sitio: respira, parpadea, mira a los lados, saluda y piensa (globo). */
+  .robot-fab{
+    position:fixed; bottom:90px; right:22px; width:108px; height:134px;
+    background:none; border:none; padding:0; cursor:pointer; z-index:1000;
+    transition: transform .25s ease;
+  }
+  .robot-fab:hover{ transform:translateY(-4px) scale(1.05); }
+  .robot-fab:active{ transform:translateY(0) scale(.97); }
+  .robot-figure{ position:relative; width:100%; height:100%; }
+  .robot-svg{ width:100%; height:100%; display:block; overflow:visible; shape-rendering:crispEdges; filter:drop-shadow(0 8px 8px rgba(0,0,0,.28)); }
+
+  .px-hair{ fill:#1c1b20; }
+  .px-hair-hi{ fill:#3b3a44; }
+  .px-skin{ fill:#c68a5e; }
+  .px-skin-sh{ fill:#a26c46; }
+  .px-frame{ fill:#121214; }
+  .px-lens{ fill:#e6f1fb; }
+  .px-pupil{ fill:#2a1a12; }
+  .px-mouth{ fill:#7a3b2a; }
+  .px-polo{ fill:#17171b; }
+  .px-polo-hi{ fill:#2e2e36; }
+  .px-jacket{ fill:#efe3c6; }
+  .px-jacket-sh{ fill:#d3c09a; }
+  .px-jean{ fill:#9fcdee; }
+  .px-jean-sh{ fill:#78afd8; }
+  .px-shoe{ fill:#141416; }
+  .px-sole{ fill:#f1f1f1; }
+  .px-ground{ fill:rgba(0,0,0,.18); shape-rendering:auto; }
+
+  /* Respiración: el torso y la cabeza bajan medio píxel, a pasos. */
+  .px-up{ animation:pxBreath 2.4s steps(1) infinite; }
+  @keyframes pxBreath{ 50%{ transform:translateY(.5px); } }
+  .px-pupil{ transform-box:fill-box; transform-origin:50% 50%; animation:pxBlink 4.2s infinite; }
+  @keyframes pxBlink{ 0%,93%,100%{ transform:none; } 95%{ transform:scaleY(.1); } }
+  .px-look{ animation:pxLook 9s steps(1) infinite; }
+  @keyframes pxLook{ 0%,30%,45%,60%,75%,100%{ transform:none; } 30%{ transform:translateX(-.5px); } 60%{ transform:translateX(.5px); } }
+  .px-smile{ opacity:0; }
+  .px-arm{ transform-box:view-box; transition:transform .45s cubic-bezier(.34,1.4,.64,1); }
+  .px-arm-l{ transform-origin:4px 15px; }
+  .px-arm-r{ transform-origin:20px 15px; }
+
+  /* Saludo con el brazo derecho */
+  .is-waving .px-arm-r{ animation:pxWave 1.6s ease-in-out; }
+  .is-waving .px-smile{ opacity:1; }
+  @keyframes pxWave{
+    0%,100%{ transform:none; }
+    20%,80%{ transform:rotate(-150deg); }
+    35%,65%{ transform:rotate(-128deg); }
+    50%{ transform:rotate(-158deg); }
+  }
+  /* Pensando: mano en la barbilla, mirada arriba y globo de pensamiento */
+  .is-thinking .px-arm-l{ transform:rotate(-110deg); }
+  .is-thinking .px-look{ animation:none; transform:translate(.5px, -.4px); }
+  .px-think-b{
+    position:absolute; left:-24%; top:-24%; min-width:34px; padding:4px 7px; z-index:1;
+    background:var(--bg-card); color:var(--text-primary); border:2px solid var(--text-primary);
+    font:700 12px/1.15 ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; text-align:center; white-space:nowrap;
+    box-shadow:3px 3px 0 rgba(0,0,0,.18); pointer-events:none;
+    opacity:0; transform:translateY(6px) scale(.8); transform-origin:85% 100%;
+    transition:opacity .25s ease, transform .3s cubic-bezier(.34,1.5,.64,1);
+  }
+  .px-think-b::before, .px-think-b::after{ content:''; position:absolute; background:var(--bg-card); border:2px solid var(--text-primary); }
+  .px-think-b::before{ width:8px; height:8px; right:6px; bottom:-13px; }
+  .px-think-b::after{ width:4px; height:4px; right:-1px; bottom:-21px; }
+  .is-thinking .px-think-b{ opacity:1; transform:none; }
+  .robot-fab.open .px-think-b, .hs-bot:hover .px-think-b, .hero-scene.say-hi .px-think-b{ opacity:0; transform:translateY(6px) scale(.8); }
+  .chatbot-avatar .robot-svg{ width:30px; height:30px; filter:none; }
+
+
+  .chatbot-fab-dot{
+    position:absolute; top:2px; right:8px; width:12px; height:12px; border-radius:50%;
+    background:#3ecf8e; border:2px solid var(--bg-primary); z-index:2;
+  }
+  .robot-fab.open .chatbot-fab-dot{ display:none; }
+
+  .chatbot-panel{
+    position:fixed; bottom:236px; right:22px; width:340px; max-width:calc(100vw - 40px);
+    max-height:min(520px, 70vh); background:var(--bg-card); border:1px solid var(--border);
+    border-radius:18px; box-shadow:var(--shadow-lg); display:flex; flex-direction:column;
+    overflow:hidden; z-index:999; opacity:0; visibility:hidden; transform:translateY(16px) scale(.96);
+    transform-origin:bottom right; transition: all .28s ease;
+  }
+  .chatbot-panel.open{ opacity:1; visibility:visible; transform:translateY(0) scale(1); }
+
+  .chatbot-header{
+    display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem;
+    background:var(--accent-grad); color:var(--on-accent); flex-shrink:0;
+  }
+  .chatbot-avatar{
+    width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.18);
+    display:flex; align-items:center; justify-content:center; font-size:1.05rem; flex-shrink:0;
+  }
+  .chatbot-title{ font-size:.92rem; font-weight:700; }
+  .chatbot-subtitle{ font-size:.72rem; opacity:.85; display:flex; align-items:center; gap:.35rem; }
+  .chatbot-status-dot{ width:7px; height:7px; border-radius:50%; background:#3ecf8e; display:inline-block; }
+  .chatbot-close{
+    margin-left:auto; background:none; border:none; color:inherit; cursor:pointer;
+    font-size:1rem; opacity:.85; padding:.3rem;
+  }
+  .chatbot-close:hover{ opacity:1; }
+
+  .chatbot-messages{
+    flex:1; overflow-y:auto; padding:1rem 1rem .3rem; display:flex; flex-direction:column; gap:.7rem;
+  }
+  .chat-msg{ max-width:84%; font-size:.85rem; line-height:1.5; padding:.6rem .8rem; border-radius:14px; overflow-wrap:break-word; white-space:pre-wrap; }
+  .chat-msg.bot{ align-self:flex-start; background:var(--bg-elevated); color:var(--text-primary); border-bottom-left-radius:4px; }
+  .chat-msg.user{ align-self:flex-end; background:var(--accent-grad); color:var(--on-accent); border-bottom-right-radius:4px; }
+  .chat-typing{ align-self:flex-start; display:flex; gap:4px; padding:.7rem .9rem; background:var(--bg-elevated); border-radius:14px; border-bottom-left-radius:4px; }
+  .chat-typing span{ width:6px; height:6px; border-radius:50%; background:var(--text-muted); animation:chatTyping 1.1s ease-in-out infinite; }
+  .chat-typing span:nth-child(2){ animation-delay:.15s; }
+  .chat-typing span:nth-child(3){ animation-delay:.3s; }
+  @keyframes chatTyping{ 0%,60%,100%{ transform:translateY(0); opacity:.4; } 30%{ transform:translateY(-4px); opacity:1; } }
+
+  .chatbot-suggestions{ display:flex; flex-wrap:wrap; gap:.4rem; padding:.5rem 1rem; flex-shrink:0; }
+  .chat-chip{
+    font-size:.72rem; font-weight:600; padding:.35rem .7rem; border-radius:999px;
+    background:var(--bg-elevated); border:1px solid var(--border); color:var(--text-secondary);
+    cursor:pointer; transition: all .2s ease;
+  }
+  .chat-chip:hover{ border-color:var(--accent); color:var(--text-primary); }
+
+  .chatbot-input-row{ display:flex; gap:.5rem; padding:.8rem 1rem; border-top:1px solid var(--border); flex-shrink:0; }
+  .chatbot-input-row input{
+    flex:1; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-primary);
+    border-radius:10px; padding:.55rem .8rem; font-size:.85rem; font-family:inherit; min-width:0;
+  }
+  .chatbot-input-row input:focus{ outline:none; border-color:var(--accent); }
+  .chatbot-input-row button{
+    width:38px; height:38px; border-radius:10px; border:none; background:var(--accent-grad);
+    color:var(--on-accent); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; font-size:.9rem;
+  }
+  .chatbot-disclaimer{ font-size:.66rem; color:var(--text-muted); text-align:center; padding:0 1rem .7rem; flex-shrink:0; }
+  .chatbot-credit{
+    display:flex; align-items:center; justify-content:center; gap:.4rem; padding:.45rem 1rem;
+    font-size:.72rem; font-weight:600; color:var(--text-secondary);
+    background:var(--bg-elevated); border-bottom:1px solid var(--border); flex-shrink:0;
+  }
+  .gemini-logo{ width:14px; height:14px; flex-shrink:0; }
+  /* Respuesta del asistente escribiéndose y enlaces a GitHub/LinkedIn. */
+  .chat-text.is-typing::after{
+    content:''; display:inline-block; width:2px; height:1em; margin-left:2px; vertical-align:-2px;
+    background:currentColor; animation:chatCaret .8s steps(1) infinite;
+  }
+  @keyframes chatCaret{ 50%{ opacity:0; } }
+  .chat-links{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.55rem; white-space:normal; }
+  .chat-link{
+    display:inline-flex; align-items:center; gap:.4rem; padding:.32rem .65rem; border-radius:999px;
+    background:var(--bg-card); border:1px solid var(--border); color:var(--text-primary);
+    font-size:.76rem; font-weight:600; text-decoration:none; animation:chatLinkIn .3s ease both;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .chat-link:hover{ border-color:var(--accent); transform:translateY(-1px); }
+  .chat-link i{ font-size:.95rem; }
+  .chat-link.is-linkedin i{ color:#0a66c2; }
+  @keyframes chatLinkIn{ from{ opacity:0; transform:translateY(4px); } }
+  @media (prefers-reduced-motion: reduce){ .chat-text.is-typing::after, .chat-link{ animation:none; } }
+
+  /* Clawd: mascota pixel-art (homenaje a la mascota de Claude Code) que pasea
+     por toda la pantalla, hace un gesto cada vez que se detiene y cierra los
+     ojos, sonrojado, si lo presionas como si lo acariciaras. Es decorativo. */
+  .clawd{
+    position:fixed; left:0; top:0; z-index:950; width:64px; height:48px;
+    transform:translate3d(-200px, -200px, 0); opacity:0; transition:opacity .5s ease;
+    cursor:grab; touch-action:manipulation; user-select:none; -webkit-user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .clawd.on{ opacity:1; }
+  .clawd.petting{ cursor:grabbing; }
+  .cl-inner{ position:relative; width:100%; height:100%; transform-origin:50% 100%; }
+  .cl-svg{ width:100%; height:100%; display:block; overflow:visible; shape-rendering:crispEdges; filter:drop-shadow(0 5px 5px rgba(0,0,0,.28)); }
+  .cl-body, .cl-arm, .cl-leg{ fill:#d97757; }
+  .cl-arm, .cl-leg, .cl-eye{ transform-box:fill-box; }
+  .cl-arm-l{ transform-origin:100% 50%; }
+  .cl-arm-r{ transform-origin:0 50%; }
+  .cl-eyes{ transform:translateX(var(--look, 0px)); transition:transform .3s ease; }
+  .cl-eye{ fill:#1f1e1d; transform-origin:50% 50%; transition:transform .08s ease, opacity .12s ease; }
+  .cl-closed{ fill:none; stroke:#1f1e1d; stroke-width:1; stroke-linecap:square; shape-rendering:auto; opacity:0; transition:opacity .12s ease; }
+  .cl-blush{ fill:#f0a08c; opacity:0; transition:opacity .25s ease; }
+  .clawd.blink .cl-eye, .clawd.g-sleep .cl-eye{ transform:scaleY(.15); }
+
+  /* Caminar: patas alternas y un rebote de un píxel, a pasos (look pixel-art). */
+  .clawd.walking .cl-inner{ animation:clBob .34s steps(2) infinite; }
+  .clawd.walking .cl-leg-a{ animation:clStep .34s steps(2) infinite; }
+  .clawd.walking .cl-leg-b, .clawd.walking .cl-arm{ animation:clStep .34s steps(2) -.17s infinite; }
+  @keyframes clBob{ 50%{ translate:0 -2px; } }
+  @keyframes clStep{ 50%{ transform:translateY(-1px); } }
+
+  /* Gestos al detenerse */
+  .clawd.g-jump .cl-inner{ animation:clJump .55s cubic-bezier(.3,0,.4,1) 2; }
+  @keyframes clJump{ 0%,100%{ transform:none; } 15%{ transform:scale(1.14,.84); } 50%{ transform:translateY(-28px) scale(.94,1.08); } 85%{ transform:scale(1.1,.9); } }
+  .clawd.g-wave .cl-arm-r{ animation:clWave .36s ease-in-out 4; }
+  @keyframes clWave{ 50%{ transform:translateY(-2px) rotate(-50deg); } }
+  .clawd.g-wiggle .cl-inner{ animation:clWiggle .16s ease-in-out 8 alternate; }
+  @keyframes clWiggle{ from{ transform:rotate(-8deg); } to{ transform:rotate(8deg); } }
+  .clawd.g-look .cl-eyes{ animation:clLook 1.8s ease-in-out; }
+  @keyframes clLook{ 0%,100%{ transform:none; } 22%,42%{ transform:translateX(-1.4px); } 60%,82%{ transform:translateX(1.4px); } }
+  .clawd.g-spin .cl-inner{ animation:clSpin .7s cubic-bezier(.45,0,.2,1); }
+  @keyframes clSpin{ 0%,100%{ transform:none; } 50%{ transform:translateY(-10px) scaleX(-1); } }
+  .clawd.g-stretch .cl-inner{ animation:clStretch 1.2s ease-in-out; }
+  .clawd.g-stretch .cl-arm-l{ animation:clArmUpL 1.2s ease-in-out; }
+  .clawd.g-stretch .cl-arm-r{ animation:clArmUpR 1.2s ease-in-out; }
+  @keyframes clStretch{ 0%,100%{ transform:none; } 40%,60%{ transform:scale(.92,1.14); } }
+  @keyframes clArmUpL{ 0%,100%{ transform:none; } 40%,60%{ transform:translateY(-3px) rotate(60deg); } }
+  @keyframes clArmUpR{ 0%,100%{ transform:none; } 40%,60%{ transform:translateY(-3px) rotate(-60deg); } }
+  .clawd.g-sleep .cl-inner{ animation:clBreath 1.6s ease-in-out infinite; }
+  @keyframes clBreath{ 50%{ transform:scale(1.04,.96); } }
+
+  /* Caricia: ojos cerrados en ^ ^, mejillas y un ronroneo con corazones. */
+  .clawd.petting .cl-eye{ opacity:0; }
+  .clawd.petting .cl-closed, .clawd.petting .cl-blush{ opacity:1; }
+  .clawd.petting .cl-inner{ animation:clPurr .5s ease-in-out infinite; }
+  .clawd.petting .cl-arm-l{ transform:rotate(-25deg); }
+  .clawd.petting .cl-arm-r{ transform:rotate(25deg); }
+  @keyframes clPurr{ 0%,100%{ transform:scale(1.05,.93); } 50%{ transform:scale(.98,1.03) rotate(-2deg); } }
+  .cl-fx{
+    position:absolute; left:50%; top:-6px; pointer-events:none; font:700 15px/1 var(--font-sans); color:#e0624a;
+    animation:clFloat 1.2s ease-out forwards;
+  }
+  .cl-fx.cl-z{ color:var(--text-secondary); font-size:13px; animation-duration:1.8s; }
+  @keyframes clFloat{
+    0%{ opacity:0; transform:translate(-50%, 0) scale(.5); }
+    20%{ opacity:1; }
+    100%{ opacity:0; transform:translate(calc(-50% + var(--dx, 0px)), -38px) scale(1.1); }
+  }
+  @media (max-width: 640px){ .clawd{ width:48px; height:36px; } }
+  @media (max-width: 520px){
+    .robot-fab{ right:8px; bottom:12px; width:70px; height:88px; }
+    .px-think-b{ font-size:10px; padding:3px 5px; left:-46%; top:-30%; }
+    .chatbot-panel{ right:12px; bottom:108px; width:calc(100vw - 24px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .px-up, .px-pupil, .px-look, .px-arm, .chat-typing span{ animation:none !important; }
+    .clawd, .clawd *{ animation:none !important; transition:none !important; }
+  }
+  /* En el PDF no salen ni el chat ni la mascota. */
+  @media print{ .robot-fab, .chatbot-panel, .clawd{ display:none !important; } }
+</style>
+</head>
+<body>
+
+<header class="cv-bar">
+  <div class="cv-bar-inner">
+    <a class="cv-back" href="index.html"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> <span data-i18n="back">Volver al portafolio</span></a>
+    <div class="cv-lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-set-lang="es" aria-pressed="true">ES</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <button type="button" class="cv-btn cv-btn-icon" id="cvTheme" data-i18n-aria="themeAria" aria-label="Cambiar tema">
+      <i class="fa-solid fa-moon theme-moon" aria-hidden="true"></i><i class="fa-solid fa-sun theme-sun" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="cv-btn cv-btn-primary" id="cvPrint">
+      <i class="fa-solid fa-file-pdf" aria-hidden="true"></i><span class="cv-btn-label" data-i18n="print">Imprimir / Guardar PDF</span>
+    </button>
+  </div>
+</header>
+
+<main class="cv-sheet">
+  <div class="cv-head">
+    <h1>Javier Alonso Fiestas Calixto</h1>
+    <p class="cv-role" data-i18n="role">Analista de Datos y Automatización · Bachiller en Ingeniería de Sistemas</p>
+    <ul class="cv-contact">
+      <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <span data-i18n="location">Lima, Perú</span></li>
+      <li><i class="fa-solid fa-envelope" aria-hidden="true"></i> <a href="mailto:javierfiestas44@gmail.com">javierfiestas44@gmail.com</a></li>
+      <li><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i> <a href="https://www.linkedin.com/in/javier-fiestas-6457ba240/" target="_blank" rel="noopener">linkedin.com/in/javier-fiestas</a></li>
+      <li><i class="fa-brands fa-github" aria-hidden="true"></i> <a href="https://github.com/Javier3921" target="_blank" rel="noopener">github.com/Javier3921</a></li>
+    </ul>
+    <div class="cv-status" data-i18n="status">Disponible para nuevas oportunidades</div>
+  </div>
+
+  <div class="cv-grid">
+    <div>
+      <section class="cv-section" aria-labelledby="h-profile">
+        <h2 id="h-profile" data-i18n="h.profile">Perfil profesional</h2>
+        <p data-i18n="profile">Bachiller en Ingeniería de Sistemas por la Universidad de Lima, con 2 años de experiencia en automatización de procesos, análisis de datos e inteligencia de negocio dentro del ecosistema Zoho. Trabajo con SQL, dashboards, APIs y flujos de automatización que optimizan procesos operativos y apoyan la toma de decisiones basada en datos. Busco integrarme a un equipo de Tecnología, Datos o Analítica donde pueda aportar eficiencia, escalabilidad y mejora continua.</p>
+      </section>
+
+      <section class="cv-section" aria-labelledby="h-exp">
+        <h2 id="h-exp" data-i18n="h.exp">Experiencia</h2>
+        <article class="cv-job">
+          <div class="cv-job-top">
+            <h3 data-i18n="job.role">Practicante / Analista de Automatización y Datos</h3>
+            <span class="cv-date" data-i18n="job.date">Ago 2024 – Set 2026</span>
+          </div>
+          <p class="cv-org">Payet, Rey, Cauvi, Pérez Abogados · Lima</p>
+          <ul class="cv-list">
+            <li data-i18n="job.b1">Desarrollo y mantenimiento de dashboards en Zoho Analytics para abogados y socios, orientados al control de facturación, liquidaciones, horas trabajadas, metas y principales indicadores operativos del estudio.</li>
+            <li data-i18n="job.b2">Elaboración y optimización de consultas SQL (SELECT, JOIN, GROUP BY) sobre datos financieros, de clientes e históricos, asegurando consistencia y rendimiento en reportes recurrentes.</li>
+            <li data-i18n="job.b3">Implementación de automatizaciones end-to-end con Zoho Flow, Zoho CRM y Zoho Sheet, integrando funciones personalizadas en Deluge para sincronizar y validar datos entre sistemas.</li>
+            <li data-i18n="job.b4">Diseño de flujos que evitan duplicados y priorizan la información más reciente, controlando el origen y la fecha de actualización de los datos (CRM / Sheet).</li>
+            <li data-i18n="job.b5">Desarrollo de macros avanzadas en Zoho Sheet y Excel para el procesamiento automático de información y la reducción de tareas manuales.</li>
+            <li data-i18n="job.b6">Creación de scripts en Python para automatizar procesos internos, incluido el envío de correos masivos personalizados a partir de bases de datos en Excel.</li>
+            <li data-i18n="job.b7">Implementación de flujos en Power Automate Desktop para tareas repetitivas en entornos web y de escritorio.</li>
+            <li data-i18n="job.b9">Desarrollo de un dashboard interno de transacciones y proyectos públicos: backend en Node.js/Express conectado en vivo a Zoho Analytics y Zoho CRM (OAuth 2.0), frontend en React con filtros cruzados, KPIs y un mapa interactivo del Perú, con caché, cola de concurrencia y reintentos.</li>
+            <li data-i18n="job.b8">Mantenimiento y mejora de automatizaciones existentes, optimizando el consumo de APIs en Zoho CRM y documentando procesos para asegurar la continuidad operativa.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="cv-section" aria-labelledby="h-proj">
+        <h2 id="h-proj" data-i18n="h.proj">Proyectos personales</h2>
+        <ul class="cv-projects">
+          <li class="cv-project">
+            <h3>Finanzas Gestor <a href="https://github.com/Javier3921/Finance" target="_blank" rel="noopener">github.com/Javier3921/Finance</a></h3>
+            <p data-i18n="p.fin">Registro de gastos desde Telegram (texto libre o foto del comprobante) y dashboard web con presupuestos y alertas. Bot 24/7 en Oracle Cloud a costo cero, base de datos con RLS y 42 tests automatizados.</p>
+            <p class="cv-stack"><span>Python</span><span>SQLAlchemy</span><span>PostgreSQL (Supabase)</span><span>Streamlit</span><span>Oracle Cloud</span></p>
+          </li>
+          <li class="cv-project">
+            <h3>AudioReport-AI <a href="https://github.com/Javier3921/AudioReport-AI" target="_blank" rel="noopener">github.com/Javier3921/AudioReport-AI</a></h3>
+            <p data-i18n="p.aud">Convierte grabaciones de reuniones en informes técnicos en HTML: transcripción local con Whisper (el audio no sale del equipo) y análisis con Claude Code que extrae temas, línea de tiempo y pendientes.</p>
+            <p class="cv-stack"><span>Python</span><span>Flask</span><span>Whisper</span><span>FFmpeg</span><span>Claude Code</span></p>
+          </li>
+          <li class="cv-project">
+            <h3 data-i18n-html="p.extTitle">Extractor de Texto de Video <a href="https://github.com/Javier3921/Extractor_texto_tiktok" target="_blank" rel="noopener">github.com/Javier3921/Extractor_texto_tiktok</a></h3>
+            <p data-i18n="p.ext">Transcribe vídeos de TikTok o archivos locales con Whisper, traduce al español y genera un informe técnico en HTML y/o Markdown con Gemini o Claude Code. Solo descarga el audio, nunca el vídeo.</p>
+            <p class="cv-stack"><span>Python</span><span>Whisper</span><span>yt-dlp</span><span>FFmpeg</span><span>Gemini API</span></p>
+          </li>
+          <li class="cv-project">
+            <h3 data-i18n-html="p.portTitle">Portafolio web <a href="https://github.com/Javier3921/Portfolio" target="_blank" rel="noopener">github.com/Javier3921/Portfolio</a></h3>
+            <p data-i18n="p.port">Sitio estático en 5 idiomas con un chatbot conectado a Gemini mediante una función serverless (API key solo en el servidor, control de origen y límite por IP) y una sección que se sincroniza con la API de GitHub.</p>
+            <p class="cv-stack"><span>HTML/CSS/JS</span><span>Node.js</span><span>Vercel</span><span>Gemini API</span></p>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <aside>
+      <section class="cv-section cv-edu" aria-labelledby="h-edu">
+        <h2 id="h-edu" data-i18n="h.edu">Educación</h2>
+        <h3 data-i18n="edu.degree">Bachiller en Ingeniería de Sistemas</h3>
+        <p data-i18n="edu.school">Universidad de Lima</p>
+        <p class="cv-date" data-i18n="edu.date">Jul 2020 – Ago 2026</p>
+      </section>
+
+      <section class="cv-section" aria-labelledby="h-skills">
+        <h2 id="h-skills" data-i18n="h.skills">Habilidades técnicas</h2>
+        <div class="cv-skill-group">
+          <h3 data-i18n="sk.lang">Lenguajes</h3>
+          <ul class="cv-chips">
+            <li class="cv-chip" data-tech="python"><i class="fa-brands fa-python" aria-hidden="true"></i>Python</li>
+            <li class="cv-chip" data-tech="sql"><i class="fa-solid fa-database" aria-hidden="true"></i>SQL</li>
+            <li class="cv-chip" data-tech="javascript"><i class="fa-brands fa-js" aria-hidden="true"></i>JavaScript</li>
+            <li class="cv-chip" data-tech="html5"><i class="fa-brands fa-html5" aria-hidden="true"></i>HTML / CSS</li>
+          </ul>
+        </div>
+        <div class="cv-skill-group">
+          <h3 data-i18n="sk.zoho">Herramientas Zoho</h3>
+          <ul class="cv-chips">
+            <li class="cv-chip" data-tech="zoho"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i>Zoho Analytics</li>
+            <li class="cv-chip" data-tech="zoho"><i class="fa-solid fa-address-book" aria-hidden="true"></i>Zoho CRM</li>
+            <li class="cv-chip" data-tech="zoho"><i class="fa-solid fa-code-branch" aria-hidden="true"></i>Zoho Flow</li>
+            <li class="cv-chip" data-tech="zoho"><i class="fa-solid fa-table" aria-hidden="true"></i>Zoho Sheet</li>
+            <li class="cv-chip" data-tech="zoho"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>Deluge</li>
+            <li class="cv-chip" data-tech="zoho"><i class="fa-solid fa-plug" aria-hidden="true"></i><span data-i18n="sk.zohoApis">APIs de Zoho (Analytics y CRM)</span></li>
+          </ul>
+        </div>
+        <div class="cv-skill-group">
+          <h3 data-i18n="sk.auto">Automatización y desarrollo</h3>
+          <ul class="cv-chips">
+            <li class="cv-chip" data-tech="power-automate"><i class="fa-solid fa-desktop" aria-hidden="true"></i>Power Automate</li>
+            <li class="cv-chip" data-tech="excel"><i class="fa-solid fa-file-excel" aria-hidden="true"></i><span data-i18n="sk.macros">Macros (Zoho Sheet / Excel)</span></li>
+            <li class="cv-chip"><i class="fa-solid fa-key" aria-hidden="true"></i>REST APIs · OAuth 2.0</li>
+            <li class="cv-chip" data-tech="node-js"><i class="fa-brands fa-node-js" aria-hidden="true"></i>Node.js / Express</li>
+            <li class="cv-chip" data-tech="react"><i class="fa-brands fa-react" aria-hidden="true"></i>React</li>
+            <li class="cv-chip" data-tech="streamlit"><i class="fa-solid fa-layer-group" aria-hidden="true"></i>Streamlit / Flask</li>
+            <li class="cv-chip" data-tech="git"><i class="fa-brands fa-git-alt" aria-hidden="true"></i>Git / GitHub Actions</li>
+          </ul>
+        </div>
+        <div class="cv-skill-group">
+          <h3 data-i18n="sk.db">Bases de datos y BI</h3>
+          <ul class="cv-chips">
+            <li class="cv-chip" data-tech="power-bi"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i>Power BI</li>
+            <li class="cv-chip" data-tech="postgresql"><i class="fa-solid fa-database" aria-hidden="true"></i>PostgreSQL / Supabase</li>
+            <li class="cv-chip" data-tech="oracle"><i class="fa-solid fa-database" aria-hidden="true"></i>Oracle SQL Developer</li>
+            <li class="cv-chip" data-tech="oracle"><i class="fa-solid fa-sitemap" aria-hidden="true"></i>Oracle SQL Data Modeler</li>
+            <li class="cv-chip" data-tech="sql-server"><i class="fa-solid fa-server" aria-hidden="true"></i>SQL Server Management Studio</li>
+          </ul>
+        </div>
+        <div class="cv-skill-group">
+          <h3 data-i18n="sk.ai">IA generativa</h3>
+          <ul class="cv-chips">
+            <li class="cv-chip" data-tech="openai"><i class="fa-solid fa-comments" aria-hidden="true"></i>ChatGPT</li>
+            <li class="cv-chip" data-tech="claude"><i class="fa-solid fa-robot" aria-hidden="true"></i>Claude / Claude Code</li>
+            <li class="cv-chip" data-tech="gemini"><i class="fa-brands fa-google" aria-hidden="true"></i>Gemini API</li>
+            <li class="cv-chip" data-tech="openai"><i class="fa-solid fa-microphone" aria-hidden="true"></i>Whisper</li>
+          </ul>
+          <p class="cv-ai-note" data-i18n="sk.aiUse">Para desarrollo, revisión y documentación de código.</p>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="h-langs">
+        <h2 id="h-langs" data-i18n="h.langs">Idiomas</h2>
+        <div class="cv-skill-group">
+          <ul class="cv-skills">
+            <li><span data-i18n="lg.es">Español</span> <span class="cv-level"><span class="cv-lvl-word" data-i18n="lg.native">Nativo</span></span></li>
+            <li><span data-i18n="lg.enSpeak">Inglés · conversación</span> <span class="cv-level"><span data-lvl="2"></span></span></li>
+            <li><span data-i18n="lg.enWrite">Inglés · escritura</span> <span class="cv-level"><span data-lvl="2"></span></span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="h-certs">
+        <h2 id="h-certs" data-i18n="h.certs">Certificaciones</h2>
+        <ul class="cv-certs">
+          <li><strong>Ciberseguridad: Ethical Hacking (C|EH)</strong><span data-i18n="c1">Universidad Nacional de Ingeniería · CTIC · Set 2025</span></li>
+          <li><strong>Ethical Hacking Essentials (EHE)</strong><span data-i18n="c2">Universidad de Lima · Ago 2025</span></li>
+          <li><strong>Introduction to Cybersecurity</strong><span data-i18n="c3">Cisco Networking Academy · Jul 2026</span></li>
+          <li><strong>Linux Unhatched</strong><span data-i18n="c4">Cisco Networking Academy · NDG · May 2026</span></li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<p class="cv-foot" data-i18n="updated">Actualizado en octubre de 2026 · Versión web del CV, sin datos personales sensibles.</p>
+
+<script>
+  const LVL = { es: ['Básico', 'Intermedio', 'Avanzado'], en: ['Basic', 'Intermediate', 'Advanced'] };
+  const I18N = {
+    es: {}, // el español es el texto original del HTML (se guarda al cargar)
+    en: {
+      back: 'Back to portfolio', print: 'Print / Save PDF', themeAria: 'Toggle theme',
+      role: 'Data & Automation Analyst · B.S. in Systems Engineering',
+      location: 'Lima, Peru', status: 'Open to new opportunities',
+      'h.profile': 'Professional summary',
+      profile: 'Systems Engineering graduate (B.S.) from the University of Lima with 2 years of hands-on experience in process automation, data analytics, and business intelligence within the Zoho ecosystem. Experienced in SQL, dashboards, APIs, and automation workflows that optimize operational processes and support data-driven decision-making. Seeking to join a Technology, Data, or Analytics team where I can contribute to efficiency, scalability, and continuous improvement.',
+      'h.exp': 'Experience',
+      'job.role': 'Automation & Data Analyst / Intern', 'job.date': 'Aug 2024 – Sep 2026',
+      'job.b1': 'Designed, developed, and maintained interactive dashboards in Zoho Analytics for partners and legal teams, supporting monitoring of billing, collections, worked hours, targets, and key operational KPIs.',
+      'job.b2': 'Built and optimized SQL queries (SELECT, JOIN, GROUP BY) over financial, client, and historical datasets to ensure accuracy, consistency, and performance in recurring reports.',
+      'job.b3': 'Implemented end-to-end automations using Zoho Flow, Zoho CRM, and Zoho Sheet, integrating custom Deluge functions to synchronize, validate, and update data across systems.',
+      'job.b4': 'Designed data workflows to prevent duplicates and prioritize the most recent information, managing data origin and update timestamps between CRM and spreadsheets.',
+      'job.b5': 'Developed advanced macros in Zoho Sheet and Excel to automate data processing and significantly reduce manual tasks.',
+      'job.b6': 'Created Python scripts to automate internal processes, including personalized bulk email delivery based on Excel databases.',
+      'job.b7': 'Implemented Power Automate Desktop flows to automate repetitive web and desktop tasks.',
+      'job.b9': 'Built an internal transactions and public projects dashboard: a Node.js/Express backend connected live to Zoho Analytics and Zoho CRM (OAuth 2.0), and a React frontend with cross-filters, KPIs and an interactive map of Peru, with caching, a concurrency queue and retries.',
+      'job.b8': 'Maintained and improved existing automations, optimizing API consumption in Zoho CRM and documenting processes to ensure operational continuity.',
+      'h.proj': 'Personal projects',
+      'p.fin': 'Expense tracking from Telegram (free text or a photo of the receipt) plus a web dashboard with budgets and alerts. Bot running 24/7 on Oracle Cloud at zero cost, database with RLS, and 42 automated tests.',
+      'p.aud': 'Turns meeting recordings into technical HTML reports: local transcription with Whisper (audio never leaves the machine) and analysis with Claude Code that extracts topics, a timeline, and action items.',
+      'p.extTitle': 'Video Text Extractor',
+      'p.ext': 'Transcribes TikTok videos or local files with Whisper, translates them into Spanish, and generates a technical report in HTML and/or Markdown with Gemini or Claude Code. It only downloads the audio, never the video.',
+      'p.portTitle': 'Web portfolio',
+      'p.port': 'Static site in 5 languages with a chatbot connected to Gemini through a serverless function (API key kept server-side, origin check, and per-IP rate limit) and a section that syncs with the GitHub API.',
+      'h.edu': 'Education', 'edu.degree': 'B.S. in Systems Engineering', 'edu.school': 'University of Lima', 'edu.date': 'Jul 2020 – Aug 2026',
+      'h.skills': 'Technical skills', 'sk.lang': 'Languages', 'sk.zoho': 'Zoho tools', 'sk.zohoApis': 'Zoho APIs (Analytics & CRM)',
+      'sk.auto': 'Automation & development', 'sk.macros': 'Macros (Zoho Sheet / Excel)', 'sk.db': 'Databases & BI',
+      'sk.ai': 'Generative AI', 'sk.aiUse': 'For code development, review, and documentation.',
+      'h.langs': 'Languages', 'lg.es': 'Spanish', 'lg.native': 'Native', 'lg.enSpeak': 'English · speaking', 'lg.enWrite': 'English · writing',
+      'h.certs': 'Certifications',
+      c1: 'Universidad Nacional de Ingeniería · CTIC · Sep 2025', c2: 'University of Lima · Aug 2025',
+      c3: 'Cisco Networking Academy · Jul 2026', c4: 'Cisco Networking Academy · NDG · May 2026',
+      updated: 'Updated October 2026 · Web version of the CV, without sensitive personal data.',
+    },
+  };
+
+  // Indicador de nivel: 3 barras + la palabra (el texto es lo que cuenta; las
+  // barras solo ayudan a escanear la columna).
+  function renderLevels(lang) {
+    document.querySelectorAll('[data-lvl]').forEach((el) => {
+      const n = Number(el.getAttribute('data-lvl'));
+      el.innerHTML = `<span class="cv-pips" data-level="${n}" aria-hidden="true"><i></i><i></i><i></i></span><span class="cv-lvl-word">${LVL[lang][n - 1]}</span>`;
+    });
+  }
+
+  // Textos originales en español, para poder volver desde inglés.
+  document.querySelectorAll('[data-i18n]').forEach((el) => { I18N.es[el.dataset.i18n] = el.textContent; });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => { I18N.es[el.dataset.i18nHtml] = el.firstChild.textContent.trim(); });
+  document.querySelectorAll('[data-i18n-first]').forEach((el) => { I18N.es[el.dataset.i18nFirst] = el.firstChild.textContent.trim(); });
+  document.querySelectorAll('[data-i18n-aria]').forEach((el) => { I18N.es[el.dataset.i18nAria] = el.getAttribute('aria-label'); });
+
+  function applyLang(lang) {
+    const d = I18N[lang];
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach((el) => { if (d[el.dataset.i18n]) el.textContent = d[el.dataset.i18n]; });
+    // Títulos con un enlace dentro: solo se cambia el primer nodo de texto.
+    document.querySelectorAll('[data-i18n-html]').forEach((el) => { if (d[el.dataset.i18nHtml]) el.firstChild.textContent = d[el.dataset.i18nHtml] + ' '; });
+    document.querySelectorAll('[data-i18n-first]').forEach((el) => { if (d[el.dataset.i18nFirst]) el.firstChild.textContent = d[el.dataset.i18nFirst] + ' '; });
+    document.querySelectorAll('[data-i18n-aria]').forEach((el) => { if (d[el.dataset.i18nAria]) el.setAttribute('aria-label', d[el.dataset.i18nAria]); });
+    document.querySelectorAll('[data-set-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.setLang === lang)));
+    document.title = lang === 'es'
+      ? 'CV | Javier Fiestas — Analista de Datos y Automatización'
+      : 'CV | Javier Fiestas — Data & Automation Analyst';
+    renderLevels(lang);
+  }
+
+  // Chips de herramientas: índice para el escalonado y entrada al aparecer en pantalla.
+  (function chipsReveal() {
+    const groups = document.querySelectorAll('.cv-skill-group');
+    groups.forEach((g) => g.querySelectorAll('.cv-chip').forEach((c, i) => c.style.setProperty('--i', i)));
+    if (!('IntersectionObserver' in window)) return; // sin observer: chips visibles sin animar
+    document.documentElement.classList.add('cv-anim');
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }), { rootMargin: '0px 0px -8% 0px' });
+    groups.forEach((g) => io.observe(g));
+  })();
+
+  document.querySelectorAll('[data-set-lang]').forEach((b) => b.addEventListener('click', () => {
+    const lang = b.dataset.setLang;
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+    applyLang(lang);
+  }));
+
+  document.getElementById('cvTheme').addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  document.getElementById('cvPrint').addEventListener('click', () => window.print());
+
+  applyLang(document.documentElement.lang === 'es' ? 'es' : 'en');
+</script>
+
+<!-- Clawd: mascota decorativa que pasea por la pantalla (ver "Clawd" en el JS).
+     Homenaje a la mascota de Claude Code, dibujado aquí con rectángulos. -->
+<div class="clawd" id="clawd" aria-hidden="true">
+  <div class="cl-inner">
+    <svg class="cl-svg" viewBox="0 0 24 18">
+      <rect class="cl-leg cl-leg-a" x="5" y="12" width="2" height="4"/>
+      <rect class="cl-leg cl-leg-b" x="8" y="12" width="2" height="4"/>
+      <rect class="cl-leg cl-leg-a" x="14" y="12" width="2" height="4"/>
+      <rect class="cl-leg cl-leg-b" x="17" y="12" width="2" height="4"/>
+      <rect class="cl-arm cl-arm-l" x="1" y="6" width="3" height="3"/>
+      <rect class="cl-arm cl-arm-r" x="20" y="6" width="3" height="3"/>
+      <rect class="cl-body" x="4" y="2" width="16" height="11"/>
+      <rect class="cl-blush" x="5" y="9" width="2.5" height="1.2"/>
+      <rect class="cl-blush" x="16.5" y="9" width="2.5" height="1.2"/>
+      <g class="cl-eyes">
+        <rect class="cl-eye" x="8" y="5" width="1.6" height="3"/>
+        <rect class="cl-eye" x="14.4" y="5" width="1.6" height="3"/>
+        <path class="cl-closed" d="M7.2 7.6 L8.8 6.2 L10.4 7.6 M13.6 7.6 L15.2 6.2 L16.8 7.6"/>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<!-- Chatbot flotante (avatar pixel art): responde con Gemini vía api/chat.js y, si esa llamada falla,
+     con un set fijo de respuestas predefinidas (buscadas por palabra clave). Diseño propio
+     inspirado libremente en la estética "robot amigable" de juegos tipo Astro Bot. -->
+<button class="robot-fab px-host" id="chatbotFab" aria-expanded="false" aria-controls="chatbotPanel" aria-label="Abrir asistente virtual sobre el perfil de Javier">
+  <span class="px-think-b" aria-hidden="true"></span>
+  <div class="robot-figure">
+    <svg class="robot-svg" viewBox="0 -1 24 35" aria-hidden="true">
+      <ellipse class="px-ground" cx="12" cy="33.3" rx="8" ry="1.2"/>
+      <rect class="px-jean" x="8" y="23" width="8" height="3"/>
+      <rect class="px-jean" x="8" y="26" width="3" height="5"/>
+      <rect class="px-jean" x="13" y="26" width="3" height="5"/>
+      <rect class="px-jean-sh" x="10" y="26" width="1" height="5"/>
+      <rect class="px-jean-sh" x="15" y="26" width="1" height="5"/>
+      <rect class="px-shoe" x="7" y="31" width="4" height="1"/>
+      <rect class="px-shoe" x="13" y="31" width="4" height="1"/>
+      <rect class="px-sole" x="7" y="32" width="4" height="1"/>
+      <rect class="px-sole" x="13" y="32" width="4" height="1"/>
+      <g class="px-up">
+        <rect class="px-skin-sh" x="10" y="13" width="4" height="1"/>
+        <rect class="px-polo" x="8" y="14" width="8" height="10"/>
+        <rect class="px-polo-hi" x="10" y="14" width="4" height="1"/>
+        <rect class="px-jacket" x="5" y="14" width="4" height="10"/>
+        <rect class="px-jacket" x="15" y="14" width="4" height="10"/>
+        <rect class="px-jacket-sh" x="8" y="15" width="1" height="9"/>
+        <rect class="px-jacket-sh" x="15" y="15" width="1" height="9"/>
+        <rect class="px-jacket-sh" x="6" y="19" width="2" height="1"/>
+        <rect class="px-jacket-sh" x="16" y="19" width="2" height="1"/>
+        <rect class="px-skin" x="7" y="4" width="10" height="8"/>
+        <rect class="px-skin" x="8" y="12" width="8" height="1"/>
+        <rect class="px-skin" x="6" y="8" width="1" height="2"/>
+        <rect class="px-skin" x="17" y="8" width="1" height="2"/>
+        <rect class="px-hair" x="6" y="1" width="12" height="3"/>
+        <rect class="px-hair" x="7" y="0" width="10" height="1"/>
+        <rect class="px-hair" x="9" y="-1" width="2" height="1"/>
+        <rect class="px-hair" x="13" y="-1" width="2" height="1"/>
+        <rect class="px-hair" x="6" y="4" width="1" height="4"/>
+        <rect class="px-hair" x="17" y="4" width="1" height="4"/>
+        <rect class="px-hair" x="7" y="4" width="4" height="1"/>
+        <rect class="px-hair" x="13" y="4" width="3" height="1"/>
+        <rect class="px-hair-hi" x="9" y="1" width="4" height="1"/>
+        <rect class="px-hair" x="8" y="6" width="2" height="1"/>
+        <rect class="px-hair" x="14" y="6" width="2" height="1"/>
+        <rect class="px-frame" x="7" y="7" width="4" height="3"/>
+        <rect class="px-frame" x="13" y="7" width="4" height="3"/>
+        <rect class="px-frame" x="11" y="7" width="2" height="1"/>
+        <rect class="px-frame" x="6" y="7" width="1" height="1"/>
+        <rect class="px-frame" x="17" y="7" width="1" height="1"/>
+        <rect class="px-lens" x="8" y="8" width="2" height="1"/>
+        <rect class="px-lens" x="14" y="8" width="2" height="1"/>
+        <g class="hs-eyes"><g class="px-look">
+          <rect class="px-pupil" x="8.5" y="8" width="1" height="1"/>
+          <rect class="px-pupil" x="14.5" y="8" width="1" height="1"/>
+        </g></g>
+        <rect class="px-mouth" x="10" y="11" width="4" height="1"/>
+        <rect class="px-mouth px-smile" x="9" y="10" width="1" height="1"/>
+        <rect class="px-mouth px-smile" x="14" y="10" width="1" height="1"/>
+        <g class="px-arm px-arm-l"><rect class="px-jacket" x="3" y="14" width="2" height="9"/><rect class="px-jacket-sh" x="3" y="22" width="2" height="1"/><rect class="px-skin" x="3" y="23" width="2" height="2"/></g>
+        <g class="px-arm px-arm-r"><rect class="px-jacket" x="19" y="14" width="2" height="9"/><rect class="px-jacket-sh" x="19" y="22" width="2" height="1"/><rect class="px-skin" x="19" y="23" width="2" height="2"/></g>
+      </g>
+    </svg>
+  </div>
+  <span class="chatbot-fab-dot" aria-hidden="true"></span>
+</button>
+
+<div class="chatbot-panel" id="chatbotPanel" role="dialog" aria-label="Asistente virtual de Javier Fiestas">
+  <div class="chatbot-header">
+    <div class="chatbot-avatar"><svg class="robot-svg" viewBox="5 -1.5 14 15" aria-hidden="true">
+        <rect class="px-skin" x="7" y="4" width="10" height="8"/>
+        <rect class="px-skin" x="8" y="12" width="8" height="1"/>
+        <rect class="px-skin" x="6" y="8" width="1" height="2"/>
+        <rect class="px-skin" x="17" y="8" width="1" height="2"/>
+        <rect class="px-hair" x="6" y="1" width="12" height="3"/>
+        <rect class="px-hair" x="7" y="0" width="10" height="1"/>
+        <rect class="px-hair" x="9" y="-1" width="2" height="1"/>
+        <rect class="px-hair" x="13" y="-1" width="2" height="1"/>
+        <rect class="px-hair" x="6" y="4" width="1" height="4"/>
+        <rect class="px-hair" x="17" y="4" width="1" height="4"/>
+        <rect class="px-hair" x="7" y="4" width="4" height="1"/>
+        <rect class="px-hair" x="13" y="4" width="3" height="1"/>
+        <rect class="px-hair-hi" x="9" y="1" width="4" height="1"/>
+        <rect class="px-hair" x="8" y="6" width="2" height="1"/>
+        <rect class="px-hair" x="14" y="6" width="2" height="1"/>
+        <rect class="px-frame" x="7" y="7" width="4" height="3"/>
+        <rect class="px-frame" x="13" y="7" width="4" height="3"/>
+        <rect class="px-frame" x="11" y="7" width="2" height="1"/>
+        <rect class="px-frame" x="6" y="7" width="1" height="1"/>
+        <rect class="px-frame" x="17" y="7" width="1" height="1"/>
+        <rect class="px-lens" x="8" y="8" width="2" height="1"/>
+        <rect class="px-lens" x="14" y="8" width="2" height="1"/>
+        <g><g class="px-look">
+          <rect class="px-pupil" x="8.5" y="8" width="1" height="1"/>
+          <rect class="px-pupil" x="14.5" y="8" width="1" height="1"/>
+        </g></g>
+        <rect class="px-mouth" x="10" y="11" width="4" height="1"/>
+        <rect class="px-mouth px-smile" x="9" y="10" width="1" height="1"/>
+        <rect class="px-mouth px-smile" x="14" y="10" width="1" height="1"/>
+      </svg></div>
+    <div>
+      <div class="chatbot-title">Asistente de Javier</div>
+      <div class="chatbot-subtitle"><span class="chatbot-status-dot"></span> Con IA (Gemini)</div>
+    </div>
+    <button class="chatbot-close" id="chatbotClose" type="button" aria-label="Cerrar chat"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="chatbot-credit">
+    <svg class="gemini-logo" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="geminiGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4285f4"/><stop offset=".55" stop-color="#9b72cb"/><stop offset="1" stop-color="#d96570"/></linearGradient></defs><path fill="url(#geminiGrad)" d="M12 0C12 6.6 17.4 12 24 12 17.4 12 12 17.4 12 24 12 17.4 6.6 12 0 12 6.6 12 12 6.6 12 0Z"/></svg>
+    <span>Chatbot developed with Gemini</span>
+  </div>
+  <div class="chatbot-messages" id="chatbotMessages"></div>
+  <div class="chatbot-suggestions" id="chatbotSuggestions"></div>
+  <form class="chatbot-input-row" id="chatbotForm">
+    <input type="text" id="chatbotInput" placeholder="Escribe tu pregunta..." autocomplete="off" maxlength="140">
+    <button type="submit" aria-label="Enviar"><i class="fa-solid fa-paper-plane"></i></button>
+  </form>
+  <div class="chatbot-disclaimer">Respuestas generadas con IA · pueden contener errores</div>
+</div>
+
+<script>
+  // Chatbot y Clawd: copiados de index.html (mantener iguales).
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // ---- Clawd: mascota que pasea por toda la pantalla ----
+  // Elige destinos al azar en cualquier zona de la ventana y va hacia ellos por
+  // una curva; al llegar hace un gesto. Al presionarlo cierra los ojos y suelta
+  // corazones (mínimo 1,3 s, o mientras se mantenga presionado). Con el ratón
+  // encima se queda quieto para poder "acariciarlo".
+  (function () {
+    const el = document.getElementById('clawd');
+    if (!el) return;
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 72;
+    const GESTURES = [['g-jump', 1150], ['g-wave', 1500], ['g-wiggle', 1350], ['g-look', 1850],
+      ['g-spin', 750], ['g-stretch', 1250], ['g-sleep', 3400], [null, 600]];
+    let x = 0, y = 0, seg = null, walking = false, hover = false, last = 0;
+    let petting = false, petStart = 0, ending = false, gestureCls = null, gestureTimer = 0, heartTimer = 0;
+
+    function bounds() {
+      const m = 8;
+      return { x0: m, x1: Math.max(m, innerWidth - el.offsetWidth - m),
+               y0: navH + m, y1: Math.max(navH + m, innerHeight - el.offsetHeight - m) };
+    }
+    const place = () => { el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)'; };
+    function setGesture(cls) {
+      if (gestureCls) el.classList.remove(gestureCls);
+      gestureCls = cls;
+      if (cls) el.classList.add(cls);
+    }
+    function spawn(ch, n, gap) {
+      for (let i = 0; i < n; i++) setTimeout(() => {
+        const s = document.createElement('span');
+        s.className = 'cl-fx' + (ch === 'z' ? ' cl-z' : '');
+        s.textContent = ch;
+        s.style.setProperty('--dx', rand(-18, 18).toFixed(0) + 'px');
+        s.addEventListener('animationend', () => s.remove());
+        el.appendChild(s);
+      }, i * gap);
+    }
+    function walk() {
+      setGesture(null);
+      const b = bounds();
+      // Destino lejano en cualquier punto de la pantalla (no solo los bordes).
+      let tx, ty, tries = 0;
+      const minD = Math.min(280, (b.x1 - b.x0 + b.y1 - b.y0) / 3);
+      do { tx = rand(b.x0, b.x1); ty = rand(b.y0, b.y1); } while (Math.hypot(tx - x, ty - y) < minD && ++tries < 10);
+      // Punto de control desplazado en perpendicular: el camino es una curva.
+      const dx = tx - x, dy = ty - y, d = Math.hypot(dx, dy) || 1, bend = rand(-0.5, 0.5) * d;
+      seg = { x0: x, y0: y, x1: tx, y1: ty, t: 0, len: d * 1.15, speed: rand(75, 140),
+              cx: clamp((x + tx) / 2 - dy / d * bend, b.x0, b.x1), cy: clamp((y + ty) / 2 + dx / d * bend, b.y0, b.y1) };
+      walking = true;
+      el.classList.add('walking');
+    }
+    function arrive() {
+      walking = false;
+      el.classList.remove('walking');
+      const [cls, ms] = GESTURES[Math.floor(Math.random() * GESTURES.length)];
+      setGesture(cls);
+      if (cls === 'g-sleep') spawn('z', 3, 800);
+      gestureTimer = setTimeout(walk, ms + rand(250, 1100));
+    }
+    function frame(now) {
+      const dt = Math.min(50, now - (last || now)); last = now;
+      if (walking && !hover && !petting) {
+        seg.t = Math.min(1, seg.t + dt / 1000 * seg.speed / seg.len);
+        const t = seg.t, u = 1 - t;
+        const nx = u * u * seg.x0 + 2 * u * t * seg.cx + t * t * seg.x1;
+        const ny = u * u * seg.y0 + 2 * u * t * seg.cy + t * t * seg.y1;
+        // Mira hacia donde camina.
+        if (Math.abs(nx - x) > 0.05) el.style.setProperty('--look', (nx > x ? 0.9 : -0.9) + 'px');
+        x = nx; y = ny; place();
+        if (t >= 1) arrive();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function startPet() {
+      if (petting) { ending = false; return; }
+      petting = true; ending = false; petStart = performance.now();
+      clearTimeout(gestureTimer); setGesture(null);
+      el.classList.remove('walking', 'blink');
+      el.classList.add('petting');
+      spawn('♥', 1, 0);
+      heartTimer = setInterval(() => spawn('♥', 1, 0), 420);
+    }
+    function endPet() {
+      if (!petting || ending) return;
+      ending = true;
+      setTimeout(() => {
+        if (!ending) return; // lo volvieron a presionar
+        petting = false; ending = false;
+        clearInterval(heartTimer);
+        el.classList.remove('petting');
+        if (reduceMotion) return;
+        // Retoma el paseo donde lo dejó, o busca un destino nuevo.
+        gestureTimer = setTimeout(() => { if (walking) el.classList.add('walking'); else walk(); }, 500);
+      }, Math.max(0, 1300 - (performance.now() - petStart)));
+    }
+    el.addEventListener('pointerdown', startPet);
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => el.addEventListener(ev, endPet));
+    el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hover = true; });
+    el.addEventListener('pointerleave', () => { hover = false; });
+    el.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    // Parpadeo de vez en cuando.
+    (function blink() {
+      setTimeout(() => {
+        if (!petting && gestureCls !== 'g-sleep') {
+          el.classList.add('blink');
+          setTimeout(() => el.classList.remove('blink'), 130);
+        }
+        blink();
+      }, rand(2200, 5200));
+    })();
+
+    window.addEventListener('resize', () => {
+      const b = bounds();
+      x = clamp(x, b.x0, b.x1); y = clamp(y, b.y0, b.y1); place();
+      if (walking && !petting) walk();
+    });
+
+    // Aparece abajo a la izquierda; con "reducir movimiento" se queda ahí quieto.
+    const b0 = bounds();
+    x = b0.x0 + 16; y = b0.y1 - 8; place();
+    setTimeout(() => {
+      el.classList.add('on');
+      if (!reduceMotion) { walk(); requestAnimationFrame(frame); }
+    }, 1800);
+  })();
+
+  // ---- Avatar pixel art del chatbot: gestos sin moverse de su sitio ----
+  // Alterna un saludo con la mano y un rato "pensando" con un globo que muestra
+  // una idea al azar. Cada avatar (portada y botón flotante) va a su ritmo.
+  (function () {
+    if (reduceMotion) return;
+    const IDEAS = ['SQL', '{ }', '📊', '☕', '💡', '🐍', 'JOIN', 'print()', '⚙️', '📈'];
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    document.querySelectorAll('.px-host').forEach((host, n) => {
+      const bubble = host.querySelector('.px-think-b');
+      (async function cycle() {
+        await sleep(2500 + n * 3500);
+        for (;;) {
+          host.classList.add('is-waving'); await sleep(1700); host.classList.remove('is-waving');
+          await sleep(3500 + Math.random() * 2500);
+          if (bubble) bubble.textContent = IDEAS[Math.floor(Math.random() * IDEAS.length)];
+          host.classList.add('is-thinking'); await sleep(3000); host.classList.remove('is-thinking');
+          await sleep(4000 + Math.random() * 3000);
+        }
+      })();
+    });
+  })();
+
+  // ---- Chatbot flotante: responde con Gemini (vía api/chat.js, la API key
+  // vive solo en el servidor) y, si esa llamada falla por lo que sea
+  // (función no desplegada todavía, sin GEMINI_API_KEY configurada, sin
+  // conexión, cuota agotada), cae de vuelta al set fijo de respuestas por
+  // palabra clave para que el chatbot nunca se quede roto. Los textos del
+  // chat y las respuestas de respaldo siguen el idioma de la página (es/en). ----
+  (function(){
+    const fab = document.getElementById('chatbotFab');
+    const panel = document.getElementById('chatbotPanel');
+    const closeBtn = document.getElementById('chatbotClose');
+    const messages = document.getElementById('chatbotMessages');
+    const suggestions = document.getElementById('chatbotSuggestions');
+    const form = document.getElementById('chatbotForm');
+    const input = document.getElementById('chatbotInput');
+    if (!fab || !panel || !form || !input) return;
+
+    const lang = () => (document.documentElement.lang || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+
+    // Respuestas de respaldo: cada entrada tiene palabras clave en ambos
+    // idiomas (se comparan al inicio de palabra) y la respuesta en es/en.
+    const FAQ = [
+      { k:['quien es','quien eres','presentate','sobre ti','sobre el','perfil','cuentame de','who is','who are you','about him','about you','tell me about','introduce'],
+        es:'Soy el asistente virtual de Javier Fiestas: Bachiller en Ingeniería de Sistemas por la Universidad de Lima y Analista de Datos y Automatización, con cerca de 2 años de experiencia en Business Intelligence, automatización de procesos e integración de sistemas.',
+        en:"I'm Javier Fiestas's virtual assistant. He holds a Bachelor's degree in Systems Engineering from the University of Lima and is a Data & Automation Analyst with about 2 years of experience in Business Intelligence, process automation and systems integration." },
+      { k:['que hace','a que se dedica','experiencia','trabaj','empresa','laboral','puesto','cargo','what does he do','experience','work','job','company','employ','role'],
+        es:'De agosto de 2024 a setiembre de 2026 fue Practicante / Analista de Automatización y Datos en Payet, Rey, Cauvi, Pérez Abogados, donde completó sus prácticas profesionales. Trabajó con SQL, Python, Zoho (Analytics, CRM, Flow) y Power BI. Hoy busca nuevas oportunidades.',
+        en:'From August 2024 to September 2026 he was an Automation & Data Intern / Analyst at Payet, Rey, Cauvi, Pérez Abogados, where he completed his professional internship. He worked with SQL, Python, Zoho (Analytics, CRM, Flow) and Power BI. He is now looking for new opportunities.' },
+      { k:['por que se fue','por que dejo','por que salio','dejo el','renunci','why did he leave','why he left','leave','left'],
+        es:'Terminó su etapa de prácticas profesionales en el estudio en setiembre de 2026 y ahora busca nuevas oportunidades.',
+        en:'He finished his professional internship at the firm in September 2026 and is now looking for new opportunities.' },
+      { k:['remoto','hibrido','presencial','modalidad','home office','trabajar remoto','trabajo remoto','remote','hybrid','on-site','onsite','in office','work remote'],
+        es:'Se adapta a cualquier modalidad, aunque prefiere el trabajo remoto o híbrido. Está en Lima, Perú.',
+        en:"He adapts to any work arrangement, though he prefers remote or hybrid roles. He's based in Lima, Peru." },
+      { k:['caso','dashboard interno','transacciones','proyecto del trabajo','proyecto interno','case study','internal'],
+        es:'En el estudio construyó un dashboard interno de transacciones y proyectos públicos: backend en Node.js/Express conectado en vivo a Zoho Analytics y Zoho CRM, y frontend en React con filtros cruzados, KPIs y un mapa del Perú. Lo explica en la sección "Caso de trabajo".',
+        en:'At the firm he built an internal dashboard of transactions and public projects: a Node.js/Express backend connected live to Zoho Analytics and Zoho CRM, and a React frontend with cross-filters, KPIs and a map of Peru. See the "Work case" section.' },
+      { k:['tecnolog','stack','herramienta','skill','habilidad','domina','lenguaje','programa','sabe programar','technolog','tools','program','code','coding'],
+        es:'Trabaja con SQL, Python, Power BI, Excel y las herramientas Zoho (Analytics, CRM, Flow, Sheet, Deluge y sus APIs). También desarrolla con JavaScript, React, Node.js/Express, Flask y Streamlit, usa PostgreSQL y Supabase, y herramientas de IA como ChatGPT, Gemini, Claude Code y Whisper.',
+        en:'He works with SQL, Python, Power BI, Excel and the Zoho tools (Analytics, CRM, Flow, Sheet, Deluge and their APIs). He also builds with JavaScript, React, Node.js/Express, Flask and Streamlit, uses PostgreSQL and Supabase, and AI tools such as ChatGPT, Gemini, Claude Code and Whisper.' },
+      { k:['zoho','deluge'],
+        es:'Zoho es su especialidad: dashboards en Zoho Analytics, automatizaciones con Zoho CRM, Zoho Flow y Deluge, hojas en Zoho Sheet e integraciones con las APIs de Zoho Analytics y Zoho CRM (OAuth 2.0).',
+        en:'Zoho is his specialty: dashboards in Zoho Analytics, automations with Zoho CRM, Zoho Flow and Deluge, spreadsheets in Zoho Sheet, and integrations with the Zoho Analytics and Zoho CRM APIs (OAuth 2.0).' },
+      { k:['datos','analisis','dashboard','reporte','power bi','sql','data','analytics','report'],
+        es:'Su día a día fue el análisis de datos: consultas SQL, dashboards en Zoho Analytics y Power BI, y scripts en Python para limpiar y procesar información. El "Caso de trabajo" muestra un dashboard completo que construyó.',
+        en:'Data analysis was his day-to-day work: SQL queries, dashboards in Zoho Analytics and Power BI, and Python scripts to clean and process data. The "Work case" section shows a full dashboard he built.' },
+      { k:['proyecto','portafolio','github','repositorio','project','portfolio','repo'],
+        es:'Tiene 4 proyectos personales: un extractor y traductor de texto de vídeos (Python + Whisper), un gestor de finanzas con bot de Telegram (Python + Streamlit + Supabase), AudioReport-AI (informes de reuniones con Whisper + Claude Code) y este portafolio. Todo el código es público en GitHub; abajo tienes los enlaces.',
+        en:'He has 4 personal projects: a video text extractor and translator (Python + Whisper), a finance manager with a Telegram bot (Python + Streamlit + Supabase), AudioReport-AI (meeting reports with Whisper + Claude Code) and this portfolio. All the code is public on GitHub; the links are below.' },
+      { k:['educacion','estudi','universidad','bachiller','carrera','ingenieria','study','studied','education','university','degree','college'],
+        es:'Es Bachiller en Ingeniería de Sistemas por la Universidad de Lima (2020 – 2026).',
+        en:"He holds a Bachelor's degree in Systems Engineering from the University of Lima (2020 – 2026)." },
+      { k:['certificacion','certificado','curso','cisco','ciberseguridad','certification','certificate','course','cybersecurity'],
+        es:'Tiene certificaciones en ciberseguridad (Ethical Hacking C|EH y EHE) y de Cisco Networking Academy (Introduction to Cybersecurity y Linux Unhatched).',
+        en:'He has cybersecurity certifications (Ethical Hacking C|EH and EHE) and Cisco Networking Academy ones (Introduction to Cybersecurity and Linux Unhatched).' },
+      { k:['ingles','idioma','habla','english','language','speak'],
+        es:'Habla español (nativo) e inglés a nivel intermedio, para conversación y escritura.',
+        en:'He speaks Spanish (native) and intermediate English, for conversation and writing.' },
+      { k:['junior','senior','nivel','seniority','level','years of experience','anos de experiencia'],
+        es:'Tiene cerca de 2 años de experiencia en análisis de datos, BI y automatización, más 4 proyectos personales publicados en GitHub.',
+        en:'He has about 2 years of experience in data analysis, BI and automation, plus 4 personal projects published on GitHub.' },
+      { k:['contacto','contactar','correo','email','escribir','comunicar','hablar con','contact','reach','mail'],
+        es:'Puedes escribirle a javierfiestas44@gmail.com o usar el formulario de la sección Contacto. También está en LinkedIn y GitHub.',
+        en:'You can email him at javierfiestas44@gmail.com or use the form in the Contact section. He is also on LinkedIn and GitHub.' },
+      { k:['linkedin'],
+        es:'Aquí tienes su perfil de LinkedIn:',
+        en:'Here is his LinkedIn profile:' },
+      { k:['cv','curriculum','resume','hoja de vida'],
+        es:'Puedes ver su CV con "Ver CV" en la barra superior o en la portada; desde ahí puedes imprimirlo o guardarlo en PDF.',
+        en:'You can see his resume via "View CV" in the top bar or on the home section; from there you can print it or save it as a PDF.' },
+      { k:['disponible','disponibilidad','contratar','freelance','vacante','oportunidad','hire','hiring','available','availability','opportunit','vacanc'],
+        es:'Javier está abierto a nuevas oportunidades laborales. Escríbele por el formulario de contacto o a su correo para conversar.',
+        en:'Javier is open to new job opportunities. Reach out through the contact form or by email to talk.' },
+      { k:['ubicacion','donde vive','lima','peru','ciudad','where does he live','where is he','location','based'],
+        es:'Está ubicado en Lima, Perú.',
+        en:"He's based in Lima, Peru." },
+      { k:['hola','buenas','holi','hello','hi','hey'],
+        es:'¡Hola! Soy el asistente de Javier. Pregúntame sobre su experiencia, tecnologías, proyectos o cómo contactarlo.',
+        en:"Hi! I'm Javier's assistant. Ask me about his experience, skills, projects or how to contact him." },
+      { k:['gracias','genial','perfecto','excelente','thanks','thank you','great'],
+        es:'¡De nada! Si tienes otra pregunta, aquí estoy.',
+        en:"You're welcome! If you have another question, I'm here." },
+      { k:['eres una ia','eres real','eres un robot','eres humano','eres un bot','are you an ai','are you a bot','are you human','are you real'],
+        es:'Soy un asistente virtual basado en IA (Google Gemini), configurado para responder sobre el perfil de Javier. Ahora mismo estoy usando respuestas de respaldo porque la IA no está disponible.',
+        en:"I'm an AI-based virtual assistant (Google Gemini) set up to answer questions about Javier's profile. Right now I'm using backup answers because the AI isn't available." }
+    ];
+    const UI = {
+      es: {
+        fallback:'No tengo una respuesta preparada para eso todavía. Prueba preguntando sobre experiencia, tecnologías, proyectos, educación o cómo contactar a Javier, o escríbele directo por el formulario de contacto.',
+        greeting:'¡Hola! Soy el asistente virtual de Javier. Puedo contarte sobre su experiencia, tecnologías, proyectos, estudios o cómo contactarlo. ¿Qué quieres saber?',
+        suggestions:['¿Qué hace Javier?', '¿Dónde ha trabajado?', 'Cuéntame sus proyectos', '¿Cómo lo contacto?'],
+        title:'Asistente de Javier', subtitle:'Con IA (Gemini)', placeholder:'Escribe tu pregunta...', send:'Enviar',
+        disclaimer:'Respuestas generadas con IA · pueden contener errores', close:'Cerrar chat',
+        open:'Abrir asistente virtual sobre el perfil de Javier', panel:'Asistente virtual de Javier Fiestas'
+      },
+      en: {
+        fallback:"I don't have an answer ready for that yet. Try asking about his experience, skills, projects, education or how to contact Javier, or write to him directly through the contact form.",
+        greeting:"Hi! I'm Javier's virtual assistant. I can tell you about his experience, skills, projects, studies or how to contact him. What would you like to know?",
+        suggestions:['What does Javier do?', 'Where has he worked?', 'Tell me about his projects', 'How can I contact him?'],
+        title:"Javier's assistant", subtitle:'AI-powered (Gemini)', placeholder:'Type your question...', send:'Send',
+        disclaimer:'AI-generated answers · may contain errors', close:'Close chat',
+        open:"Open the virtual assistant about Javier's profile", panel:"Javier Fiestas's virtual assistant"
+      }
+    };
+
+    function normalize(s){
+      return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+    }
+    const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Idioma de cada pregunta: el asistente contesta en español o en inglés
+    // según cómo le escriban, y a cualquier otro idioma le pide usar uno de
+    // esos dos (sin gastar una llamada a Gemini). Es una heurística por
+    // palabras frecuentes; si no hay pistas claras, usa el idioma de la página.
+    const OTHER_LANG_MSG = 'Please ask your questions in English and/or Spanish, thank you!';
+    const WORDS = {
+      es:'que de el la los las es en y por para con donde como cual quien tiene sabe hace trabaja estudia estudio sus su del al un una hola gracias puede habla cuentame sobre esta tu mi yo se lo le qué cómo dónde'.split(' '),
+      en:'what where who how does did is are the his he can do about tell me have has hi hello thanks thank work works study studied which why when you your of and with any him was'.split(' '),
+      other:'voce você ele onde qual trabalha obrigado obrigada nao não tem seu sua quem ola olá isso est il où ou qui quoi comment travaille merci bonjour des pourquoi avec ses quel ist er wo wie arbeitet danke hallo der die das und mit dove cosa lui lavora grazie ciao che perché'.split(' ')
+    };
+    function detectLang(text){
+      // Escrituras no latinas (chino, cirílico, árabe, japonés, coreano, etc.).
+      if (/[Ѐ-ӿ֐-ۿऀ-ॿ฀-๿぀-ヿ㐀-鿿가-힯]/.test(text)) return 'other';
+      const words = text.toLowerCase().match(/[a-záéíóúüñàâçèêëîïôûœãõ]+/g) || [];
+      const score = { es: 0, en: 0, other: 0 };
+      words.forEach((w) => { for (const l in WORDS) if (WORDS[l].includes(w)) score[l]++; });
+      if (/[ñ¿¡]/.test(text)) score.es += 2;
+      if (/[ãõçœ]|ê/.test(text)) score.other += 2;
+      if (score.other >= 2 && score.other > score.es && score.other > score.en) return 'other';
+      if (score.es > score.en) return 'es';
+      if (score.en > score.es) return 'en';
+      return null;
+    }
+
+    function findAnswer(text, l){
+      l = l || lang();
+      const q = normalize(text);
+      let best = null, bestScore = 0;
+      FAQ.forEach((entry) => {
+        let score = 0;
+        // Coincidencia al inicio de palabra: "hi" no salta con "this".
+        entry.k.forEach((kw) => { if (new RegExp('(^|[^a-z0-9])' + escRe(normalize(kw))).test(q)) score++; });
+        if (score > bestScore) { bestScore = score; best = entry; }
+      });
+      return best ? best[l] : UI[l].fallback;
+    }
+
+    // Enlaces que se añaden debajo de una respuesta cuando menciona un
+    // proyecto (con el logo de GitHub) o LinkedIn. Se detectan por nombre en
+    // el texto, venga de Gemini o de las respuestas de respaldo.
+    const GH = 'https://github.com/Javier3921';
+    const LINKS = [
+      { re:/extractor|Extractor_texto_tiktok/i, icon:'fa-brands fa-github', url: GH + '/Extractor_texto_tiktok', es:'Extractor de Texto de Video', en:'Video Text Extractor' },
+      { re:/finanzas gestor|gestor de finanzas|finance manager|Javier3921\/Finance\b/i, icon:'fa-brands fa-github', url: GH + '/Finance', es:'Finanzas Gestor', en:'Finance Manager' },
+      { re:/audio\s?report/i, icon:'fa-brands fa-github', url: GH + '/AudioReport-AI', es:'AudioReport-AI', en:'AudioReport-AI' },
+      { re:/este (mismo )?portafolio|this (same )?portfolio|Javier3921\/Portfolio/i, icon:'fa-brands fa-github', url: GH + '/Portfolio', es:'Portafolio (este sitio)', en:'Portfolio (this site)' },
+    ];
+    const LINKEDIN = { re:/linkedin/i, icon:'fa-brands fa-linkedin', url:'https://www.linkedin.com/in/javier-fiestas-6457ba240', es:'LinkedIn de Javier', en:'Javier on LinkedIn', cls:'is-linkedin' };
+    const GH_PROFILE = { re:/github/i, icon:'fa-brands fa-github', url: GH, es:'GitHub de Javier', en:'Javier on GitHub' };
+    function findLinks(text){
+      const found = LINKS.filter((l) => l.re.test(text));
+      // El perfil de GitHub solo si se nombra GitHub sin un proyecto concreto.
+      if (!found.length && GH_PROFILE.re.test(text)) found.push(GH_PROFILE);
+      if (LINKEDIN.re.test(text)) found.push(LINKEDIN);
+      return found;
+    }
+    function renderLinks(links){
+      const box = document.createElement('div');
+      box.className = 'chat-links';
+      links.forEach((l) => {
+        const a = document.createElement('a');
+        a.className = 'chat-link' + (l.cls ? ' ' + l.cls : '');
+        a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
+        const i = document.createElement('i'); i.className = l.icon; i.setAttribute('aria-hidden', 'true');
+        a.append(i, document.createTextNode(l[lang()]));
+        box.appendChild(a);
+      });
+      return box;
+    }
+
+    // Las respuestas del asistente se escriben letra por letra (más rápido
+    // cuanto más largas, ~2 s como máximo); los enlaces aparecen al final.
+    const reduceMotionChat = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const toBottom = () => { messages.scrollTop = messages.scrollHeight; };
+    function addMessage(text, who){
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + who;
+      messages.appendChild(div);
+      if (who !== 'bot') { div.textContent = text; toBottom(); return div; }
+      const span = document.createElement('span');
+      span.className = 'chat-text';
+      div.appendChild(span);
+      const links = findLinks(text);
+      const finish = () => {
+        span.textContent = text;
+        span.classList.remove('is-typing');
+        if (links.length) div.appendChild(renderLinks(links));
+        toBottom();
+      };
+      if (reduceMotionChat) { finish(); return div; }
+      span.classList.add('is-typing');
+      const step = Math.max(1, Math.ceil(text.length / 110));
+      let n = 0;
+      (function tick(){
+        n = Math.min(text.length, n + step);
+        span.textContent = text.slice(0, n);
+        toBottom();
+        if (n < text.length) setTimeout(tick, 18); else finish();
+      })();
+      return div;
+    }
+
+    function showTyping(){
+      const div = document.createElement('div');
+      div.className = 'chat-typing';
+      div.id = 'chatTypingIndicator';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+    function hideTyping(){
+      const el = document.getElementById('chatTypingIndicator');
+      if (el) el.remove();
+    }
+
+    // Historial de la sesión (solo en memoria, se reinicia al recargar la
+    // página). Se manda al backend para que Gemini tenga contexto, pero se
+    // limita el tamaño acá también para no acumular sin límite en una
+    // sesión larga (el backend además solo usa los últimos mensajes).
+    const chatHistory = [];
+    const MAX_CLIENT_HISTORY = 20;
+
+    async function askGemini(text){
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: chatHistory }),
+      });
+      if (!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+      if (!data.reply) throw new Error('sin respuesta');
+      return data.reply;
+    }
+
+    function respondTo(text){
+      addMessage(text, 'user');
+      showTyping();
+      const started = Date.now();
+      const minDelay = 450 + Math.random() * 400;
+      const qLang = detectLang(text);
+
+      (qLang === 'other' ? Promise.resolve(OTHER_LANG_MSG) : askGemini(text))
+        .then((reply) => {
+          chatHistory.push({ role: 'user', text }, { role: 'model', text: reply });
+          if (chatHistory.length > MAX_CLIENT_HISTORY) chatHistory.splice(0, chatHistory.length - MAX_CLIENT_HISTORY);
+          return reply;
+        })
+        .catch(() => findAnswer(text, qLang)) // Gemini no disponible todavía: usa el set predefinido
+        .then((reply) => {
+          const wait = Math.max(0, minDelay - (Date.now() - started));
+          setTimeout(() => { hideTyping(); addMessage(reply, 'bot'); }, wait);
+        });
+    }
+
+    function renderSuggestions(){
+      suggestions.innerHTML = '';
+      UI[lang()].suggestions.forEach((q) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chat-chip';
+        chip.textContent = q;
+        chip.addEventListener('click', () => respondTo(q));
+        suggestions.appendChild(chip);
+      });
+    }
+
+    // Textos fijos del panel en el idioma de la página.
+    let greetingEl = null;
+    function applyChatLang(){
+      const u = UI[lang()];
+      panel.querySelector('.chatbot-title').textContent = u.title;
+      const sub = panel.querySelector('.chatbot-subtitle');
+      sub.innerHTML = '<span class="chatbot-status-dot"></span> ';
+      sub.appendChild(document.createTextNode(u.subtitle));
+      input.placeholder = u.placeholder;
+      form.querySelector('button[type="submit"]').setAttribute('aria-label', u.send);
+      panel.querySelector('.chatbot-disclaimer').textContent = u.disclaimer;
+      closeBtn.setAttribute('aria-label', u.close);
+      fab.setAttribute('aria-label', u.open);
+      panel.setAttribute('aria-label', u.panel);
+      // Si todavía no se ha escrito nada, el saludo y las sugerencias cambian de idioma.
+      if (greetingEl && messages.children.length === 1) greetingEl.querySelector('.chat-text').textContent = u.greeting;
+      if (started && !chatHistory.length) renderSuggestions();
+    }
+    new MutationObserver(applyChatLang).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+
+    let started = false;
+    function openChat(){
+      panel.classList.add('open');
+      fab.classList.add('open');
+      fab.setAttribute('aria-expanded', 'true');
+      if (!started) {
+        started = true;
+        greetingEl = addMessage(UI[lang()].greeting, 'bot');
+        renderSuggestions();
+      }
+      input.focus();
+    }
+    function closeChat(){
+      panel.classList.remove('open');
+      fab.classList.remove('open');
+      fab.setAttribute('aria-expanded', 'false');
+    }
+
+    fab.addEventListener('click', () => {
+      if (panel.classList.contains('open')) closeChat(); else openChat();
+    });
+    closeBtn.addEventListener('click', closeChat);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      respondTo(text);
+    });
+    applyChatLang();
+  })();
+
+</script>
+</body>
+</html>

@@ -6,3 +6,6 @@ NOTES.md
 .env
 .env.local
 .vercel
+
+# Informes locales de la skill de diseño (pueden contener datos personales)
+.impeccable/
