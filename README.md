@@ -54,20 +54,27 @@ de estudio con su diagrama de arquitectura, y un CV en versión web.
 - **Portada con escena animada**: nombre y rol fijos y, al lado, un portátil
   flotante cuya pantalla es una terminal que escribe una consulta SQL y un
   script de Python, muestra el resultado y lo convierte en gráfico; alrededor,
-  tarjetas de dashboard en 3D que se inclinan con el ratón, y el robot del
+  tarjetas de dashboard en 3D que se inclinan con el ratón, y el avatar del
   chatbot, que sigue el cursor con los ojos y abre el chat. Acento teal propio
   en todo el sitio y bandas de fondo alternas.
 - **Caso de trabajo**: un dashboard interno que construí en mi último empleo
   (Node.js/Express + React + D3 sobre Zoho Analytics y Zoho CRM), contado
   como problema → solución → resultado, con su diagrama y 4 decisiones
   técnicas. Anonimizado: sin dominios, IDs, tablas ni datos de clientes.
-- **Robot flotante + chatbot con IA real**: conectado a la API de Gemini a
-  través de una función serverless (la API key nunca llega al navegador).
-  Tiene un system prompt con el perfil profesional completo y reglas de
-  estilo (respuestas breves, sin salirse de tema, sin Markdown). Si la
-  llamada a Gemini falla por cualquier motivo, cae automáticamente a un set
-  de respuestas predefinidas por palabra clave, así el chatbot nunca se
-  queda roto.
+- **Chatbot con IA real y avatar pixel art**: el asistente es un avatar
+  pixel art de Javier que respira, parpadea, saluda y "piensa" con un globo,
+  sin moverse de su sitio. Está conectado a la API de Gemini (3.6 Flash) a
+  través de una función serverless (la API key nunca llega al navegador),
+  con un system prompt que contiene el perfil completo y reglas para no
+  inventar datos. Responde en el idioma de cada pregunta (español o inglés)
+  y pide usar uno de esos dos si le escriben en otro; escribe la respuesta
+  letra por letra y añade debajo botones a los repos de GitHub de los
+  proyectos que menciona y a LinkedIn. Si Gemini falla o se agota la cuota
+  gratuita (20 consultas al día), cae a respuestas de respaldo bilingües por
+  palabra clave, así el chatbot nunca se queda roto. Está también en el CV.
+- **Clawd**: mascota pixel art (homenaje a la de Claude Code) que pasea por
+  toda la pantalla, hace un gesto cada vez que se detiene y cierra los ojos
+  si la acaricias (clic o toque).
 - **Calendario de contribuciones de GitHub en vivo**: calendario propio
   (mismo tamaño/color/cantidad de cuadros que github.com) armado con datos
   reales del año en curso, con tooltips por día y celdas de ancho fluido
@@ -79,11 +86,13 @@ de estudio con su diagrama de arquitectura, y un CV en versión web.
   mostrar el "flujo de datos" animado.
   Además lleva problema → solución, datos técnicos verificables, el stack y
   el enlace al código.
-- **CV web (`cv.html`)**: el botón "Ver CV" abre el currículum como página
-  (no como archivo), en español e inglés, sin teléfono ni dirección. El PDF
-  descargable será el CV original de Javier (pendiente de subir).
-- **Sincronización con GitHub**: los topics de los repos públicos alimentan
-  la sección Skills ("Otras tecnologías").
+- **CV web (`cv.html`)**: "Ver CV" (en la barra superior y en la portada)
+  abre el currículum como página, en español e inglés, sin teléfono ni
+  dirección. El PDF descargable será el CV original de Javier (pendiente).
+- **Skills técnicas** en 6 categorías, con una dedicada a las Herramientas
+  Zoho. Los topics de los repos públicos se sincronizan solos: si un repo
+  nuevo usa una tecnología que no está en la lista, aparece en "Otras
+  tecnologías".
 - **Selector de idioma**: español (bandera del Perú) e inglés, sin recargar
   la página.
 - **Modo claro/oscuro**, diseño responsive, colores de marca por tecnología
@@ -189,7 +198,7 @@ aunque la API de GitHub falle o llegue a su límite de peticiones.
 | **Google Gemini API** | Motor de respuestas del chatbot | API key guardada como variable de entorno en Vercel, nunca expuesta al cliente |
 | **GitHub REST API** (`api.github.com`) | Topics de los repos públicos para la sección Skills | Pública, sin token (datos públicos, límite de tasa estándar de GitHub) |
 | **github-contributions-api** (`github-contributions-api.jogruber.de`) | Datos del calendario de contribuciones (servicio de terceros que lee el perfil público de GitHub, ya que la API REST no expone ese calendario sin token) | Pública, sin token |
-| **Vercel** | Hosting del sitio estático y de la función serverless `api/chat.js` | Variables de entorno del proyecto |
+| **Vercel** | Hosting del sitio estático y de la función serverless `api/chat.js` (dominio `javier-fiestas.vercel.app`) | Variables de entorno del proyecto |
 
 ## Seguridad
 
@@ -244,7 +253,10 @@ correr `vercel dev`.
 
 ## Roadmap
 
-- [ ] Traducir el chatbot al inglés.
+- [x] Chatbot bilingüe (español/inglés), con enlaces a los repos y
+      respuestas letra por letra (2026-10-11).
+- [ ] Sección de hobbies y actividades.
+- [ ] Botón para descargar el CV original en PDF.
 - [ ] Afinar aún más el system prompt del chatbot según el uso real.
 - [ ] Sumar capturas o GIFs reales de cada proyecto junto a su diagrama.
 - [x] Rediseñar la portada con un visual de datos y añadir un caso de
