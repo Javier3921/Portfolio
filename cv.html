@@ -509,9 +509,6 @@
     <button type="button" class="cv-btn cv-btn-icon" id="cvTheme" data-i18n-aria="themeAria" aria-label="Cambiar tema">
       <i class="fa-solid fa-moon theme-moon" aria-hidden="true"></i><i class="fa-solid fa-sun theme-sun" aria-hidden="true"></i>
     </button>
-    <button type="button" class="cv-btn cv-btn-primary" id="cvPrint">
-      <i class="fa-solid fa-file-pdf" aria-hidden="true"></i><span class="cv-btn-label" data-i18n="print">Imprimir / Guardar PDF</span>
-    </button>
   </div>
 </header>
 
@@ -679,7 +676,7 @@
   const I18N = {
     es: {}, // el español es el texto original del HTML (se guarda al cargar)
     en: {
-      back: 'Back to portfolio', print: 'Print / Save PDF', themeAria: 'Toggle theme',
+      back: 'Back to portfolio', themeAria: 'Toggle theme',
       role: 'Data & Automation Analyst · B.S. in Systems Engineering',
       location: 'Lima, Peru', status: 'Open to new opportunities',
       'h.profile': 'Professional summary',
@@ -769,7 +766,6 @@
     try { localStorage.setItem('theme', next); } catch (e) {}
   });
 
-  document.getElementById('cvPrint').addEventListener('click', () => window.print());
 
   applyLang(document.documentElement.lang === 'es' ? 'es' : 'en');
 </script>
@@ -1133,8 +1129,8 @@
         es:'Aquí tienes su perfil de LinkedIn:',
         en:'Here is his LinkedIn profile:' },
       { k:['cv','curriculum','resume','hoja de vida'],
-        es:'Puedes ver su CV con "Ver CV" en la barra superior o en la portada; desde ahí puedes imprimirlo o guardarlo en PDF.',
-        en:'You can see his resume via "View CV" in the top bar or on the home section; from there you can print it or save it as a PDF.' },
+        es:'Puedes ver su CV con "Ver CV" en la barra superior o en la portada.',
+        en:'You can see his resume via "View CV" in the top bar or on the home section.' },
       { k:['disponible','disponibilidad','contratar','freelance','vacante','oportunidad','hire','hiring','available','availability','opportunit','vacanc'],
         es:'Javier está abierto a nuevas oportunidades laborales. Escríbele por el formulario de contacto o a su correo para conversar.',
         en:'Javier is open to new job opportunities. Reach out through the contact form or by email to talk.' },

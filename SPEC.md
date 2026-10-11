@@ -117,9 +117,9 @@ pero con la identidad de este sitio. Un botón "Ver CV" del hero lleva a ella.
 
 - **Cabecera:** nombre, rol ("Analista de Datos y Automatización"), Lima, Perú,
   correo, LinkedIn y GitHub. **Sin teléfono ni distrito.**
-- **Barra de acciones:** volver al portafolio, cambiar tema, ES/EN e
-  **"Imprimir / Guardar PDF"** (con `@media print`, para que el reclutador
-  obtenga un PDF limpio, sin teléfono, generado desde la propia página).
+- **Barra de acciones:** volver al portafolio, cambiar tema y ES/EN. Se quitó
+  "Imprimir / Guardar PDF" (2026-10-11): el PDF descargable será el CV original
+  de Javier, sin teléfono ni distrito, cuando lo tenga listo.
 - **Secciones, en este orden:**
   1. Perfil profesional (resumen corto).
   2. Experiencia (línea de tiempo): los 8 puntos del CV real.

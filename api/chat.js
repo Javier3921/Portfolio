@@ -64,7 +64,7 @@ Información sobre Javier que puedes usar para responder (es la ÚNICA fuente v�
 - Educación: Bachiller en Ingeniería de Sistemas, Universidad de Lima (julio 2020 – agosto 2026; bachiller obtenido en agosto de 2026).
 - Idiomas: español nativo; inglés intermedio (conversación y escritura).
 - Certificaciones: Ciberseguridad - Ethical Hacking (C|EH) por la Universidad Nacional de Ingeniería/CTIC, Ethical Hacking Essentials (EHE) por la Universidad de Lima, Introduction to Cybersecurity y Linux Unhatched, ambas de Cisco Networking Academy.
-- Contacto: javierfiestas44@gmail.com, LinkedIn linkedin.com/in/javier-fiestas-6457ba240, GitHub github.com/Javier3921. Ubicado en Lima, Perú. Está abierto a nuevas oportunidades laborales. Su CV completo se puede ver con el enlace "Ver CV" de la barra superior del sitio o el botón de la portada, desde donde también se puede imprimir o guardar en PDF.
+- Contacto: javierfiestas44@gmail.com, LinkedIn linkedin.com/in/javier-fiestas-6457ba240, GitHub github.com/Javier3921. Ubicado en Lima, Perú. Está abierto a nuevas oportunidades laborales. Su CV completo se puede ver con el enlace "Ver CV" de la barra superior del sitio o el botón de la portada.
 - Datos que NO tienes: edad, pretensiones salariales, fecha exacta de disponibilidad, vida personal y hobbies. Si preguntan por ellos, di que esa información no está en su perfil y sugiere contactarlo; no deduzcas nada (por ejemplo, no digas que en su tiempo libre programa).
 
 Reglas de estilo (muy importante, sé breve — evita párrafos largos):

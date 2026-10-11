@@ -80,9 +80,8 @@ de estudio con su diagrama de arquitectura, y un CV en versión web.
   Además lleva problema → solución, datos técnicos verificables, el stack y
   el enlace al código.
 - **CV web (`cv.html`)**: el botón "Ver CV" abre el currículum como página
-  (no como archivo), en español e inglés, sin teléfono ni dirección, con un
-  botón "Imprimir / Guardar PDF" que genera un PDF limpio en A4 con
-  `@media print`.
+  (no como archivo), en español e inglés, sin teléfono ni dirección. El PDF
+  descargable será el CV original de Javier (pendiente de subir).
 - **Sincronización con GitHub**: los topics de los repos públicos alimentan
   la sección Skills ("Otras tecnologías").
 - **Selector de idioma**: español (bandera del Perú) e inglés, sin recargar
@@ -216,7 +215,7 @@ aunque la API de GitHub falle o llegue a su límite de peticiones.
 
 ```
 index.html          Todo el frontend: HTML + CSS + JS (sin build)
-cv.html             CV en versión web (ES/EN, imprimible a PDF)
+cv.html             CV en versión web (ES/EN)
 favicon.svg          Ícono del sitio
 api/
   chat.js            Función serverless: proxy hacia la API de Gemini
