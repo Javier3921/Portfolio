@@ -12,15 +12,19 @@
 //                                   ai.google.dev/gemini-api/docs/models si
 //                                   Google la vuelve a renombrar)
 //   SITE_ORIGIN     (opcional)    - dominio del sitio permitido por CORS. Por
-//                                   defecto el dominio de producción en
-//                                   Vercel; solo hace falta si cambia (ej. un
-//                                   dominio propio). El propio sitio llama a
+//                                   defecto javier-fiestas.vercel.app (y el
+//                                   dominio antiguo, por si sigue activo); solo
+//                                   hace falta si cambia (ej. un dominio propio). El propio sitio llama a
 //                                   /api/chat desde su mismo dominio, así que
 //                                   esto no afecta a `vercel dev` ni a las
 //                                   previews de Vercel.
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
-const ALLOWED_ORIGIN = process.env.SITE_ORIGIN || 'https://portfolio-mu-wine-90.vercel.app';
+// El dominio antiguo (portfolio-mu-wine-90) se sigue aceptando por si Vercel
+// lo mantiene como alias tras el cambio de nombre.
+const ALLOWED_ORIGINS = process.env.SITE_ORIGIN
+  ? [process.env.SITE_ORIGIN]
+  : ['https://javier-fiestas.vercel.app', 'https://portfolio-mu-wine-90.vercel.app'];
 const MAX_HISTORY = 6; // ventana corta para ahorrar tokens, no toda la conversación
 const MAX_CHARS = 500; // recorte defensivo por mensaje
 
@@ -91,7 +95,9 @@ Reglas de estilo (muy importante, sé breve — evita párrafos largos):
 - No inventes datos que no estén en esta información. No agregues detalles, cifras ni preferencias que no figuren aquí, aunque parezcan razonables. Llámalo "Bachiller en Ingeniería de Sistemas", nunca "Ingeniero". Si no sabes algo específico, dilo y sugiere contactar a Javier directamente.`;
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
+  const origin = req.headers.origin;
+  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]);
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -103,9 +109,8 @@ module.exports = async function handler(req, res) {
   // llamada a Gemini se haría igual). Las llamadas desde el mismo dominio
   // pueden no traer Origin, y curl/scripts pueden falsearlo — para esos
   // queda el límite por IP de abajo.
-  const origin = req.headers.origin;
   const host = req.headers.host;
-  if (origin && origin !== ALLOWED_ORIGIN && origin !== `https://${host}` && origin !== `http://${host}`) {
+  if (origin && !ALLOWED_ORIGINS.includes(origin) && origin !== `https://${host}` && origin !== `http://${host}`) {
     return res.status(403).json({ error: 'forbidden_origin' });
   }
 

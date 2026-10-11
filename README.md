@@ -12,7 +12,7 @@ Ingeniería de Sistemas, Analista de Datos y Automatización. Este documento es
 un reporte técnico del proyecto: cómo está construido, qué tecnologías usa,
 qué conexiones/integraciones externas hace y cómo se relacionan entre sí.
 
-**Sitio en vivo:** [portfolio-mu-wine-90.vercel.app](https://portfolio-mu-wine-90.vercel.app/)
+**Sitio en vivo:** [javier-fiestas.vercel.app](https://javier-fiestas.vercel.app/)
 
 <!-- Sugerencia: agregar una captura de pantalla del sitio acá, por ejemplo:
 ![Preview del sitio](docs/preview.png) -->
