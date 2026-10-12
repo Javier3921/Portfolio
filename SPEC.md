@@ -2,7 +2,34 @@
 
 Bloques de trabajo, el más reciente primero. Cada uno se aprueba antes de programar.
 
-## Bloque 2 — "Color, portada, caso de trabajo y movimiento" (implementado, sin desplegar, 2026-10-11)
+## Ajustes tras el bloque 2 (hechos y desplegados, 2026-10-11/12)
+
+Pedidos por Javier sobre la marcha, cada uno probado en Edge (escritorio y
+móvil) antes de subirlo:
+
+- Revisión independiente de la escena: terminal con scroll, avatar flotante
+  fuera del foco del teclado en la portada, animaciones pausadas fuera de
+  pantalla, barras con `transform`, escena que se corta al salir de pantalla.
+- **Clawd**, mascota pixel art que pasea por toda la pantalla (index y CV).
+- **Avatar pixel art** de Javier en lugar del robot del chatbot (portada,
+  botón flotante y cabecera del chat), con animaciones sin desplazarse.
+- Chat también en `cv.html` (copia del de `index.html`).
+- **Idiomas**: solo español (bandera del Perú) e inglés.
+- **Skills** reorganizadas en 6 categorías con **Herramientas Zoho**, también
+  en el CV.
+- **"Ver CV"** en la barra superior.
+- **Chatbot**: prompt sin datos inventados (fin de prácticas, prefiere remoto
+  o híbrido, nivel solo con hechos), respuesta en el idioma de cada pregunta
+  y aviso en inglés para otros idiomas, escritura letra por letra, botones a
+  GitHub y LinkedIn, franja "Chatbot developed with Gemini", respaldo bilingüe.
+- Se quitó "Imprimir / Guardar PDF" del CV (vendrá el PDF original).
+- Dominio nuevo `javier-fiestas.vercel.app` (el antiguo redirige).
+
+Reglas que siguen vigentes: plan gratuito en todo (Gemini incluido, 20
+consultas al día), nunca publicar teléfono ni distrito, no inventar datos.
+Pendientes: ver `NOTES.md` (privado) y el Roadmap del README.
+
+## Bloque 2 — "Color, portada, caso de trabajo y movimiento" (hecho y desplegado, 2026-10-11)
 
 Problema: el sitio se siente plano. Es casi todo blanco y negro, el color solo
 aparece en etiquetas pequeñas y la portada muestra un adorno (portátil 3D con
